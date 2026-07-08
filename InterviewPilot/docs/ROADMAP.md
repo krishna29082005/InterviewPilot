@@ -6,13 +6,15 @@ This roadmap tracks the development progress of InterviewPilot.
 
 # Current Version
 
-**v0.2.0**
+**v0.3.0**
 
-Current Sprint: **Sprint 2 - Authentication**
+Current Sprint: **Sprint 3 — Login & JWT Authentication**
 
 ---
 
-# Phase 1 — Foundation ✅
+# Phase 1 — Project Foundation ✅
+
+**Status:** Completed
 
 ## Repository
 
@@ -32,8 +34,8 @@ Current Sprint: **Sprint 2 - Authentication**
 
 - [x] FastAPI
 - [x] APIRouter
-- [x] Health Endpoint
 - [x] Swagger Documentation
+- [x] Health Endpoint
 - [x] CORS Configuration
 
 ## Integration
@@ -46,63 +48,58 @@ Current Sprint: **Sprint 2 - Authentication**
 
 **Status:** In Progress
 
-## Backend
+## Database
 
-- [ ] User Registration API
+- [x] PostgreSQL
+- [x] SQLAlchemy ORM
+- [x] User Model
+- [x] Database Sessions
+
+## Signup
+
+- [x] User Registration API
+- [x] Password Hashing
+- [x] Duplicate Username Validation
+- [x] Duplicate Email Validation
+- [x] Transaction Rollback
+
+## Login
+
 - [ ] User Login API
-- [ ] Password Hashing (bcrypt)
+- [ ] Password Verification
 - [ ] JWT Authentication
+- [ ] Access Token
 - [ ] Protected Routes
-- [ ] Authentication Middleware
+- [ ] Current User Endpoint
 
 ## Frontend
 
-- [ ] Login Page
 - [ ] Signup Page
+- [ ] Login Page
 - [ ] Authentication Forms
 - [ ] Route Protection
 
 ---
 
-# Phase 3 — Database
+# Phase 3 — Resume Intelligence
 
 **Status:** Planned
 
-- [ ] PostgreSQL
-- [ ] SQLAlchemy ORM
-- [ ] Alembic Migrations
-- [ ] User Model
-- [ ] Interview Model
-- [ ] Resume Model
-
----
-
-# Phase 4 — Dashboard
-
-**Status:** Planned
-
-- [ ] Dashboard Layout
-- [ ] User Profile
-- [ ] Interview History
-- [ ] Progress Tracking
-- [ ] Analytics Cards
-
----
-
-# Phase 5 — Resume Module
-
-**Status:** Planned
+## Resume
 
 - [ ] Resume Upload
+- [ ] Resume Storage
 - [ ] PDF Parsing
 - [ ] Skill Extraction
 - [ ] Resume Scoring
 
 ---
 
-# Phase 6 — AI Interview
+# Phase 4 — AI Interview
 
 **Status:** Planned
+
+## Interview
 
 - [ ] Technical Interview Generator
 - [ ] Behavioral Interview Generator
@@ -112,19 +109,32 @@ Current Sprint: **Sprint 2 - Authentication**
 
 ---
 
-# Phase 7 — AI Evaluation
+# Phase 5 — AI Evaluation
 
 **Status:** Planned
 
 - [ ] LLM Feedback
-- [ ] Communication Score
 - [ ] Technical Score
+- [ ] Communication Score
 - [ ] Behavioral Score
 - [ ] Improvement Suggestions
 
 ---
 
-# Phase 8 — Advanced Features
+# Phase 6 — Dashboard & Analytics
+
+**Status:** Planned
+
+- [ ] Dashboard Layout
+- [ ] User Profile
+- [ ] Interview History
+- [ ] Progress Tracking
+- [ ] Analytics
+- [ ] Performance Graphs
+
+---
+
+# Phase 7 — Advanced Features
 
 **Status:** Planned
 
@@ -136,39 +146,40 @@ Current Sprint: **Sprint 2 - Authentication**
 
 ---
 
-# Phase 9 — DevOps
+# Phase 8 — DevOps
 
 **Status:** Planned
 
 - [ ] Docker
 - [ ] Docker Compose
+- [ ] Alembic Migrations
 - [ ] GitHub Actions
 - [ ] Automated Testing
 - [ ] CI/CD Pipeline
 
 ---
 
-# Phase 10 — Deployment
+# Phase 9 — Deployment
 
 **Status:** Planned
 
 - [ ] Deploy Frontend (Vercel)
-- [ ] Deploy Backend (Railway/Render)
+- [ ] Deploy Backend (Railway / Render)
 - [ ] Deploy PostgreSQL (Neon)
-- [ ] Production Environment Variables
-- [ ] Custom Domain (Optional)
+- [ ] Environment Variables
+- [ ] Production Configuration
 
 ---
 
 # Version Timeline
 
-- ✅ v0.1.0 — Frontend Initialization
-- ✅ v0.2.0 — Backend Initialization & Frontend Integration
-- 🚧 v0.3.0 — Authentication
-- ⏳ v0.4.0 — Database
-- ⏳ v0.5.0 — Dashboard
-- ⏳ v0.6.0 — Resume Module
-- ⏳ v0.7.0 — AI Interview
-- ⏳ v0.8.0 — AI Evaluation
-- ⏳ v0.9.0 — DevOps & Deployment
-- 🎯 v1.0.0 — Production Release
+-v0.1.0 — Project Foundation
+-v0.2.0 — Backend Integration
+-v0.3.0 — Authentication
+-v0.4.0 — Resume Intelligence
+-v0.5.0 — AI Interview
+-v0.6.0 — AI Evaluation
+-v0.7.0 — Dashboard & Analytics
+-v0.8.0 — DevOps
+-v0.9.0 — Deployment
+-v1.0.0 — Production SaaS Release

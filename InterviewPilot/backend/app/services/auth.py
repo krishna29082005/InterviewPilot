@@ -1,14 +1,14 @@
 from fastapi import HTTPException, status
-from passlib.context import CryptContext
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
+from app.core.security import (
+    hash_password,
+    verify_password,
+    create_access_token,
+)
 from app.models.user import User
 from app.schemas.auth import UserSignup
-
-pwd_context = CryptContext(
-    schemes=["bcrypt"],
-    deprecated="auto"
-)
 
 
 def signup_user(user: UserSignup, db: Session):
@@ -40,7 +40,7 @@ def signup_user(user: UserSignup, db: Session):
     new_user = User(
         username=user.name,
         email=user.email,
-        hashed_password=pwd_context.hash(user.password)
+        hashed_password=hash_password(user.password)
     )
 
     try:
@@ -54,4 +54,39 @@ def signup_user(user: UserSignup, db: Session):
 
     return {
         "message": "User registered successfully."
+    }
+
+
+def login_user(form_data: OAuth2PasswordRequestForm, db: Session):
+
+    existing_user = (
+        db.query(User)
+        .filter(User.email == form_data.username)
+        .first()
+    )
+
+    if not existing_user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found."
+        )
+
+    if not verify_password(
+    form_data.password,
+    existing_user.hashed_password
+):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid credentials."
+        )
+
+    access_token = create_access_token(
+        data={
+            "sub": existing_user.email
+        }
+    )
+
+    return {
+        "access_token": access_token,
+        "token_type": "bearer"
     }

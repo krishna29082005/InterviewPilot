@@ -1,25 +1,41 @@
 # Development Log
 
+This document records the development progress of InterviewPilot throughout the project.
+
 ---
 
 # Session 1
 
-Date
+**Date**
 
 2026-07-05
 
 ---
 
+## Objective
+
+Initialize the project repository and frontend.
+
+---
+
 ## Completed
 
+### Repository
+
 - Created GitHub repository
-- Created monorepo
-- Installed Node.js
-- Configured Next.js
+- Created monorepo structure
+
+### Frontend
+
+- Initialized Next.js
 - Configured TypeScript
-- Configured TailwindCSS
+- Configured Tailwind CSS
 - Configured ESLint
+- Created landing page
 - Started development server
+
+### Git
+
 - Created first Git commit
 
 ---
@@ -29,7 +45,7 @@ Date
 - Next.js instead of Vite
 - FastAPI instead of Flask
 - Monorepo architecture
-- TailwindCSS
+- Tailwind CSS
 - App Router
 
 ---
@@ -45,19 +61,16 @@ Date
 ## Learnings
 
 - Git workflow
-- Next.js initialization
 - Professional repository setup
+- Next.js initialization
 
 ---
 
 ## Next Session
 
-Initialize FastAPI backend
-
-Create first API
-
-Connect frontend and backend
-
+- Initialize FastAPI backend
+- Create first API
+- Connect frontend and backend
 
 ---
 
@@ -71,7 +84,7 @@ Connect frontend and backend
 
 ## Objective
 
-Initialize the FastAPI backend and establish the first frontend-backend communication.
+Initialize the FastAPI backend and establish frontend-backend communication.
 
 ---
 
@@ -83,12 +96,12 @@ Initialize the FastAPI backend and establish the first frontend-backend communic
 - Installed FastAPI
 - Installed Uvicorn
 - Generated `requirements.txt`
-- Created scalable backend folder structure
+- Created backend folder structure
 - Created FastAPI application
 - Added Root endpoint (`/`)
 - Added Health endpoint (`/health`)
-- Implemented modular routing using APIRouter
-- Configured Swagger/OpenAPI documentation
+- Configured APIRouter
+- Configured Swagger/OpenAPI
 - Configured CORS middleware
 
 ### Frontend
@@ -96,40 +109,35 @@ Initialize the FastAPI backend and establish the first frontend-backend communic
 - Converted landing page into a Client Component
 - Learned React `useState`
 - Learned React `useEffect`
-- Connected frontend to FastAPI backend using Fetch API
-- Displayed live backend health status
+- Connected frontend to FastAPI backend
+- Displayed backend health status
 
 ### Git
 
-- Created feature commit
 - Updated `.gitignore`
 - Removed virtual environment from Git tracking
 - Created cleanup commit
-- Pushed all changes to GitHub
+- Pushed changes to GitHub
 
 ---
 
 ## Decisions
 
-- Use APIRouter for modular backend architecture
+- Modular routing using APIRouter
 - Keep `main.py` minimal
-- Separate routes by feature
-- Use Fetch API for frontend-backend communication
+- Feature-based routing
 - Configure CORS during development
-- Never commit virtual environments to Git
+- Never commit virtual environments
 
 ---
 
 ## Problems Faced
 
-### 1. Virtual Environment Tracking
-
-Git started tracking the entire `.venv` directory.
+### Virtual Environment tracked by Git
 
 **Solution**
 
 - Updated `.gitignore`
-- Removed `.venv` from Git index using:
 
 ```bash
 git rm -r --cached backend/.venv
@@ -137,37 +145,27 @@ git rm -r --cached backend/.venv
 
 ---
 
-### 2. Frontend Could Not Reach Backend
-
-Frontend displayed:
-
-```
-Backend Status: Offline
-```
+### Frontend could not reach backend
 
 **Cause**
 
-Browser blocked requests because of the Same-Origin Policy.
+Same-Origin Policy
 
 **Solution**
 
-Configured FastAPI `CORSMiddleware`.
+Configured `CORSMiddleware`
 
 ---
 
-### 3. Git Confusion
-
-Initially thought project changes had not been committed.
+### Git commit confusion
 
 **Solution**
 
-Verified commit history using:
+Verified commit history using
 
 ```bash
 git log --oneline
 ```
-
-Confirmed everything had already been committed and pushed.
 
 ---
 
@@ -175,10 +173,9 @@ Confirmed everything had already been committed and pushed.
 
 ### FastAPI
 
-- FastAPI project structure
 - APIRouter
 - OpenAPI
-- Swagger Documentation
+- Swagger
 
 ### React
 
@@ -186,20 +183,17 @@ Confirmed everything had already been committed and pushed.
 - useState
 - useEffect
 - Fetch API
-- Asynchronous requests
 
 ### Backend
 
 - REST APIs
-- JSON responses
+- JSON Responses
 - CORS
-- HTTP communication
 
 ### Git
 
-- .gitignore
-- git rm --cached
-- Professional commit workflow
+- `.gitignore`
+- `git rm --cached`
 
 ---
 
@@ -222,42 +216,289 @@ FastAPI
 
 ↓
 
-Python Logic
-
-↓
-
 JSON Response
 
 ↓
 
-React State
-
-↓
-
-Updated UI
+React UI
 ```
 
 ---
 
-## Project Status
+## Next Session
 
-### Frontend
-
-Landing Page
- 
-Backend Health Indicator
-
-### Backend
-
-FastAPI
-
-APIRouter
-
-Health Endpoint
-
- Swagger
-
-### Integration
- Frontend connected to Backend
+- Authentication Module
+- PostgreSQL
+- SQLAlchemy
 
 ---
+
+# Session 3
+
+**Date**
+
+2026-07-07
+
+---
+
+## Objective
+
+Build a production-style authentication system backed by PostgreSQL.
+
+---
+
+## Completed
+
+### Database
+
+- Installed PostgreSQL
+- Created `interviewpilot` database
+- Connected SQLAlchemy
+- Configured database sessions
+- Created database initialization script
+- Generated first database table (`users`)
+
+### Models
+
+- Created User model
+- Designed user table schema
+
+### Authentication
+
+- Created Authentication Router
+- Created Signup API
+- Added Pydantic request validation
+- Implemented Service Layer
+- Connected service with PostgreSQL
+- Stored first user in database
+
+### Security
+
+- Implemented bcrypt password hashing
+- Prevented duplicate usernames
+- Prevented duplicate emails
+- Added HTTP 409 Conflict responses
+- Added database transaction rollback
+
+### Testing
+
+- Verified API using Swagger UI
+- Verified database records using PostgreSQL
+- Successfully stored first real user
+
+---
+
+## Decisions
+
+- Layered Backend Architecture
+- Route → Schema → Service → Database
+- SQLAlchemy ORM
+- PostgreSQL
+- bcrypt password hashing
+- Database sessions using dependency injection
+
+---
+
+## Problems Faced
+
+### PostgreSQL PATH issue
+
+**Solution**
+
+Added PostgreSQL `bin` directory to Windows PATH.
+
+---
+
+### Missing `email-validator`
+
+**Solution**
+
+Installed:
+
+```bash
+pip install email-validator
+```
+
+---
+
+### bcrypt compatibility warning
+
+**Solution**
+
+Verified hashing worked correctly.
+
+---
+
+### Duplicate username crash
+
+**Solution**
+
+Added application-level validation before database insertion.
+
+---
+
+## Learnings
+
+### Authentication
+
+- Password hashing
+- HTTP status codes
+- Duplicate validation
+
+### SQLAlchemy
+
+- Models
+- Sessions
+- Transactions
+- ORM workflow
+
+### PostgreSQL
+
+- Database creation
+- Table creation
+- SQL verification
+
+### Backend Engineering
+
+- Layered Architecture
+- Separation of Concerns
+- Dependency Injection
+
+---
+
+## Architecture Achieved
+
+```
+Client
+
+↓
+
+FastAPI Route
+
+↓
+
+Pydantic Schema
+
+↓
+
+Service Layer
+
+↓
+
+SQLAlchemy ORM
+
+↓
+
+PostgreSQL
+
+↓
+
+JSON Response
+```
+
+---
+
+## Next Session
+
+- Login API
+- JWT Authentication
+- Protected Routes
+- Current User Endpoint
+
+---
+
+# Session 4
+
+**Date**
+
+2026-07-08
+
+---
+
+## Objective
+
+Complete the Authentication Module.
+
+---
+
+## Completed
+
+### Authentication
+
+- Implemented Login API
+- Implemented OAuth2 Password Flow
+- Implemented JWT Token Generation
+- Implemented JWT Verification
+- Created Protected Endpoints
+- Implemented Current User Dependency
+- Implemented `/auth/me`
+- Added response models
+- Centralized security utilities into `core/security.py`
+- Moved `SECRET_KEY` to environment variables
+- Added function return type hints
+- Cleaned imports and project structure
+
+### Security
+
+- Password Hashing
+- Password Verification
+- JWT Access Tokens
+- Protected Routes
+- OAuth2 Integration
+
+### Testing
+
+Completed full regression testing.
+
+Passed all 8 tests:
+
+- ✅ Signup
+- ✅ Duplicate Email
+- ✅ Duplicate Username
+- ✅ Login
+- ✅ JWT Generation
+- ✅ Protected Route (`/auth/me`)
+- ✅ Invalid Password
+- ✅ Unauthorized Access
+
+---
+
+## Decisions
+
+- Adopt FastAPI OAuth2 Password Flow
+- Store email inside JWT subject (`sub`)
+- Centralize all security logic inside `core/security.py`
+- Every endpoint should have request and response models
+- Freeze completed modules after testing
+
+---
+
+## Learnings
+
+- OAuth2 Password Flow
+- JWT Authentication
+- Dependency Injection
+- Response Models
+- Security Layer Design
+- Production Refactoring
+- Regression Testing
+
+---
+
+## Current Status
+
+✅ Authentication Module Completed
+
+---
+
+## Next Session
+
+Sprint 5 — Frontend Authentication
+
+- Professional Signup Page
+- Professional Login Page
+- API Integration
+- JWT Storage
+- Authentication Context
+- Logout
+- Protected Dashboard

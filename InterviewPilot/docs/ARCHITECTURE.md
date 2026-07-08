@@ -4,11 +4,11 @@
 
 InterviewPilot is a production-grade AI-powered interview preparation platform built using a modern full-stack architecture.
 
-The project follows a modular and scalable design so that new features (authentication, AI services, resume parsing, analytics, etc.) can be added without major architectural changes.
+The project follows a modular, layered, and scalable architecture where every component has a single responsibility. This makes the codebase maintainable, testable, and easy to extend as new features such as AI interview generation, resume parsing, analytics, and dashboards are added.
 
 ---
 
-# Current Architecture
+# Current High-Level Architecture
 
 ```
                     Browser
@@ -22,9 +22,18 @@ The project follows a modular and scalable design so that new features (authenti
                        ▼
               FastAPI Backend
                        │
-                APIRouter Layer
+                  APIRouter
                        │
-                  Python Logic
+                    Schemas
+                  (Pydantic)
+                       │
+                  Service Layer
+               (Business Logic)
+                       │
+                 SQLAlchemy ORM
+                       │
+                       ▼
+                  PostgreSQL
 ```
 
 ---
@@ -44,6 +53,7 @@ The project follows a modular and scalable design so that new features (authenti
 - API Calls
 - State Management
 - Dynamic Rendering
+- Authentication UI
 
 ---
 
@@ -52,13 +62,30 @@ The project follows a modular and scalable design so that new features (authenti
 - FastAPI
 - Python
 - APIRouter
+- Pydantic
 
 ### Responsibilities
 
 - REST API
+- Request Validation
 - Business Logic
+- Authentication
 - JSON Responses
 - API Documentation (Swagger)
+
+---
+
+## Database
+
+- PostgreSQL
+- SQLAlchemy ORM
+
+### Responsibilities
+
+- Persistent Data Storage
+- User Management
+- Authentication Data
+- Future Resume & Interview Data
 
 ---
 
@@ -74,12 +101,28 @@ InterviewPilot/
 │
 ├── backend/
 │   ├── app/
-│   │   ├── api/
-│   │   │   └── routes/
-│   │   │       └── health.py
-│   │   └── main.py
 │   │
-│   └── requirements.txt
+│   ├── api/
+│   │   └── routes/
+│   │       ├── health.py
+│   │       └── auth.py
+│   │
+│   ├── schemas/
+│   │   └── auth.py
+│   │
+│   ├── services/
+│   │   └── auth.py
+│   │
+│   ├── models/
+│   │   └── user.py
+│   │
+│   ├── db/
+│   │   ├── database.py
+│   │   └── init_db.py
+│   │
+│   └── main.py
+│
+│   requirements.txt
 │
 ├── docs/
 ├── docker/
@@ -92,29 +135,136 @@ InterviewPilot/
 # Backend Architecture
 
 ```
-                FastAPI Application
-                        │
-                        ▼
-                app.include_router()
-                        │
-         ┌──────────────┴──────────────┐
-         │                             │
-         ▼                             ▼
-     Root Endpoint              Health Router
-        "/"                      "/health"
+                 HTTP Request
+                       │
+                       ▼
+                  FastAPI Route
+                       │
+                       ▼
+             Pydantic Schema Validation
+                       │
+                       ▼
+                Service Layer
+             (Business Logic)
+                       │
+                       ▼
+               SQLAlchemy ORM
+                       │
+                       ▼
+                 PostgreSQL
+                       │
+                       ▼
+                JSON Response
 ```
 
-The backend follows a modular routing architecture using **FastAPI APIRouter**.
+---
 
-Each feature will own its own router, making the application easier to maintain and extend.
+## Backend Components
 
-Future routers will include:
+### Route Layer
 
+Responsibilities
+
+- Receives HTTP requests
+- Calls the correct service
+- Returns API responses
+- Injects database session
+
+Current Routes
+
+- Health
 - Authentication
-- Resume
-- Interview
-- Dashboard
-- AI
+
+---
+
+### Schema Layer
+
+Responsibilities
+
+- Validate request data
+- Validate response data
+- Prevent invalid input
+- Type safety
+
+Current Schemas
+
+- User Signup
+
+---
+
+### Service Layer
+
+Responsibilities
+
+- Business Logic
+- Password Hashing
+- Duplicate User Validation
+- Database Transactions
+
+Current Services
+
+- User Signup
+
+---
+
+### Database Layer
+
+Responsibilities
+
+- Database Session
+- ORM Models
+- CRUD Operations
+- Transactions
+
+Current Models
+
+- User
+
+---
+
+# Authentication Flow
+
+Current Signup Flow
+
+```
+Client
+
+↓
+
+POST /auth/signup
+
+↓
+
+Route
+
+↓
+
+Pydantic Validation
+
+↓
+
+Check Username
+
+↓
+
+Check Email
+
+↓
+
+Hash Password (bcrypt)
+
+↓
+
+SQLAlchemy
+
+↓
+
+PostgreSQL
+
+↓
+
+Success Response
+```
 
 ---
 
@@ -123,77 +273,78 @@ Future routers will include:
 ```
 Browser
 
-    │
+↓
 
-    ▼
+Next.js
 
-Next.js Page
+↓
 
-    │
+React Components
 
-React Hooks
+↓
 
-(useState + useEffect)
+useEffect / useState
 
-    │
+↓
 
 Fetch API
 
-    │
-
-HTTP Request
-
-    │
+↓
 
 FastAPI
 
-    │
+↓
 
 JSON Response
 
-    │
+↓
 
 React State Update
 
-    │
+↓
 
 Updated UI
 ```
 
-Current functionality:
+Current Functionality
 
 - Landing Page
 - Backend Health Check
-- Dynamic Backend Status Indicator
+- Dynamic Backend Status
+- API Integration
 
 ---
 
-# API Endpoints
+# Current API Endpoints
 
 | Method | Endpoint | Description |
-|---------|----------|-------------|
-| GET | `/` | Welcome endpoint |
-| GET | `/health` | Backend health status |
+|----------|----------|-------------|
+| GET | `/` | Welcome Endpoint |
+| GET | `/health` | Backend Health Status |
+| POST | `/auth/signup` | Register New User |
 
 ---
 
-# CORS Configuration
+# Database Design
 
-The frontend and backend run on different origins during development.
-
-Frontend
+Current Tables
 
 ```
-http://localhost:3000
+users
+
+id
+username
+email
+hashed_password
 ```
 
-Backend
+Current Features
 
-```
-http://127.0.0.1:8000
-```
-
-FastAPI uses **CORSMiddleware** to allow secure communication between the frontend and backend during development.
+- Unique Username
+- Unique Email
+- Password Hashing
+- Duplicate Validation
+- Transaction Rollback
 
 ---
 
@@ -208,7 +359,7 @@ Next.js
 
 ↓
 
-Fetch API
+REST API
 
 ↓
 
@@ -216,7 +367,23 @@ FastAPI
 
 ↓
 
-Python Logic
+Route
+
+↓
+
+Schema
+
+↓
+
+Service
+
+↓
+
+SQLAlchemy
+
+↓
+
+PostgreSQL
 
 ↓
 
@@ -224,46 +391,53 @@ JSON Response
 
 ↓
 
-React State
-
-↓
-
-Updated UI
+Frontend Update
 ```
 
 ---
 
 # Architecture Principles
 
-Current architecture follows:
+Current architecture follows
 
-- Modular Design
+- Layered Architecture
 - Separation of Concerns
 - Feature-based Routing
+- Modular Design
 - RESTful APIs
-- Scalable Folder Structure
+- ORM Pattern
 - Production-ready Development Practices
+- Scalable Folder Structure
 
 ---
 
 # Planned Architecture
 
-The following components will be added in future milestones:
-
 ## Authentication
 
+- Login API
 - JWT Authentication
-- Password Hashing
 - Protected Routes
+- Refresh Tokens
 - Role-based Authorization
 
 ---
 
 ## Database
 
-- PostgreSQL
-- SQLAlchemy ORM
 - Alembic Migrations
+- Database Relationships
+- Index Optimization
+- Soft Deletes
+
+---
+
+## Resume Module
+
+- Resume Upload
+- Resume Storage
+- Resume Parsing
+- Skill Extraction
 
 ---
 
@@ -334,15 +508,16 @@ Neon PostgreSQL
 
 ---
 
-## Future Documentation
+# Future Documentation
 
-This document will later include:
+This document will later include
 
-- Authentication Flow
+- JWT Authentication Flow
 - Database ER Diagram
 - Sequence Diagrams
 - Deployment Diagram
 - Docker Architecture
 - AI System Design
-- Caching Architecture
+- Caching Strategy
 - Background Workers
+- Monitoring & Logging

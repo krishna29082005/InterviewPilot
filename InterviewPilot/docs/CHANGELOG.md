@@ -6,6 +6,70 @@ The project follows Semantic Versioning.
 
 ---
 
+# v0.3.0
+
+Release Date: 08 July 2026
+
+## Added
+
+### Authentication
+
+- User Registration API
+- User Login API
+- OAuth2 Password Flow
+- JWT Authentication
+- Protected API Endpoints
+- Current User Endpoint (`GET /auth/me`)
+- Password Hashing using bcrypt
+- Duplicate Username Validation
+- Duplicate Email Validation
+- JWT Verification
+- Database Transaction Rollback
+
+### Database
+
+- PostgreSQL Integration
+- SQLAlchemy ORM
+- User Database Model
+- Database Session Management
+- Database Initialization Script
+
+### API
+
+- Authentication Router
+- Signup Endpoint (`POST /auth/signup`)
+- Login Endpoint (`POST /auth/login`)
+- Current User Endpoint (`GET /auth/me`)
+
+## Added
+
+### Authentication
+
+- User Registration API
+- Layered Authentication Architecture
+- Pydantic Request Validation
+- Service Layer
+- User Database Model
+- Password Hashing using bcrypt
+- Duplicate Username Validation
+- Duplicate Email Validation
+- Database Transaction Rollback
+- Database Session Management
+
+### Database
+
+- PostgreSQL Integration
+- SQLAlchemy ORM
+- User Table
+- Database Initialization Script
+
+### API
+
+- Authentication Router
+- Signup Endpoint (`POST /auth/signup`)
+
+---
+
 # v0.2.0
 
 Release Date: July 2026
@@ -69,27 +133,18 @@ Release Date: July 2026
 
 ---
 
-# Upcoming (v0.3.0)
+# Upcoming (v0.4.0)
 
 ## Authentication
 
-- User Registration
 - User Login
 - JWT Authentication
-- Password Hashing
 - Protected Routes
 - Authentication Middleware
 
 ---
 
 ## Future Releases
-
-### v0.4.0
-
-- PostgreSQL Integration
-- SQLAlchemy ORM
-- Database Models
-- Alembic Migrations
 
 ### v0.5.0
 

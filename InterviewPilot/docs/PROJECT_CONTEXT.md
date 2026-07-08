@@ -1,155 +1,299 @@
-# Project Context
+# PROJECT_CONTEXT.md
 
 # InterviewPilot
 
-## Vision
+---
+
+# Project Vision
 
 InterviewPilot is a production-grade AI-powered interview preparation platform.
 
-The objective is to build a startup-quality product rather than a college project.
+The objective is to build a startup-quality SaaS application rather than a college project.
 
-The project is being developed using production software engineering practices and is intended to become the flagship project on my resume for Software Engineering and AI/ML placements.
+The project is intended to become the flagship software engineering project for Software Engineering and AI/ML placements.
+
+Every implementation should follow production software engineering practices.
+
+---
+
+# Current Project Version
+
+v0.3.0
+
+Date
+
+08-07-2026
 
 ---
 
 # Current Status
 
-## Version
+## Authentication Module
 
-v0.2.0
+Status
 
-## Current Progress
+✅ COMPLETED
 
-### Frontend
+Completed Features
 
-- Next.js initialized
-- TypeScript configured
-- Tailwind CSS configured
-- Landing page completed
-- Connected with backend
-- Live backend health status indicator
+- User Registration
+- User Login
+- PostgreSQL Integration
+- SQLAlchemy ORM
+- User Model
+- Password Hashing (bcrypt)
+- Password Verification
+- Duplicate Username Validation
+- Duplicate Email Validation
+- JWT Authentication
+- OAuth2 Password Flow
+- JWT Token Generation
+- JWT Verification
+- Protected Routes
+- Current User Endpoint (`GET /auth/me`)
+- Swagger OAuth2 Authorization
+- Database Transaction Rollback
 
-### Backend
-
-- FastAPI initialized
-- Modular project structure
-- APIRouter architecture
-- Root endpoint
-- Health endpoint
-- Swagger/OpenAPI documentation
-- CORS configured
-
-### Integration
-
-- Frontend successfully communicates with backend
-- REST API integration established
+Authentication has been completely implemented and tested.
 
 ---
 
-## Tech Stack
+# Current API Endpoints
 
-### Frontend
+GET /
+
+GET /health
+
+POST /auth/signup
+
+POST /auth/login
+
+GET /auth/me
+
+All endpoints are fully functional.
+
+---
+
+# Current Backend Architecture
+
+```
+Browser
+
+↓
+
+Next.js Frontend
+
+↓
+
+REST API
+
+↓
+
+FastAPI
+
+↓
+
+Route Layer
+
+↓
+
+Schema Layer
+
+↓
+
+Service Layer
+
+↓
+
+Security Layer
+
+↓
+
+Database Layer
+
+↓
+
+PostgreSQL
+```
+
+---
+
+# Current Folder Structure
+
+```
+backend/
+
+app/
+
+├── api/
+│   ├── routes/
+│   └── dependencies/
+│
+├── core/
+│   └── security.py
+│
+├── db/
+│   ├── database.py
+│   └── init_db.py
+│
+├── models/
+│   └── user.py
+│
+├── schemas/
+│   └── auth.py
+│
+├── services/
+│   └── auth.py
+│
+└── main.py
+```
+
+---
+
+# Backend Design Rules
+
+Every backend feature must follow this architecture.
+
+```
+Route
+
+↓
+
+Schema
+
+↓
+
+Service
+
+↓
+
+Security
+
+↓
+
+Database
+```
+
+Responsibilities
+
+## Route
+
+- Receive HTTP request
+- Validate dependencies
+- Call service
+- Return response
+
+No business logic.
+
+---
+
+## Schema
+
+- Validate request
+- Validate response
+
+No business logic.
+
+---
+
+## Service
+
+Contains all business logic.
+
+Examples
+
+- Signup
+- Login
+- Resume Upload
+- Interview Generation
+
+No HTTP handling.
+
+---
+
+## Security
+
+Contains all authentication related utilities.
+
+Examples
+
+- Password Hashing
+- Password Verification
+- JWT Generation
+- JWT Verification
+
+No business logic.
+
+---
+
+## Database
+
+Contains
+
+- SQLAlchemy Models
+- Database Sessions
+
+---
+
+# Current Database
+
+Database
+
+```
+interviewpilot
+```
+
+Current Tables
+
+```
+users
+```
+
+Columns
+
+- id
+- username
+- email
+- hashed_password
+
+---
+
+# Current Tech Stack
+
+Frontend
 
 - Next.js
 - React
 - TypeScript
 - Tailwind CSS
 
-### Backend
+Backend
 
 - FastAPI
 - Python
 
-### Database (Upcoming)
+Database
 
 - PostgreSQL
-- SQLAlchemy
-- Alembic
+- SQLAlchemy ORM
 
-### Authentication (Upcoming)
+Authentication
 
-- JWT
-- Passlib (Password Hashing)
+- Passlib
+- bcrypt
+- python-jose
+- OAuth2PasswordBearer
+- python-multipart
 
-### AI (Upcoming)
+Documentation
 
-- OpenAI Compatible APIs
-- Resume Parser
-- Interview Generator
-- AI Evaluation
-
-### Infrastructure (Upcoming)
-
-- Docker
-- Docker Compose
-- GitHub Actions
-- CI/CD
+- Swagger/OpenAPI
 
 ---
 
-## Engineering Philosophy
+# Development Workflow
 
-Every architectural decision should answer:
-
-1. What is it?
-2. Why are we using it?
-3. Why not the alternatives?
-4. How can it be explained in a software engineering interview?
-
-The goal is to understand every technology before implementing it.
-
----
-
-## Repository Structure
-
-```
-InterviewPilot/
-
-├── frontend/
-├── backend/
-├── docker/
-├── docs/
-├── scripts/
-├── .github/
-├── README.md
-├── docker-compose.yml
-└── LICENSE
-```
-
----
-
-## UI Philosophy
-
-- Professional SaaS Design
-- Dark Theme
-- Minimal UI
-- Responsive Design
-- Modern User Experience
-- Startup-quality Interface
-
-Inspired by:
-
-- Linear
-- Vercel
-- Stripe
-- Notion
-
----
-
-## Backend Philosophy
-
-- Clean Architecture
-- Modular Design
-- Feature-based Routing
-- RESTful APIs
-- Scalable Folder Structure
-- Production-ready Practices
-
----
-
-## Development Workflow
-
-Every feature follows:
+Every feature must follow
 
 ```
 Understand
@@ -168,7 +312,7 @@ Test
 
 ↓
 
-Git Commit
+Refactor
 
 ↓
 
@@ -176,71 +320,197 @@ Documentation
 
 ↓
 
-Push to GitHub
+Git Commit
+
+↓
+
+Git Push
 ```
 
-No feature is considered complete until it has been:
-
-- Implemented
-- Tested
-- Documented
-- Committed
-- Pushed
+A feature is NOT considered complete until all eight steps are finished.
 
 ---
 
-## Completed Milestones
+# Coding Standards
 
-### Sprint 1 ✅
+Business logic belongs only inside Services.
 
-- Repository Initialization
-- Next.js Frontend
-- FastAPI Backend
-- APIRouter
-- Health Endpoint
-- Swagger Documentation
-- CORS Configuration
-- Frontend ↔ Backend Communication
+Routes should remain thin.
+
+Schemas should only validate data.
+
+Security logic belongs inside `core/security.py`.
+
+Models should only represent database tables.
+
+Never duplicate business logic.
+
+Always keep authentication reusable.
+
+Follow production-level coding practices.
 
 ---
 
-## Next Milestone
+# Current Milestone
 
-### Sprint 2 — Authentication
+Authentication Module
 
-Planned features:
+Status
 
-- User Registration
-- User Login
-- Password Hashing
-- JWT Authentication
+✅ COMPLETED
+
+---
+
+# Next Sprint
+
+Sprint 5
+
+Objective
+
+Build the complete Frontend Authentication Module.
+
+---
+
+# Next Tasks
+
+## Backend Cleanup
+
+Before starting frontend, complete a short engineering cleanup.
+
+Tasks
+
+- Move password hashing utilities into `core/security.py`
+- Remove unused imports
+- Create response models for authentication
+- Review authentication module for consistency
+- Final cleanup before commit
+
+Estimated Time
+
+15–20 minutes
+
+---
+
+## Frontend Authentication
+
+Build
+
+- Signup Page
+- Login Page
+- Professional UI
+- API Integration
+- JWT Storage
+- Logout
 - Protected Routes
-- Authentication Middleware
+- Auto Login
+- Authentication Context
+- Redirect after Login
+
+The frontend must use the existing authentication backend.
+
+Do NOT rebuild backend authentication.
 
 ---
 
-## Long-Term Roadmap
+# Long-Term Roadmap
 
-- Authentication
-- PostgreSQL Integration
+Phase 1 ✅
+
+Foundation
+
+Completed
+
+---
+
+Phase 2 ✅
+
+Authentication
+
+Completed
+
+---
+
+Phase 3
+
+Resume Module
+
 - Resume Upload
 - Resume Parsing
-- AI Interview Generation
-- LLM Evaluation
-- Dashboard
-- Analytics
-- Docker
-- CI/CD
-- Cloud Deployment
+- Skill Extraction
 
 ---
 
-## End Goal
+Phase 4
 
-InterviewPilot should demonstrate:
+AI Interview
 
-- Full Stack Development
-- Backend Engineering
+- Question Generator
+- Company Specific Interviews
+- Coding Interviews
+
+---
+
+Phase 5
+
+AI Evaluation
+
+- LLM Feedback
+- Communication Analysis
+- Technical Analysis
+
+---
+
+Phase 6
+
+Dashboard
+
+- Interview History
+- Analytics
+- Progress Tracking
+
+---
+
+Phase 7
+
+DevOps
+
+- Docker
+- Docker Compose
+- GitHub Actions
+- CI/CD
+
+---
+
+Phase 8
+
+Deployment
+
+- Vercel
+- Railway / Render
+- Neon PostgreSQL
+
+---
+
+# AI Instructions
+
+When continuing this project:
+
+- Never rewrite completed modules unless fixing bugs.
+- Build on top of the existing architecture.
+- Follow the Route → Schema → Service → Security → Database architecture.
+- Keep business logic inside services.
+- Keep security logic inside `core/security.py`.
+- Prefer production-grade implementations over tutorial-style code.
+- Explain important architectural decisions before implementing them.
+- Optimize for completing production-ready modules rather than isolated examples.
+
+---
+
+# End Goal
+
+InterviewPilot should demonstrate
+
+- Production Backend Engineering
 - Frontend Engineering
 - Authentication
 - Database Design
@@ -251,4 +521,6 @@ InterviewPilot should demonstrate:
 - Cloud Deployment
 - Software Architecture
 
-The final product should resemble a real startup application rather than a traditional college project.
+The final product should resemble a real startup SaaS application rather than a college project.
+
+This repository should be suitable for placement interviews and portfolio demonstrations.
