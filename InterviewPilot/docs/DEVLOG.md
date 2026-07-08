@@ -58,9 +58,6 @@ Create first API
 
 Connect frontend and backend
 
-# Development Log
-
-This document records the progress of InterviewPilot throughout development.
 
 ---
 
