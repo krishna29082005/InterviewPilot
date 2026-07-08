@@ -1,7 +1,5 @@
 # Development Log
 
-# Development Log
-
 ---
 
 # Session 1
