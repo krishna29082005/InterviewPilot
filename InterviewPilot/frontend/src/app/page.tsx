@@ -1,39 +1,18 @@
-"use client";
+import SignupForm from "@/components/auth/SignupForm";
 
-import { useEffect, useState } from "react";
-
-export default function Home() {
-  const [backendStatus, setBackendStatus] = useState("Checking...");
-
-  useEffect(() => {
-    async function checkBackend() {
-        try {
-            const response = await fetch("http://127.0.0.1:8000/health");
-
-            const data = await response.json();
-
-            setBackendStatus(data.status);
-        } catch (error) {
-            setBackendStatus("Offline");
-        }
-    }
-
-    checkBackend();
-}, []);
-
+export default function SignupPage() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-slate-950">
-      <div className="text-center">
-        <h1 className="text-6xl font-bold text-white">
-          InterviewPilot 🚀
+    <main className="flex min-h-screen items-center justify-center bg-gray-950 px-6">
+      <div className="w-full max-w-md rounded-xl border border-gray-800 bg-gray-900 p-8 shadow-xl">
+        <h1 className="mb-2 text-center text-3xl font-bold text-white">
+          Create Account
         </h1>
 
-        <p className="mt-6 text-xl text-slate-400">
-          Your AI Interview Coach
+        <p className="mb-8 text-center text-gray-400">
+          Start preparing for your dream interview.
         </p>
-        <p className="mt-4 text-lg text-green-400">
-          Backend Status: {backendStatus}
-        </p>
+
+        <SignupForm />
       </div>
     </main>
   );
