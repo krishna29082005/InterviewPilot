@@ -7,12 +7,7 @@ import {
   useEffect,
   ReactNode,
 } from "react";
-
-interface User {
-  id?: number;
-  username?: string;
-  email?: string;
-}
+import { User, getCurrentUser } from "@/lib/api";
 
 interface AuthContextType {
   token: string | null;
@@ -20,7 +15,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
 
-  login: (token: string) => void;
+  login: (token: string, user: User) => void;
   logout: () => void;
 }
 
@@ -37,20 +32,42 @@ export function AuthProvider({
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   // Restore token when the app starts
-  useEffect(() => {
-  const storedToken = localStorage.getItem("access_token");
+useEffect(() => {
+  async function initializeAuth() {
+    const storedToken = localStorage.getItem("access_token");
 
-  if (storedToken) {
-    setToken(storedToken);
+    if (!storedToken) {
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      setToken(storedToken);
+
+      const currentUser = await getCurrentUser(storedToken);
+
+      setUser(currentUser);
+    } catch {
+      localStorage.removeItem("access_token");
+      setToken(null);
+      setUser(null);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
-  setIsLoading(false);
+  initializeAuth();
 }, []);
 
-  const login = (newToken: string) => {
-    localStorage.setItem("access_token", newToken);
-    setToken(newToken);
-  };
+  const login = (
+  newToken: string,
+  currentUser: User
+) => {
+  localStorage.setItem("access_token", newToken);
+
+  setToken(newToken);
+  setUser(currentUser);
+};
 
   const logout = () => {
     localStorage.removeItem("access_token");

@@ -1,19 +1,20 @@
-import SignupForm from "@/components/auth/SignupForm";
+"use client";
 
-export default function SignupPage() {
-  return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-950 px-6">
-      <div className="w-full max-w-md rounded-xl border border-gray-800 bg-gray-900 p-8 shadow-xl">
-        <h1 className="mb-2 text-center text-3xl font-bold text-white">
-          Create Account
-        </h1>
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
-        <p className="mb-8 text-center text-gray-400">
-          Start preparing for your dream interview.
-        </p>
+export default function HomePage() {
+  const router = useRouter();
 
-        <SignupForm />
-      </div>
-    </main>
-  );
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+
+    if (token) {
+      router.replace("/dashboard");
+    } else {
+      router.replace("/signup");
+    }
+  }, [router]);
+
+  return null;
 }

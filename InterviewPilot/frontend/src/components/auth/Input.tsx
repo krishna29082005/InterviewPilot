@@ -46,19 +46,11 @@ export default function Input({
             w-full
             rounded-xl
             border
-            ${
-              errorMessage
-                ? "border-red-500"
-                : "border-gray-700"
-            }
+            ${errorMessage ? "border-red-500" : "border-gray-700"}
             bg-gray-900
             px-4
             py-3
-            ${
-              rightElement
-                ? "pr-12"
-                : ""
-            }
+            ${rightElement ? "pr-12" : ""}
             text-white
             placeholder:text-gray-500
             outline-none
@@ -72,7 +64,7 @@ export default function Input({
         />
 
         {rightElement && (
-          <div className="absolute inset-y-0 right-3 flex items-center">
+          <div className="absolute inset-y-0 right-3 z-10 flex items-center">
             {rightElement}
           </div>
         )}

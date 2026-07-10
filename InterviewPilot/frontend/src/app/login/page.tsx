@@ -1,9 +1,22 @@
-import Link from "next/link";
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 import AuthCard from "@/components/auth/AuthCard";
 import LoginForm from "@/components/auth/LoginForm";
 
+import Link from "next/link";
+
 export default function LoginPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    if (localStorage.getItem("access_token")) {
+      router.replace("/dashboard");
+    }
+  }, [router]);
+
   return (
     <AuthCard
       title="Welcome Back"
@@ -13,9 +26,9 @@ export default function LoginPage() {
           Don't have an account?{" "}
           <Link
             href="/signup"
-            className="font-medium text-blue-500 transition hover:text-blue-400"
+            className="font-medium text-blue-500 hover:text-blue-400"
           >
-            Create one
+            Sign up
           </Link>
         </>
       }

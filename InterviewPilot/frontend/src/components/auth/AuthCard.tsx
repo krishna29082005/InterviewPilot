@@ -44,9 +44,9 @@ export default function AuthCard({
 
         {children}
 
-        <div className="mt-8 border-t border-gray-800 pt-6 text-center text-sm text-gray-400">
-          {footer}
-        </div>
+       <div className="mt-8 border-t border-gray-800 pt-6 text-center text-sm text-gray-400">
+        {footer}
+      </div>
 
       </div>
     </main>

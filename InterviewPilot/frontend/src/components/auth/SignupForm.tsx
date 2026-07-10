@@ -1,20 +1,30 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Eye, EyeOff } from "lucide-react";
 
 import Input from "./Input";
 import Button from "./Button";
 
-import { signupUser } from "@/lib/api";
+import {
+  signupUser,
+  loginUser,
+  getCurrentUser,
+} from "@/lib/api";
+
+import { useAuth } from "@/context/AuthContext";
 
 export default function SignupForm() {
+  const router = useRouter();
+  const { login } = useAuth();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   async function handleSubmit(
@@ -23,9 +33,8 @@ export default function SignupForm() {
     e.preventDefault();
 
     setError("");
-    setSuccess("");
 
-    // Frontend Validation
+    // Validation
     if (!name.trim()) {
       setError("Name is required.");
       return;
@@ -49,17 +58,37 @@ export default function SignupForm() {
     setLoading(true);
 
     try {
-      const response = await signupUser({
+      // Create account
+      await signupUser({
         name,
         email,
         password,
       });
 
-      setSuccess(response.message);
+      // Login automatically
+      const loginResponse = await loginUser({
+        email,
+        password,
+      });
 
+      // Fetch current user
+      const currentUser = await getCurrentUser(
+        loginResponse.access_token
+      );
+
+      // Save token & user
+      login(
+        loginResponse.access_token,
+        currentUser
+      );
+
+      // Clear form
       setName("");
       setEmail("");
       setPassword("");
+
+      // Go to dashboard
+      router.push("/dashboard");
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
@@ -101,26 +130,25 @@ export default function SignupForm() {
         value={password}
         onChange={setPassword}
         rightElement={
-      <button
-        type="button"
-        onClick={() => setShowPassword(!showPassword)}
-        className="text-gray-400 transition hover:text-white"
-    >
-      {showPassword ? "🙈" : "👁️"}
-    </button>
-  }
-/>
-
+          <button
+            type="button"
+            onClick={() =>
+              setShowPassword((prev) => !prev)
+            }
+            className="cursor-pointer text-gray-400 transition hover:text-white"
+          >
+            {showPassword ? (
+              <EyeOff size={18} />
+            ) : (
+              <Eye size={18} />
+            )}
+          </button>
+        }
+      />
 
       {error && (
         <div className="rounded-lg border border-red-500/40 bg-red-500/10 p-3 text-sm text-red-300">
           {error}
-        </div>
-      )}
-
-      {success && (
-        <div className="rounded-lg border border-green-500/40 bg-green-500/10 p-3 text-sm text-green-300">
-          {success}
         </div>
       )}
 

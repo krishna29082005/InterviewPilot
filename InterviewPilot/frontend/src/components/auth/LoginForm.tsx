@@ -1,12 +1,16 @@
 "use client";
-
+import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import Input from "./Input";
 import Button from "./Button";
 
-import { loginUser } from "@/lib/api";
+import {
+  loginUser,
+  getCurrentUser,
+} from "@/lib/api";
+
 import { useAuth } from "@/context/AuthContext";
 
 export default function LoginForm() {
@@ -28,7 +32,6 @@ export default function LoginForm() {
 
     setError("");
 
-    // Frontend Validation
     if (!email.trim()) {
       setError("Email is required.");
       return;
@@ -47,7 +50,11 @@ export default function LoginForm() {
         password,
       });
 
-      login(response.access_token);
+      const currentUser = await getCurrentUser(
+        response.access_token
+      );
+
+      login(response.access_token, currentUser);
 
       setEmail("");
       setPassword("");
@@ -86,17 +93,24 @@ export default function LoginForm() {
         value={password}
         onChange={setPassword}
         rightElement={
-        <button
-        type="button"
-        onClick={() => setShowPassword(!showPassword)}
-        className="text-gray-400 transition hover:text-white"
-    >
-      {showPassword ? "🙈" : "👁️"}
-    </button>
-  }
-/>
+          <button
+            type="button"
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => {
+              console.log("clicked", showPassword);
+              setShowPassword((prev) => !prev);
+            }}
+            className="cursor-pointer select-none text-gray-400 transition hover:text-white"
+          >
+            {showPassword ? (
+              <EyeOff size={18} />
+                 ) : (
+              <Eye size={18} />
+            )}
+          </button>
+        }
+      />
 
-     
       {error && (
         <div className="rounded-lg border border-red-500/40 bg-red-500/10 p-3 text-sm text-red-300">
           {error}

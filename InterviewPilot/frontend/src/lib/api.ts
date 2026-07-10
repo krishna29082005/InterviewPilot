@@ -58,3 +58,31 @@ export async function loginUser(
 
   return result;
 }
+
+export interface User {
+  id: number;
+  username: string;
+  email: string;
+}
+
+export async function getCurrentUser(
+  token: string
+): Promise<User> {
+  const response = await fetch(`${BASE_URL}/auth/me`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  console.log("Status:", response.status);
+
+  const result = await response.json();
+  console.log("Response:", result);
+
+  if (!response.ok) {
+    throw new Error(result.detail || "Failed to fetch user.");
+  }
+
+  return result;
+}

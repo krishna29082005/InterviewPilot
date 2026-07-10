@@ -6,13 +6,14 @@ import { useRouter } from "next/navigation";
 import Button from "@/components/auth/Button";
 import { useAuth } from "@/context/AuthContext";
 
-export default function Dashboard() {
+export default function DashboardPage() {
   const router = useRouter();
 
   const {
+    user,
+    logout,
     isAuthenticated,
     isLoading,
-    logout,
   } = useAuth();
 
   useEffect(() => {
@@ -42,7 +43,7 @@ export default function Dashboard() {
     <main className="flex min-h-screen items-center justify-center bg-gray-950">
       <div className="w-full max-w-lg rounded-xl bg-gray-900 p-10 text-center shadow-xl">
         <h1 className="mb-4 text-4xl font-bold text-white">
-          Welcome to InterviewPilot 🚀
+          Welcome back, {user?.username} 👋
         </h1>
 
         <p className="mb-8 text-gray-400">
