@@ -3,29 +3,31 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-import Button from "@/components/auth/Button";
+import DashboardLayout from "@/components/dashboard/DashboardLayout";
+import DashboardCard from "@/components/dashboard/DashboardCard";
 import { useAuth } from "@/context/AuthContext";
+import {
+  FileText,
+  BrainCircuit,
+  BarChart3,
+  Rocket,
+} from "lucide-react";
+
 
 export default function DashboardPage() {
   const router = useRouter();
 
-  const {
-    user,
-    logout,
-    isAuthenticated,
-    isLoading,
-  } = useAuth();
+ const {
+  user,
+  isAuthenticated,
+  isLoading,
+} = useAuth();
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      router.push("/login");
+      router.replace("/login");
     }
   }, [isLoading, isAuthenticated, router]);
-
-  function handleLogout() {
-    logout();
-    router.push("/login");
-  }
 
   if (isLoading) {
     return (
@@ -35,27 +37,57 @@ export default function DashboardPage() {
     );
   }
 
-  if (!isAuthenticated) {
-    return null;
-  }
+  if (!isAuthenticated) return null;
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-950">
-      <div className="w-full max-w-lg rounded-xl bg-gray-900 p-10 text-center shadow-xl">
-        <h1 className="mb-4 text-4xl font-bold text-white">
-          Welcome back, {user?.username} 👋
-        </h1>
+    <DashboardLayout>
+      <div className="mb-10">
 
-        <p className="mb-8 text-gray-400">
-          Authentication completed successfully.
-        </p>
+  <p className="text-sm uppercase tracking-widest text-blue-400">
+    Interview Pilot
+  </p>
 
-        <Button
-          text="Logout"
-          onClick={handleLogout}
-          className="bg-red-600 hover:bg-red-700"
-        />
-      </div>
-    </main>
+  <h1 className="mt-2 text-5xl font-bold text-white">
+    Welcome back, {user?.username} 👋
+  </h1>
+
+  <p className="mt-3 text-lg text-gray-400">
+    Ready to ace your next interview today?
+  </p>
+
+</div>
+
+     <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
+
+  <DashboardCard
+    icon={<FileText size={28} />}
+    title="Resume"
+    value="0"
+    description="Upload your resume."
+  />
+
+  <DashboardCard
+    icon={<BrainCircuit size={28} />}
+    title="Interviews"
+    value="0"
+    description="Mock interviews completed."
+  />
+
+  <DashboardCard
+    icon={<BarChart3 size={28} />}
+    title="Analytics"
+    value="--"
+    description="Performance insights."
+  />
+
+  <DashboardCard
+    icon={<Rocket size={28} />}
+    title="Get Started"
+    value="🚀"
+    description="Begin your preparation."
+  />
+
+</div>
+    </DashboardLayout>
   );
 }

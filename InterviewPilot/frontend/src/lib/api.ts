@@ -86,3 +86,69 @@ export async function getCurrentUser(
 
   return result;
 }
+
+export async function getResumeInfo(token: string) {
+  const response = await fetch(
+    `${BASE_URL}/resume/info`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return response.json();
+}
+
+export function downloadResume(token: string) {
+  window.open(
+    `${BASE_URL}/resume/download?token=${token}`
+  );
+}
+
+export async function deleteResume(
+  token: string
+) {
+  const response = await fetch(
+    `${BASE_URL}/resume/delete`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return response.json();
+}
+
+
+export async function uploadResume(
+  file: File,
+  token: string
+) {
+  const formData = new FormData();
+
+  formData.append("file", file);
+
+  const response = await fetch(
+    `${BASE_URL}/resume/upload`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    }
+  );
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      result.detail || "Upload failed."
+    );
+  }
+
+  return result;
+}

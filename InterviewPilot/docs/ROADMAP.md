@@ -6,9 +6,9 @@ This roadmap tracks the development progress of InterviewPilot.
 
 # Current Version
 
-**v0.3.0**
+**v0.4.0**
 
-Current Sprint: **Sprint 3 — Login & JWT Authentication**
+**Current Sprint:** Sprint 4 — Resume Intelligence Foundation
 
 ---
 
@@ -44,9 +44,9 @@ Current Sprint: **Sprint 3 — Login & JWT Authentication**
 
 ---
 
-# Phase 2 — Authentication 🚧
+# Phase 2 — Authentication ✅
 
-**Status:** In Progress
+**Status:** Completed
 
 ## Database
 
@@ -65,88 +65,135 @@ Current Sprint: **Sprint 3 — Login & JWT Authentication**
 
 ## Login
 
-- [ ] User Login API
-- [ ] Password Verification
-- [ ] JWT Authentication
-- [ ] Access Token
-- [ ] Protected Routes
-- [ ] Current User Endpoint
+- [x] User Login API
+- [x] Password Verification
+- [x] JWT Authentication
+- [x] Access Token
+- [x] Protected Routes
+- [x] Current User Endpoint
 
 ## Frontend
 
-- [ ] Signup Page
-- [ ] Login Page
-- [ ] Authentication Forms
-- [ ] Route Protection
+- [x] Signup Page
+- [x] Login Page
+- [x] Authentication Forms
+- [x] Auth Context
+- [x] Persistent Login
+- [x] Route Protection
+- [x] Dashboard Redirect
+- [x] Logout
 
 ---
 
-# Phase 3 — Resume Intelligence
+# Phase 3 — Dashboard ✅
 
-**Status:** Planned
+**Status:** Completed
+
+## Dashboard
+
+- [x] Professional Sidebar
+- [x] Protected Dashboard
+- [x] Dashboard Cards
+- [x] Responsive Layout
+- [x] Navigation System
+
+---
+
+# Phase 4 — Resume Intelligence 🚧
+
+**Status:** In Progress
 
 ## Resume
 
-- [ ] Resume Upload
-- [ ] Resume Storage
-- [ ] PDF Parsing
-- [ ] Skill Extraction
-- [ ] Resume Scoring
+- [x] Resume Upload UI
+- [x] PDF Validation
+- [x] Resume Upload API
+- [x] Resume Storage
+- [x] Success Notifications
+- [x] Resume Management UI
+
+### Remaining
+
+- [ ] Resume Information API
+- [ ] Resume Download
+- [ ] Resume Replace
+- [ ] Resume Delete
 
 ---
 
-# Phase 4 — AI Interview
+# Phase 5 — AI Resume Intelligence 🤖
 
 **Status:** Planned
 
-## Interview
+- [ ] Resume Parsing
+- [ ] ATS Resume Score
+- [ ] Skill Extraction
+- [ ] Experience Extraction
+- [ ] Education Extraction
+- [ ] Keyword Detection
+- [ ] Missing Skills Detection
+- [ ] Resume Improvement Suggestions
+- [ ] Company-specific Resume Feedback
+- [ ] AI Resume Chat
 
+---
+
+# Phase 6 — AI Interview Engine 🤖
+
+**Status:** Planned
+
+- [ ] Resume-based Questions
 - [ ] Technical Interview Generator
 - [ ] Behavioral Interview Generator
-- [ ] Company Specific Interviews
+- [ ] Company-specific Interviews
 - [ ] Coding Interview
 - [ ] Adaptive Difficulty
+- [ ] AI Follow-up Questions
 
 ---
 
-# Phase 5 — AI Evaluation
+# Phase 7 — AI Evaluation 🤖
 
 **Status:** Planned
 
-- [ ] LLM Feedback
+- [ ] LLM Evaluation
 - [ ] Technical Score
 - [ ] Communication Score
 - [ ] Behavioral Score
-- [ ] Improvement Suggestions
+- [ ] Confidence Score
+- [ ] AI Feedback
+- [ ] Personalized Improvement Plan
 
 ---
 
-# Phase 6 — Dashboard & Analytics
+# Phase 8 — Analytics & Learning 🚧
 
 **Status:** Planned
 
-- [ ] Dashboard Layout
-- [ ] User Profile
+- [ ] AI Dashboard
+- [ ] Resume Score
 - [ ] Interview History
 - [ ] Progress Tracking
-- [ ] Analytics
-- [ ] Performance Graphs
+- [ ] Weak Topic Detection
+- [ ] Company Readiness Score
+- [ ] Adaptive Learning Roadmap
 
 ---
 
-# Phase 7 — Advanced Features
+# Phase 9 — Advanced AI Features
 
 **Status:** Planned
 
 - [ ] Voice Interviews
 - [ ] Speech-to-Text
 - [ ] Text-to-Speech
-- [ ] Interview Recording
-- [ ] Company Readiness Score
+- [ ] AI Interview Coach
+- [ ] Real-time AI Feedback
+- [ ] Multi-Agent Evaluation
 
 ---
 
-# Phase 8 — DevOps
+# Phase 10 — DevOps
 
 **Status:** Planned
 
@@ -159,27 +206,27 @@ Current Sprint: **Sprint 3 — Login & JWT Authentication**
 
 ---
 
-# Phase 9 — Deployment
+# Phase 11 — Deployment
 
 **Status:** Planned
 
 - [ ] Deploy Frontend (Vercel)
 - [ ] Deploy Backend (Railway / Render)
 - [ ] Deploy PostgreSQL (Neon)
-- [ ] Environment Variables
-- [ ] Production Configuration
+- [ ] Production Environment
+- [ ] Monitoring & Logging
 
 ---
 
 # Version Timeline
 
--v0.1.0 — Project Foundation
--v0.2.0 — Backend Integration
--v0.3.0 — Authentication
--v0.4.0 — Resume Intelligence
--v0.5.0 — AI Interview
--v0.6.0 — AI Evaluation
--v0.7.0 — Dashboard & Analytics
--v0.8.0 — DevOps
--v0.9.0 — Deployment
--v1.0.0 — Production SaaS Release
+- v0.1.0 — Project Foundation
+- v0.2.0 — Backend Integration
+- v0.3.0 — Authentication
+- v0.4.0 — Dashboard + Resume Upload
+- v0.5.0 — AI Resume Intelligence
+- v0.6.0 — AI Interview Engine
+- v0.7.0 — AI Evaluation
+- v0.8.0 — AI Analytics
+- v0.9.0 — DevOps & Deployment
+- v1.0.0 — Production AI Interview Platform

@@ -1,14 +1,16 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
+from app.api.routes.resume import router as resume_router
 from app.api.routes.health import router as health_router
 from app.api.routes.auth import router as auth_router
+from app.api.routes.resume import router as resume_router
+
 app = FastAPI(
     title="InterviewPilot API",
     description="Backend API for InterviewPilot - AI Powered Interview Preparation Platform",
     version="0.1.0"
 )
-
+app.include_router(resume_router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -29,3 +31,4 @@ def root():
 
 app.include_router(health_router)
 app.include_router(auth_router)
+app.include_router(resume_router)

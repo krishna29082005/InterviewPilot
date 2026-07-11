@@ -491,14 +491,51 @@ Passed all 8 tests:
 
 ---
 
-## Next Session
+# Development Log
 
-Sprint 5 — Frontend Authentication
+## Version 0.4.0 (11-07-2026)
 
-- Professional Signup Page
-- Professional Login Page
-- API Integration
-- JWT Storage
-- Authentication Context
-- Logout
-- Protected Dashboard
+### Authentication
+- Improved authentication flow
+- Automatic login after signup
+- Persistent authentication using AuthContext
+- Dashboard route protection
+- Logout functionality
+
+### Dashboard
+- Redesigned dashboard layout
+- Added professional sidebar navigation
+- Created reusable DashboardCard component
+- Added Resume, Interviews, Analytics and Quick Actions sections
+
+### Resume Module
+- Built Resume Management page
+- Resume upload UI
+- PDF validation
+- File selection preview
+- Resume upload API integration
+- Backend resume storage
+- Success and error notifications
+- Resume management card
+- Resume download/replace/delete UI (frontend scaffold)
+
+### Backend
+- Resume upload endpoint
+- Authentication middleware
+- JWT verification improvements
+- Uploads folder integration
+
+### Bug Fixes
+- Fixed routing issues
+- Fixed login redirect
+- Fixed dashboard rendering
+- Fixed token restoration
+- Fixed resume upload authentication
+- Fixed backend endpoint registration
+
+### Next Milestone
+- Resume Management APIs
+- Resume AI Analysis
+- ATS Score Generation
+- Skill Extraction
+- AI Interview Generation

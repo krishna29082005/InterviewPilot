@@ -133,24 +133,44 @@ Release Date: July 2026
 
 ---
 
-# Upcoming (v0.4.0)
+# Changelog
 
-## Authentication
+## v0.4.0 - Resume Module
 
-- User Login
-- JWT Authentication
-- Protected Routes
-- Authentication Middleware
+### Added
 
----
+- Authentication persistence
+- Protected dashboard
+- Professional dashboard UI
+- Sidebar navigation
+- Resume upload page
+- PDF upload support
+- Resume storage backend
+- Resume upload notifications
+- Resume management card
 
-## Future Releases
+### Improved
 
-### v0.5.0
+- Login flow
+- Signup flow
+- Dashboard UX
+- Error handling
+- Authentication state restoration
 
-- Resume Upload
-- PDF Parsing
+### Fixed
+
+- Login routing
+- Dashboard rendering
+- JWT authentication
+- Resume upload integration
+
+### Upcoming
+
+- AI Resume Analysis
+- ATS Score
 - Skill Extraction
+- Resume Improvements
+- Company Specific AI Feedback
 
 ### v0.6.0
 
