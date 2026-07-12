@@ -2,11 +2,17 @@
 
 import { useRef, useState } from "react";
 
-import { uploadResume } from "@/lib/api";
+import { uploadResume, type ResumeInfo } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import Button from "../auth/Button";
 
-export default function ResumeUpload() {
+export default function ResumeUpload({
+  hasResume = false,
+  onUploadSuccess,
+}: {
+  hasResume?: boolean;
+  onUploadSuccess?: (resume: ResumeInfo) => void;
+}) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -82,6 +88,12 @@ export default function ResumeUpload() {
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
+
+      onUploadSuccess?.({
+        filename: result.filename,
+        size: selectedFile.size,
+        uploaded_at: new Date().toLocaleString(),
+      });
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
@@ -98,7 +110,7 @@ export default function ResumeUpload() {
   return (
     <div className="rounded-2xl border border-gray-800 bg-gray-900 p-8">
       <h2 className="text-2xl font-semibold text-white">
-        Upload Resume
+        {hasResume ? "Replace Resume" : "Upload Resume"}
       </h2>
 
       <p className="mt-2 text-gray-400">
@@ -108,7 +120,9 @@ export default function ResumeUpload() {
       {success && (
         <div className="mt-6 rounded-xl border border-green-500/30 bg-green-500/10 p-4">
           <h3 className="font-semibold text-green-400">
-            ✅ Resume uploaded successfully!
+            ✅ {hasResume
+              ? "Resume replaced successfully!"
+              : "Resume uploaded successfully!"}
           </h3>
 
           <p className="mt-1 text-sm text-green-300">
@@ -130,8 +144,11 @@ export default function ResumeUpload() {
       )}
 
       <div className="mt-8 flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-700 p-16">
-        <p className="text-gray-400">
-          Drag & Drop your resume here
+
+        <p className="text-gray-400 text-center">
+          {hasResume
+            ? "Upload a new resume to replace your current one."
+            : "Drag & Drop your resume here"}
         </p>
 
         <p className="my-5 text-gray-500">
@@ -147,7 +164,11 @@ export default function ResumeUpload() {
         />
 
         <Button
-          text="Choose File"
+          text={
+            hasResume
+              ? "Choose New Resume"
+              : "Choose File"
+          }
           type="button"
           onClick={handleChooseFile}
         />
@@ -170,7 +191,11 @@ export default function ResumeUpload() {
 
             <div className="mt-6">
               <Button
-                text="Upload Resume"
+                text={
+                  hasResume
+                    ? "Replace Resume"
+                    : "Upload Resume"
+                }
                 type="button"
                 onClick={handleUpload}
               />

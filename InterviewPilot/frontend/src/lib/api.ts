@@ -1,9 +1,29 @@
 const BASE_URL = "http://127.0.0.1:8000";
 
+/* ===========================
+   Authentication
+=========================== */
+
 export interface SignupData {
   name: string;
   email: string;
   password: string;
+}
+
+export interface LoginData {
+  email: string;
+  password: string;
+}
+
+export interface LoginResponse {
+  access_token: string;
+  token_type: string;
+}
+
+export interface User {
+  id: number;
+  username: string;
+  email: string;
 }
 
 export async function signupUser(data: SignupData) {
@@ -22,16 +42,6 @@ export async function signupUser(data: SignupData) {
   }
 
   return result;
-}
-
-export interface LoginData {
-  email: string;
-  password: string;
-}
-
-export interface LoginResponse {
-  access_token: string;
-  token_type: string;
 }
 
 export async function loginUser(
@@ -59,26 +69,16 @@ export async function loginUser(
   return result;
 }
 
-export interface User {
-  id: number;
-  username: string;
-  email: string;
-}
-
 export async function getCurrentUser(
   token: string
 ): Promise<User> {
   const response = await fetch(`${BASE_URL}/auth/me`, {
-    method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
 
-  console.log("Status:", response.status);
-
   const result = await response.json();
-  console.log("Response:", result);
 
   if (!response.ok) {
     throw new Error(result.detail || "Failed to fetch user.");
@@ -87,41 +87,15 @@ export async function getCurrentUser(
   return result;
 }
 
-export async function getResumeInfo(token: string) {
-  const response = await fetch(
-    `${BASE_URL}/resume/info`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+/* ===========================
+   Resume
+=========================== */
 
-  return response.json();
+export interface ResumeInfo {
+  filename: string;
+  size: number;
+  uploaded_at: string;
 }
-
-export function downloadResume(token: string) {
-  window.open(
-    `${BASE_URL}/resume/download?token=${token}`
-  );
-}
-
-export async function deleteResume(
-  token: string
-) {
-  const response = await fetch(
-    `${BASE_URL}/resume/delete`,
-    {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-
-  return response.json();
-}
-
 
 export async function uploadResume(
   file: File,
@@ -145,10 +119,92 @@ export async function uploadResume(
   const result = await response.json();
 
   if (!response.ok) {
-    throw new Error(
-      result.detail || "Upload failed."
-    );
+    throw new Error(result.detail || "Upload failed.");
   }
 
   return result;
+}
+
+export async function getResumeInfo(
+  token: string
+): Promise<ResumeInfo> {
+  const response = await fetch(
+    `${BASE_URL}/resume/info`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.detail || "Failed to fetch resume.");
+  }
+
+  return result;
+}
+
+export async function deleteResume(
+  token: string
+) {
+  const response = await fetch(
+    `${BASE_URL}/resume/delete`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.detail || "Failed to delete resume.");
+  }
+
+  return result;
+}
+
+/**
+ * Download resume.
+ *
+ * NOTE:
+ * Since your backend expects JWT in the Authorization header,
+ * this function will be updated later to use fetch + blob.
+ */
+export async function downloadResume(
+  token: string
+) {
+  const response = await fetch(
+    `${BASE_URL}/resume/download`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Download failed.");
+  }
+
+  const blob = await response.blob();
+
+  const url = window.URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = "Resume.pdf";
+
+  document.body.appendChild(link);
+
+  link.click();
+
+  link.remove();
+
+  window.URL.revokeObjectURL(url);
 }

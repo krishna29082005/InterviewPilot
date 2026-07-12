@@ -1,5 +1,7 @@
 "use client";
 
+import { ReactNode } from "react";
+
 type Props = {
   text: string;
   type?: "button" | "submit" | "reset";
@@ -8,6 +10,7 @@ type Props = {
   loading?: boolean;
   loadingText?: string;
   className?: string;
+  icon?: ReactNode;
 };
 
 export default function Button({
@@ -16,7 +19,9 @@ export default function Button({
   onClick,
   disabled = false,
   loading = false,
+  loadingText = "Loading...",
   className = "",
+  icon,
 }: Props) {
   return (
     <button
@@ -28,6 +33,7 @@ export default function Button({
         w-full
         items-center
         justify-center
+        gap-2
         rounded-xl
         bg-blue-600
         px-4
@@ -51,7 +57,7 @@ export default function Button({
       {loading ? (
         <>
           <svg
-            className="mr-2 h-5 w-5 animate-spin"
+            className="h-5 w-5 animate-spin"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -71,10 +77,13 @@ export default function Button({
             />
           </svg>
 
-          Loading...
+          {loadingText}
         </>
       ) : (
-        text
+        <>
+          {icon}
+          <span>{text}</span>
+        </>
       )}
     </button>
   );

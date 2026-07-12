@@ -12,6 +12,7 @@ import Button from "../auth/Button";
 interface ResumeCardProps {
   filename: string;
   size: number;
+  uploadedAt: string;
   onDownload: () => void;
   onReplace: () => void;
   onDelete: () => void;
@@ -20,6 +21,7 @@ interface ResumeCardProps {
 export default function ResumeCard({
   filename,
   size,
+  uploadedAt,
   onDownload,
   onReplace,
   onDelete,
@@ -41,8 +43,12 @@ export default function ResumeCard({
             {filename}
           </h2>
 
-          <p className="text-sm text-gray-400">
+          <p className="mt-1 text-sm text-gray-400">
             {(size / 1024).toFixed(2)} KB
+          </p>
+
+          <p className="mt-1 text-sm text-gray-500">
+            Uploaded: {uploadedAt}
           </p>
         </div>
 
@@ -62,6 +68,7 @@ export default function ResumeCard({
           text="Replace Resume"
           icon={<RefreshCw size={18} />}
           onClick={onReplace}
+          disabled
         />
 
         <Button
