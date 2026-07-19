@@ -22,18 +22,27 @@ export default function ResumePage() {
   const [loading, setLoading] = useState(true);
 
   async function fetchResume() {
-    if (!token) return;
+  console.log("🔥 fetchResume called");
+  console.log("Token:", token);
 
-    try {
-      const data = await getResumeInfo(token);
-
-      setResume(data);
-    } catch {
-      setResume(null);
-    } finally {
-      setLoading(false);
-    }
+  if (!token) {
+    console.log("❌ No token");
+    return;
   }
+
+  try {
+    const data = await getResumeInfo(token);
+
+    console.log("✅ Resume Data:", data);
+
+    setResume(data);
+  } catch (err) {
+    console.error("❌ Error:", err);
+    setResume(null);
+  } finally {
+    setLoading(false);
+  }
+}
 
   useEffect(() => {
     fetchResume();
@@ -50,7 +59,6 @@ export default function ResumePage() {
 
     try {
       await deleteResume(token);
-
       setResume(null);
     } catch (err) {
       if (err instanceof Error) {
@@ -114,6 +122,147 @@ export default function ResumePage() {
           </div>
         )}
       </div>
+
+      {/* ================= AI Resume Analysis ================= */}
+
+      {resume?.analysis && (
+        <div className="mt-10 space-y-8">
+
+          {/* Header */}
+
+          <div className="rounded-2xl bg-gray-900 border border-gray-800 p-8">
+            <h2 className="text-3xl font-bold text-white">
+              {resume.analysis.personal_info.full_name}
+            </h2>
+
+            <p className="mt-2 text-gray-400">
+              {resume.analysis.personal_info.email}
+            </p>
+
+            <p className="mt-4 text-lg text-gray-300">
+              {resume.analysis.summary}
+            </p>
+          </div>
+
+          {/* Skills */}
+
+          <div className="rounded-2xl bg-gray-900 border border-gray-800 p-8">
+            <h3 className="text-2xl font-semibold text-white">
+              Programming Languages
+            </h3>
+
+            <div className="mt-5 flex flex-wrap gap-3">
+              {resume.analysis.technical_skills.programming_languages.map(
+                (skill: string) => (
+                  <span
+                    key={skill}
+                    className="rounded-full bg-blue-600 px-4 py-2 text-sm font-medium text-white"
+                  >
+                    {skill}
+                  </span>
+                )
+              )}
+            </div>
+          </div>
+
+          {/* Education */}
+
+          <div className="rounded-2xl bg-gray-900 border border-gray-800 p-8">
+            <h3 className="text-2xl font-semibold text-white">
+              Education
+            </h3>
+
+            <div className="mt-6 space-y-5">
+              {resume.analysis.education.map((edu: any) => (
+                <div
+                  key={edu.institution}
+                  className="rounded-xl bg-gray-800 p-5"
+                >
+                  <h4 className="text-xl font-bold text-white">
+                    {edu.institution}
+                  </h4>
+
+                  <p className="text-gray-300">
+                    {edu.degree}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Experience */}
+
+          <div className="rounded-2xl bg-gray-900 border border-gray-800 p-8">
+            <h3 className="text-2xl font-semibold text-white">
+              Experience
+            </h3>
+
+            <div className="mt-6 space-y-5">
+              {resume.analysis.experience.map((exp: any) => (
+                <div
+                  key={`${exp.company}-${exp.title}`}
+                  className="rounded-xl bg-gray-800 p-5"
+                >
+                  <h4 className="text-xl font-bold text-white">
+                    {exp.title}
+                  </h4>
+
+                  <p className="text-blue-400">
+                    {exp.company}
+                  </p>
+
+                  <p className="mt-1 text-sm text-gray-400">
+                    {exp.start_date} - {exp.end_date}
+                  </p>
+
+                  <ul className="mt-4 list-disc pl-5 text-gray-300 space-y-2">
+                    {exp.description.map((point: string) => (
+                      <li key={point}>{point}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Projects */}
+
+          <div className="rounded-2xl bg-gray-900 border border-gray-800 p-8">
+            <h3 className="text-2xl font-semibold text-white">
+              Projects
+            </h3>
+
+            <div className="mt-6 space-y-5">
+              {resume.analysis.projects.map((project: any) => (
+                <div
+                  key={project.title}
+                  className="rounded-xl bg-gray-800 p-5"
+                >
+                  <h4 className="text-xl font-bold text-white">
+                    {project.title}
+                  </h4>
+
+                  <p className="mt-2 text-gray-300">
+                    {project.description}
+                  </p>
+
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {project.technologies.map((tech: string) => (
+                      <span
+                        key={tech}
+                        className="rounded-full bg-gray-700 px-3 py-1 text-sm text-white"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </div>
+      )}
     </DashboardLayout>
   );
 }

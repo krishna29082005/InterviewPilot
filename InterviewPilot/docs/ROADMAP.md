@@ -85,41 +85,20 @@ This roadmap tracks the development progress of InterviewPilot.
 
 ---
 
-# Phase 3 — Dashboard ✅
-
-**Status:** Completed
-
-## Dashboard
-
-- [x] Professional Sidebar
-- [x] Protected Dashboard
-- [x] Dashboard Cards
-- [x] Responsive Layout
-- [x] Navigation System
-
----
-
-# Phase 4 — Resume Intelligence 🚧
+# Phase 3 — Resume Intelligence
 
 **Status:** In Progress
 
-## Resume
+## Resume Management ✅
 
-- [x] Resume Upload UI
-- [x] PDF Validation
-- [x] Resume Upload API
+- [x] Resume Upload
 - [x] Resume Storage
-- [x] Success Notifications
-- [x] Resume Management UI
+- [x] Resume Information API
+- [x] Resume Download
+- [x] Resume Delete
+- [x] Resume Replace
 
-### Remaining
 
-- [ ] Resume Information API
-- [ ] Resume Download
-- [ ] Resume Replace
-- [ ] Resume Delete
-
----
 
 # Phase 5 — AI Resume Intelligence 🤖
 

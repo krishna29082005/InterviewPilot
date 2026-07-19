@@ -2,7 +2,7 @@ import asyncio
 import io
 from pathlib import Path
 
-from app.services import resume as resume_service
+from backend.app.ai.services import resume as resume_service
 
 
 class FakeUploadFile:

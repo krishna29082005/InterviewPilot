@@ -95,8 +95,8 @@ export interface ResumeInfo {
   filename: string;
   size: number;
   uploaded_at: string;
+  analysis: any;
 }
-
 export async function uploadResume(
   file: File,
   token: string

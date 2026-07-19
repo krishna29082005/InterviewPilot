@@ -1,0 +1,171 @@
+{
+    "personal_info": {
+        "full_name": "Krishna Mehra R",
+        "email": "u23ai064@coed.svnit.ac.in",
+        "phone": "+91 6354604426",
+        "location": "Sardar Vallabhbhai National Institute of Technology, Surat",
+        "linkedin": null,
+        "github": null,
+        "leetcode": null,
+        "portfolio": null
+    },
+    "summary": null,
+    "education": [
+        {
+            "institution": "NIT Surat",
+            "degree": "B.Tech - Artificial Intelligence",
+            "field_of_study": null,
+            "start_date": null,
+            "end_date": null,
+            "cgpa": "7.4 CGPA"
+        },
+        {
+            "institution": "SGVP, Rajkot",
+            "degree": "12th (CBSE)",
+            "field_of_study": null,
+            "start_date": null,
+            "end_date": null,
+            "cgpa": "87.1%"
+        },
+        {
+            "institution": "Kendriya Vidyalaya, Rajkot",
+            "degree": "10th (CBSE)",
+            "field_of_study": null,
+            "start_date": null,
+            "end_date": null,
+            "cgpa": "91.2%"
+        }
+    ],
+    "experience": [
+        {
+            "company": "MINDBEND (Annual Technical Festival)",
+            "title": "Manager",
+            "start_date": "Jan 2026",
+            "end_date": "Apr 2026",
+            "location": null,
+            "description": []
+        },
+        {
+            "company": "MINDBEND (Annual Technical Festival)",
+            "title": "Co-Head",
+            "start_date": "Jan 2025",
+            "end_date": "Apr 2025",
+            "location": null,
+            "description": []
+        },
+        {
+            "company": "MINDBEND (Annual Technical Festival)",
+            "title": "Executive",
+            "start_date": "Jan 2024",
+            "end_date": "Apr 2024",
+            "location": null,
+            "description": []
+        }
+    ],
+    "projects": [
+        {
+            "title": "Can You Break RLVER? Probing Adversarial Robustness of RL-Trained Empathetic Agents",
+            "technologies": [
+                "Reinforcement Learning",
+                "LLM Evaluation",
+                "Empathy Modeling"
+            ],
+            "description": "Research project evaluating the adversarial robustness of RL-trained empathetic agents.",
+            "bullet_points": [
+                "Designed the Adversarial Empathy Benchmark (AEB) with six psychologically grounded adversarial dialogue trajectories.",
+                "Proposed Emotional Consistency Score (ECS) to distinguish emotional state tracking from state improvement in dialogue systems."
+            ]
+        },
+        {
+            "title": "VidSynth AI – YouTube Chat Assistant",
+            "technologies": [
+                "Streamlit",
+                "Gemini 2.5 Flash Lite",
+                "ChromaDB",
+                "LangChain",
+                "Sentence Transformers"
+            ],
+            "description": "An intelligent Streamlit application that transforms YouTube videos into structured notes, key topics, and an interactive chatbot.",
+            "bullet_points": [
+                "Implemented a Retrieval-Augmented Generation (RAG) system using Gemini 2.5 Flash Lite and ChromaDB for context-aware QA.",
+                "Engineered modules for transcript extraction, English translation, topic detection, and concise note generation."
+            ]
+        },
+        {
+            "title": "Rare Gen master - Synthetic Data Generation for Rare Cancer Diseases using GANs",
+            "technologies": [
+                "Deep Learning",
+                "PyTorch",
+                "WGAN-GP",
+                "DCGAN"
+            ],
+            "description": "Building a GAN-based framework to synthesize rare cancer imaging data, addressing dataset scarcity.",
+            "bullet_points": [
+                "Building a GAN-based framework (WGAN-GP, DCGAN) to synthesize rare cancer imaging data, addressing dataset scarcity and imbalance.",
+                "Validating generated data with FID/IS metrics and testing improvements in downstream classification performance."
+            ]
+        }
+    ],
+    "technical_skills": {
+        "programming_languages": [
+            "C",
+            "C++",
+            "Python",
+            "R Language",
+            "HTML"
+        ],
+        "frameworks": [
+            "TensorFlow",
+            "Keras",
+            "PyTorch"
+        ],
+        "libraries": [
+            "Scikit-learn",
+            "Hugging Face",
+            "Transformers",
+            "Pandas",
+            "NumPy",
+            "Matplotlib",
+            "Seaborn",
+            "Sentence Transformers"
+        ],
+        "databases": [
+            "MongoDB",
+            "MySQL",
+            "Cassandra",
+            "ChromaDB"
+        ],
+        "cloud": [],
+        "tools": [
+            "Git",
+            "Colab",
+            "Kaggle",
+            "GitHub",
+            "Jupyter Notebook",
+            "Anaconda",
+            "VS Code",
+            "Streamlit"
+        ],
+        "technologies": [],
+        "ai_ml": [
+            "Machine Learning",
+            "Deep Learning",
+            "Reinforcement Learning",
+            "Supervised & Unsupervised Learning",
+            "Neural Networks",
+            "NLP (Basics)",
+            "GANs",
+            "WGAN-GP",
+            "DCGAN"
+        ],
+        "gen_ai": [
+            "Langchain",
+            "Retrieval-Augmented Generation (RAG)",
+            "Gemini 2.5 Flash Lite"
+        ]
+    },
+    "soft_skills": [],
+    "certifications": [],
+    "achievements": [],
+    "languages": []
+}
