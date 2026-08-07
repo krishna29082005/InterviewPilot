@@ -16,6 +16,11 @@ IMPORTANT RULES
 - Maximum 2 bullet points.
 - Preserve spelling exactly.
 - Preserve URLs exactly.
+- Link extraction priority is critical:
+  - Always extract LinkedIn, GitHub, LeetCode, and Portfolio if they appear anywhere in the resume.
+  - Accept links written as full URLs or bare domains such as `linkedin.com/in/...`, `github.com/...`, or `leetcode.com/...`.
+  - If a link is shown as plain text without `https://`, still populate the field with the exact link text.
+  - Do not overwrite a detected link with `null` if a visible link exists in the resume header, footer, or contact section.
 - Preserve dates exactly.
 - Ensure the JSON is COMPLETE before stopping.
 

@@ -1,12 +1,12 @@
 {
     "personal_info": {
-        "full_name": "Krishna Mehra R",
-        "email": "u23ai064@coed.svnit.ac.in",
+        "full_name": "Krishna Mehra",
+        "email": "krishnab2908@gmail.com",
         "phone": "+91 6354604426",
-        "location": "Sardar Vallabhbhai National Institute of Technology, Surat",
-        "linkedin": null,
-        "github": null,
-        "leetcode": null,
+        "location": "Surat",
+        "linkedin": "https://www.linkedin.com/in/krishna-mehra-a25827407/",
+        "github": "https://github.com/krishna29082005",
+        "leetcode": "https://leetcode.com/u/krishna29082005/",
         "portfolio": null
     },
     "summary": null,
@@ -17,7 +17,7 @@
             "field_of_study": null,
             "start_date": null,
             "end_date": null,
-            "cgpa": "7.4 CGPA"
+            "cgpa": "CGPA: 7.4"
         },
         {
             "institution": "SGVP, Rajkot",
@@ -70,39 +70,39 @@
                 "LLM Evaluation",
                 "Empathy Modeling"
             ],
-            "description": "Research project evaluating the adversarial robustness of RL-trained empathetic agents.",
+            "description": "Probing adversarial robustness of RL-trained empathetic agents.",
             "bullet_points": [
-                "Designed the Adversarial Empathy Benchmark (AEB) with six psychologically grounded adversarial dialogue trajectories.",
-                "Proposed Emotional Consistency Score (ECS) to distinguish emotional state tracking from state improvement in dialogue systems."
+                "Designed adversarial personas and psychologically grounded dialogue trajectories for the Adversarial Empathy Benchmark (AEB).",
+                "Conducted controlled evaluations across 480 adversarial dialogues comparing RL-trained (PPO, GRPO) and baseline LLMs under identical conditions."
             ]
         },
         {
             "title": "VidSynth AI – YouTube Chat Assistant",
             "technologies": [
-                "Streamlit",
                 "Gemini 2.5 Flash Lite",
                 "ChromaDB",
                 "LangChain",
-                "Sentence Transformers"
+                "Sentence Transformers",
+                "Streamlit"
             ],
-            "description": "An intelligent Streamlit application that transforms YouTube videos into structured notes, key topics, and an interactive chatbot.",
+            "description": "YouTube chat assistant using RAG pipeline for conversational video querying.",
             "bullet_points": [
-                "Implemented a Retrieval-Augmented Generation (RAG) system using Gemini 2.5 Flash Lite and ChromaDB for context-aware QA.",
-                "Engineered modules for transcript extraction, English translation, topic detection, and concise note generation."
+                "Independently developed the complete VidSynth AI system, including transcript processing, RAG pipeline integration, chatbot workflow, and deployment pipeline.",
+                "Developed a Streamlit-based RAG application using Gemini 2.5 Flash Lite and ChromaDB for context-aware YouTube video question answering."
             ]
         },
         {
-            "title": "Rare Gen master - Synthetic Data Generation for Rare Cancer Diseases using GANs",
+            "title": "Rare Gen Master - Synthetic Data Generation for Rare Cancer Diseases Using GANs",
             "technologies": [
                 "Deep Learning",
                 "PyTorch",
-                "WGAN-GP",
-                "DCGAN"
+                "GANs",
+                "VAEs"
             ],
-            "description": "Building a GAN-based framework to synthesize rare cancer imaging data, addressing dataset scarcity.",
+            "description": "Synthetic data generation framework for rare cancer imaging datasets.",
             "bullet_points": [
-                "Building a GAN-based framework (WGAN-GP, DCGAN) to synthesize rare cancer imaging data, addressing dataset scarcity and imbalance.",
-                "Validating generated data with FID/IS metrics and testing improvements in downstream classification performance."
+                "Implemented a GAN-VAE framework on the Brain Glioma dataset to synthesize rare cancer imaging data, addressing dataset scarcity and class imbalance.",
+                "Validated generated samples using FID/IS metrics and evaluated downstream classification performance improvements."
             ]
         }
     ],
@@ -110,30 +110,25 @@
         "programming_languages": [
             "C",
             "C++",
-            "Python",
-            "R Language",
-            "HTML"
+            "Python"
         ],
         "frameworks": [
-            "TensorFlow",
-            "Keras",
-            "PyTorch"
+            "PyTorch",
+            "TensorFlow"
         ],
         "libraries": [
             "Scikit-learn",
-            "Hugging Face",
-            "Transformers",
+            "Hugging Face Transformers",
+            "LangChain",
+            "ChromaDB",
             "Pandas",
             "NumPy",
             "Matplotlib",
-            "Seaborn",
-            "Sentence Transformers"
+            "Seaborn"
         ],
         "databases": [
             "MongoDB",
-            "MySQL",
-            "Cassandra",
-            "ChromaDB"
+            "MySQL"
         ],
         "cloud": [],
         "tools": [
@@ -143,26 +138,21 @@
             "GitHub",
             "Jupyter Notebook",
             "Anaconda",
-            "VS Code",
-            "Streamlit"
+            "VS Code"
         ],
-        "technologies": [],
+        "technologies": [
+            "HTML"
+        ],
         "ai_ml": [
             "Machine Learning",
             "Deep Learning",
             "Reinforcement Learning",
-            "Supervised & Unsupervised Learning",
-            "Neural Networks",
-            "NLP (Basics)",
+            "NLP",
+            "RAG Systems",
             "GANs",
-            "WGAN-GP",
-            "DCGAN"
+            "VAEs"
         ],
-        "gen_ai": [
-            "Langchain",
-            "Retrieval-Augmented Generation (RAG)",
-            "Gemini 2.5 Flash Lite"
-        ]
+        "gen_ai": []
     },
     "soft_skills": [],
     "certifications": [],

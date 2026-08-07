@@ -539,3 +539,69 @@ Passed all 8 tests:
 - ATS Score Generation
 - Skill Extraction
 - AI Interview Generation
+
+Last Updated: July 19, 2026
+
+---
+
+# Overall Progress
+
+## Backend
+- [x] FastAPI Project Setup
+- [x] JWT Authentication
+- [x] User Management
+- [x] Protected APIs
+
+## AI Architecture
+- [x] Modular AI Architecture
+- [x] Provider Abstraction
+- [x] Gemini Provider
+- [x] Prompt Management
+- [x] AI Schemas
+- [x] Resume Processing Pipeline
+
+## Resume Module
+- [x] Resume Upload
+- [x] Resume Download
+- [x] Resume Delete
+- [x] Resume Information API
+- [x] Resume Persistence
+- [x] Resume Analysis Storage
+
+## Dashboard
+- [x] Resume Upload UI
+- [x] Resume Details
+- [x] Download Resume
+- [x] Delete Resume
+
+---
+
+# Current Resume Pipeline
+
+User Upload
+        ↓
+Save PDF
+        ↓
+Extract Text (PyMuPDF)
+        ↓
+Clean Text
+        ↓
+Prompt Builder
+        ↓
+Gemini
+        ↓
+Pydantic Validation
+        ↓
+Store JSON Analysis
+        ↓
+Dashboard Display
+
+---
+
+Current Status
+
+🟢 Stable
+
+Known Issue:
+- Some LaTeX-generated resumes produce PDF extraction artifacts (e.g., isolated characters like "R").
+- This originates from the PDF text layer rather than Gemini.

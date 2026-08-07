@@ -164,31 +164,39 @@ Release Date: July 2026
 - JWT authentication
 - Resume upload integration
 
-### Upcoming
+## July 19, 2026
 
-- AI Resume Analysis
-- ATS Score
-- Skill Extraction
-- Resume Improvements
-- Company Specific AI Feedback
+### Added
 
-### v0.6.0
+- Modular AI architecture
+- Gemini provider abstraction
+- Resume parser pipeline
+- Prompt management
+- Pydantic response validation
+- Resume analysis persistence
+- Resume information API
+- Resume download API
+- Resume deletion API
+- Dashboard integration
 
-- AI Interview Generation
-- LLM Evaluation
-- Feedback Engine
+### Improved
 
-### v0.7.0
+- Resume upload flow
+- AI processing pipeline
+- Provider initialization
+- Resume overwrite handling
+- Overall project structure
 
-- Dashboard
-- Progress Analytics
-- Interview History
-- Performance Tracking
+### Fixed
 
-### v1.0.0
+- Provider initialization bug
+- Resume overwrite issues
+- Dashboard synchronization
+- Resume deletion cleanup
+- AI parsing pipeline verification
 
-- Production Deployment
-- Docker
-- CI/CD
-- Monitoring
-- Complete SaaS Platform
+### Notes
+
+- Investigated incorrect parsing of "Krishna Mehra R".
+- Root cause traced to LaTeX-generated PDF text layer artifacts during PDF extraction.
+- Confirmed Gemini correctly parsed the extracted text and was not the source of the issue.

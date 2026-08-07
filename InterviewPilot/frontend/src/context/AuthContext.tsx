@@ -23,6 +23,8 @@ const AuthContext = createContext<AuthContextType | undefined>(
   undefined
 );
 
+export { AuthContext };
+
 export function AuthProvider({
   children,
 }: {

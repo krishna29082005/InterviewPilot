@@ -1,12 +1,21 @@
-from fastapi import APIRouter, Depends, UploadFile, File
-from app.api.dependencies.auth import get_current_user
-from app.services.resume import upload_resume, get_resume_filepath
-from fastapi import HTTPException
-from fastapi.responses import FileResponse
-from datetime import datetime
-from app.services.resume import upload_resume, get_resume_filepath
-from app.services.resume import get_resume_analysis
+import asyncio
+import logging
 import os
+from datetime import datetime
+
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from fastapi.responses import FileResponse
+
+from app.api.dependencies.auth import get_current_user
+from app.ai.services.ai_resume import process_resume
+from app.services.resume import (
+    get_resume_analysis,
+    get_resume_filepath,
+    save_resume_analysis,
+    upload_resume,
+)
+
+logger = logging.getLogger(__name__)
 router = APIRouter(
     prefix="/resume",
     tags=["Resume"],
@@ -37,6 +46,17 @@ def get_resume_info(
     )
 
     analysis = get_resume_analysis(current_user.id)
+
+    if analysis is None and file_path:
+        try:
+            parsed_resume = asyncio.run(process_resume(file_path))
+            analysis = parsed_resume.model_dump()
+            save_resume_analysis(current_user.id, analysis)
+        except Exception as exc:
+            logger.warning(
+                "Resume analysis could not be regenerated: %s",
+                exc,
+            )
 
     return {
         "filename": os.path.basename(file_path),

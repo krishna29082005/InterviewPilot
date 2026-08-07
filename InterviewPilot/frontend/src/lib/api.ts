@@ -95,8 +95,9 @@ export interface ResumeInfo {
   filename: string;
   size: number;
   uploaded_at: string;
-  analysis: any;
+  analysis?: any;
 }
+
 export async function uploadResume(
   file: File,
   token: string
@@ -168,13 +169,6 @@ export async function deleteResume(
   return result;
 }
 
-/**
- * Download resume.
- *
- * NOTE:
- * Since your backend expects JWT in the Authorization header,
- * this function will be updated later to use fetch + blob.
- */
 export async function downloadResume(
   token: string
 ) {
@@ -207,4 +201,42 @@ export async function downloadResume(
   link.remove();
 
   window.URL.revokeObjectURL(url);
+}
+
+/* ===========================
+   ATS Analysis
+=========================== */
+
+export interface ATSAnalysis {
+  ats_score: number;
+  summary: string;
+  strengths: string[];
+  weaknesses: string[];
+  missing_keywords: string[];
+  formatting_issues: string[];
+  recommendations: string[];
+  improvement_suggestions?: string[];
+}
+
+export async function getATSAnalysis(
+  token: string
+): Promise<ATSAnalysis> {
+  const response = await fetch(
+    `${BASE_URL}/ats/analysis`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      result.detail || "Failed to fetch ATS analysis."
+    );
+  }
+
+  return result;
 }

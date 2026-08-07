@@ -6,9 +6,9 @@ This roadmap tracks the development progress of InterviewPilot.
 
 # Current Version
 
-**v0.4.0**
+**v0.5.0**
 
-**Current Sprint:** Sprint 4 — Resume Intelligence Foundation
+**Current Sprint:** Sprint 5 — Resume Intelligence
 
 ---
 
@@ -85,45 +85,71 @@ This roadmap tracks the development progress of InterviewPilot.
 
 ---
 
-# Phase 3 — Resume Intelligence
+# Phase 3 — Resume Management ✅
 
-**Status:** In Progress
-
-## Resume Management ✅
+**Status:** Completed
 
 - [x] Resume Upload
 - [x] Resume Storage
-- [x] Resume Information API
+- [x] Resume Replace
 - [x] Resume Download
 - [x] Resume Delete
-- [x] Resume Replace
+- [x] Resume Information API
+- [x] Dashboard Integration
+- [x] Resume Persistence
 
+---
 
+# Phase 4 — AI Resume Parsing ✅
 
-# Phase 5 — AI Resume Intelligence 🤖
+**Status:** Completed
 
-**Status:** Planned
+## AI Architecture
 
-- [ ] Resume Parsing
+- [x] Modular AI Layer
+- [x] Provider Abstraction
+- [x] Gemini Provider
+- [x] Prompt Management
+- [x] Resume Schema
+- [x] Pydantic Validation
+
+## Resume Parsing
+
+- [x] PDF Text Extraction
+- [x] Text Cleaning
+- [x] Prompt Generation
+- [x] Gemini Resume Parsing
+- [x] Structured JSON Output
+- [x] Resume Analysis Storage
+
+### Notes
+
+- Verified complete AI pipeline.
+- Identified PDF extraction artifacts caused by some LaTeX-generated resumes.
+
+---
+
+# Phase 5 — Resume Intelligence 🚧
+
+**Status:** In Progress
+
 - [ ] ATS Resume Score
-- [ ] Skill Extraction
-- [ ] Experience Extraction
-- [ ] Education Extraction
-- [ ] Keyword Detection
-- [ ] Missing Skills Detection
+- [ ] Resume Strength Analysis
+- [ ] Skill Gap Detection
+- [ ] Missing Keywords
 - [ ] Resume Improvement Suggestions
 - [ ] Company-specific Resume Feedback
 - [ ] AI Resume Chat
 
 ---
 
-# Phase 6 — AI Interview Engine 🤖
+# Phase 6 — AI Interview Engine
 
 **Status:** Planned
 
 - [ ] Resume-based Questions
 - [ ] Technical Interview Generator
-- [ ] Behavioral Interview Generator
+- [ ] HR Interview Generator
 - [ ] Company-specific Interviews
 - [ ] Coding Interview
 - [ ] Adaptive Difficulty
@@ -131,11 +157,10 @@ This roadmap tracks the development progress of InterviewPilot.
 
 ---
 
-# Phase 7 — AI Evaluation 🤖
+# Phase 7 — AI Evaluation
 
 **Status:** Planned
 
-- [ ] LLM Evaluation
 - [ ] Technical Score
 - [ ] Communication Score
 - [ ] Behavioral Score
@@ -145,21 +170,20 @@ This roadmap tracks the development progress of InterviewPilot.
 
 ---
 
-# Phase 8 — Analytics & Learning 🚧
+# Phase 8 — Analytics
 
 **Status:** Planned
 
 - [ ] AI Dashboard
-- [ ] Resume Score
 - [ ] Interview History
+- [ ] Resume History
 - [ ] Progress Tracking
 - [ ] Weak Topic Detection
 - [ ] Company Readiness Score
-- [ ] Adaptive Learning Roadmap
 
 ---
 
-# Phase 9 — Advanced AI Features
+# Phase 9 — Advanced AI
 
 **Status:** Planned
 
@@ -178,7 +202,7 @@ This roadmap tracks the development progress of InterviewPilot.
 
 - [ ] Docker
 - [ ] Docker Compose
-- [ ] Alembic Migrations
+- [ ] Alembic
 - [ ] GitHub Actions
 - [ ] Automated Testing
 - [ ] CI/CD Pipeline
@@ -189,11 +213,11 @@ This roadmap tracks the development progress of InterviewPilot.
 
 **Status:** Planned
 
-- [ ] Deploy Frontend (Vercel)
-- [ ] Deploy Backend (Railway / Render)
-- [ ] Deploy PostgreSQL (Neon)
-- [ ] Production Environment
-- [ ] Monitoring & Logging
+- [ ] Vercel
+- [ ] Railway / Render
+- [ ] Neon PostgreSQL
+- [ ] Production Monitoring
+- [ ] Logging
 
 ---
 
@@ -202,10 +226,10 @@ This roadmap tracks the development progress of InterviewPilot.
 - v0.1.0 — Project Foundation
 - v0.2.0 — Backend Integration
 - v0.3.0 — Authentication
-- v0.4.0 — Dashboard + Resume Upload
-- v0.5.0 — AI Resume Intelligence
-- v0.6.0 — AI Interview Engine
-- v0.7.0 — AI Evaluation
-- v0.8.0 — AI Analytics
-- v0.9.0 — DevOps & Deployment
+- v0.4.0 — Resume Management
+- **v0.5.0 — AI Resume Parsing ✅ (Current)**
+- v0.6.0 — Resume Intelligence
+- v0.7.0 — AI Interview Engine
+- v0.8.0 — AI Evaluation
+- v0.9.0 — Analytics & DevOps
 - v1.0.0 — Production AI Interview Platform

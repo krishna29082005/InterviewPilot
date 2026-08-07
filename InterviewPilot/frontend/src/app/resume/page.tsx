@@ -5,20 +5,143 @@ import { useEffect, useState } from "react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import ResumeUpload from "@/components/resume/ResumeUpload";
 import ResumeCard from "@/components/resume/ResumeCard";
-
+import ATSAnalysisCard from "@/components/ats/ATSAnalysis";
 import {
   getResumeInfo,
   deleteResume,
   downloadResume,
-  ResumeInfo,
+  getATSAnalysis,
+  type ATSAnalysis as ATSAnalysisType,
+  type ResumeInfo,
 } from "@/lib/api";
 
 import { useAuth } from "@/context/AuthContext";
+
+function DetailCard({
+  title,
+  children,
+  className = "",
+}: {
+  title: string;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <section
+      className={`rounded-2xl border border-gray-800 bg-gray-900 p-6 shadow-lg ${className}`}
+    >
+      <h3 className="text-lg font-semibold text-white">{title}</h3>
+      <div className="mt-4">{children}</div>
+    </section>
+  );
+}
+
+function ChipList({
+  items,
+  emptyText = "No items available.",
+}: {
+  items: string[];
+  emptyText?: string;
+}) {
+  if (!items.length) {
+    return (
+      <p className="text-sm text-gray-500">
+        {emptyText}
+      </p>
+    );
+  }
+
+  return (
+    <div className="flex flex-wrap gap-2">
+      {items.map((item) => (
+        <span
+          key={item}
+          className="rounded-full border border-blue-500/20 bg-blue-500/10 px-3 py-1 text-sm text-blue-200"
+        >
+          {item}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function BulletList({
+  items,
+  emptyText = "No details available.",
+}: {
+  items: string[];
+  emptyText?: string;
+}) {
+  if (!items.length) {
+    return (
+      <p className="text-sm text-gray-500">
+        {emptyText}
+      </p>
+    );
+  }
+
+  return (
+    <ul className="space-y-2 text-sm leading-7 text-gray-300">
+      {items.map((item) => (
+        <li
+          key={item}
+          className="flex gap-3 rounded-xl border border-gray-800 bg-gray-950/50 p-3"
+        >
+          <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-blue-400" />
+          <span className="break-words">{item}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function LinkItem({
+  label,
+  value,
+  fallbackLabel,
+}: {
+  label: string;
+  value?: string | null;
+  fallbackLabel: string;
+}) {
+  const displayValue = value?.trim();
+
+  return (
+    <div className="rounded-xl border border-gray-800 bg-gray-950/50 p-4">
+      <p className="text-[11px] uppercase tracking-[0.3em] text-gray-500">
+        {label}
+      </p>
+
+      {displayValue ? (
+        <>
+          <p className="mt-2 break-words text-sm font-semibold text-white">
+            {fallbackLabel}
+          </p>
+          <a
+            href={displayValue}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-1 block break-words text-sm text-blue-400 underline decoration-blue-400/40 underline-offset-4 transition hover:text-blue-300"
+          >
+            {displayValue}
+          </a>
+        </>
+      ) : (
+        <p className="mt-2 text-sm font-semibold text-gray-400">
+          {fallbackLabel}
+        </p>
+      )}
+    </div>
+  );
+}
 
 export default function ResumePage() {
   const { token } = useAuth();
 
   const [resume, setResume] = useState<ResumeInfo | null>(null);
+  const [ats, setATS] = useState<ATSAnalysisType | null>(null);
+  const [atsError, setATSError] = useState<string | null>(null);
+  const [atsLoading, setATSLoading] = useState(false);
   const [loading, setLoading] = useState(true);
 
   async function fetchResume() {
@@ -44,9 +167,33 @@ export default function ResumePage() {
   }
 }
 
+async function fetchATS() {
+    if (!token) return;
+
+    try {
+        setATSLoading(true);
+
+        const data = await getATSAnalysis(token);
+
+        console.log("========== ATS RESPONSE ==========");
+        console.log(data);
+        console.log(JSON.stringify(data, null, 2));
+
+        setATS(data);
+    } catch (err) {
+        console.error("ATS ERROR:", err);
+        setATS(null);
+    } finally {
+        setATSLoading(false);
+    }
+}
+
   useEffect(() => {
-    fetchResume();
-  }, [token]);
+  if (!token) return;
+
+  fetchResume();
+  fetchATS();
+}, [token]);
 
   async function handleDelete() {
     if (!token || !resume) return;
@@ -59,7 +206,9 @@ export default function ResumePage() {
 
     try {
       await deleteResume(token);
+
       setResume(null);
+      setATS(null);
     } catch (err) {
       if (err instanceof Error) {
         alert(err.message);
@@ -79,6 +228,30 @@ export default function ResumePage() {
     }
   }
 
+  const resumeSummary =
+    resume?.analysis?.summary ||
+    [
+      resume?.analysis?.personal_info?.full_name
+        ? `${resume.analysis.personal_info.full_name}'s resume has been parsed successfully.`
+        : "Your resume has been parsed successfully.",
+      resume?.analysis?.technical_skills?.programming_languages?.length
+        ? `Key programming languages include ${resume.analysis.technical_skills.programming_languages.join(", ")}.`
+        : "Technical skills are available in the parsed analysis.",
+      resume?.analysis?.projects?.length
+        ? `The resume includes ${resume.analysis.projects.length} project${resume.analysis.projects.length > 1 ? "s" : ""}, which helps ATS scoring and screening.`
+        : "Add more project detail to strengthen ATS matching.",
+    ]
+      .filter(Boolean)
+      .join(" ");
+
+  const resumeSummaryLines =
+    resumeSummary
+      .split(/(?<=[.!?])\s+/)
+      .map((line: string) => line.trim())
+      .filter((line: string) => Boolean(line));
+
+  const analysis = resume?.analysis;
+
   return (
     <DashboardLayout>
       <div className="mb-10">
@@ -97,9 +270,12 @@ export default function ResumePage() {
 
       <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
         <ResumeUpload
-          hasResume={!!resume}
-          onUploadSuccess={fetchResume}
-        />
+         hasResume={!!resume}
+         onUploadSuccess={async () => {
+         await fetchResume();
+         await fetchATS();
+        }}
+/>
 
         {loading ? null : resume ? (
           <ResumeCard
@@ -123,144 +299,298 @@ export default function ResumePage() {
         )}
       </div>
 
+      {/* ================= ATS Analysis ================= */}
+
+      {atsLoading ? (
+        <div className="mt-10 rounded-2xl border border-gray-800 bg-gray-900 p-8 text-center text-gray-400">
+          Generating ATS Analysis...
+        </div>
+      ) : atsError ? (
+        <div className="mt-10 rounded-2xl border border-red-500/30 bg-red-500/10 p-8 text-center">
+          <h2 className="text-xl font-semibold text-red-400">
+            ATS analysis could not be loaded
+          </h2>
+
+          <p className="mt-2 text-sm text-red-200">
+            {atsError}
+          </p>
+        </div>
+      ) : (
+        ats && (
+          <div className="mt-10">
+            <ATSAnalysisCard analysis={ats} />
+          </div>
+        )
+      )}
+
+
       {/* ================= AI Resume Analysis ================= */}
 
-      {resume?.analysis && (
+      {resume && (
         <div className="mt-10 space-y-8">
+          <section className="rounded-2xl border border-gray-800 bg-gray-900 p-8 shadow-lg">
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+              <div className="max-w-3xl">
+                <p className="text-sm uppercase tracking-widest text-blue-400">
+                  Resume Summary
+                </p>
 
-          {/* Header */}
+                <h2 className="mt-2 text-3xl font-bold text-white break-words">
+                  {analysis?.personal_info?.full_name || resume.filename.replace(/\.pdf$/i, "")}
+                </h2>
 
-          <div className="rounded-2xl bg-gray-900 border border-gray-800 p-8">
-            <h2 className="text-3xl font-bold text-white">
-              {resume.analysis.personal_info.full_name}
-            </h2>
+                <p className="mt-2 text-gray-400 break-words">
+                  {analysis?.personal_info?.email ||
+                    "Analysis details will appear after parsing completes."}
+                </p>
 
-            <p className="mt-2 text-gray-400">
-              {resume.analysis.personal_info.email}
-            </p>
+                <div className="mt-5 space-y-3 text-base leading-7 text-gray-200">
+                  {resumeSummaryLines.map((line: string, index: number) => (
+                    <p
+                      key={`${index}-${line}`}
+                      className="rounded-xl border border-gray-800 bg-gray-950/50 px-4 py-3 break-words whitespace-pre-wrap"
+                    >
+                      {line}
+                    </p>
+                  ))}
+                </div>
+              </div>
 
-            <p className="mt-4 text-lg text-gray-300">
-              {resume.analysis.summary}
-            </p>
-          </div>
-
-          {/* Skills */}
-
-          <div className="rounded-2xl bg-gray-900 border border-gray-800 p-8">
-            <h3 className="text-2xl font-semibold text-white">
-              Programming Languages
-            </h3>
-
-            <div className="mt-5 flex flex-wrap gap-3">
-              {resume.analysis.technical_skills.programming_languages.map(
-                (skill: string) => (
-                  <span
-                    key={skill}
-                    className="rounded-full bg-blue-600 px-4 py-2 text-sm font-medium text-white"
-                  >
-                    {skill}
-                  </span>
-                )
-              )}
-            </div>
-          </div>
-
-          {/* Education */}
-
-          <div className="rounded-2xl bg-gray-900 border border-gray-800 p-8">
-            <h3 className="text-2xl font-semibold text-white">
-              Education
-            </h3>
-
-            <div className="mt-6 space-y-5">
-              {resume.analysis.education.map((edu: any) => (
-                <div
-                  key={edu.institution}
-                  className="rounded-xl bg-gray-800 p-5"
-                >
-                  <h4 className="text-xl font-bold text-white">
-                    {edu.institution}
-                  </h4>
-
-                  <p className="text-gray-300">
-                    {edu.degree}
+              <div className="grid min-w-[220px] gap-3 sm:grid-cols-2 lg:grid-cols-1">
+                <div className="rounded-xl border border-gray-800 bg-gray-950/50 p-4">
+                  <p className="text-xs uppercase tracking-[0.3em] text-gray-500">
+                    File
+                  </p>
+                  <p className="mt-2 break-words text-sm font-medium text-white">
+                    {resume.filename}
                   </p>
                 </div>
-              ))}
-            </div>
-          </div>
 
-          {/* Experience */}
-
-          <div className="rounded-2xl bg-gray-900 border border-gray-800 p-8">
-            <h3 className="text-2xl font-semibold text-white">
-              Experience
-            </h3>
-
-            <div className="mt-6 space-y-5">
-              {resume.analysis.experience.map((exp: any) => (
-                <div
-                  key={`${exp.company}-${exp.title}`}
-                  className="rounded-xl bg-gray-800 p-5"
-                >
-                  <h4 className="text-xl font-bold text-white">
-                    {exp.title}
-                  </h4>
-
-                  <p className="text-blue-400">
-                    {exp.company}
+                <div className="rounded-xl border border-gray-800 bg-gray-950/50 p-4">
+                  <p className="text-xs uppercase tracking-[0.3em] text-gray-500">
+                    Status
                   </p>
-
-                  <p className="mt-1 text-sm text-gray-400">
-                    {exp.start_date} - {exp.end_date}
+                  <p className="mt-2 text-sm font-medium text-green-400">
+                    Parsed successfully
                   </p>
-
-                  <ul className="mt-4 list-disc pl-5 text-gray-300 space-y-2">
-                    {exp.description.map((point: string) => (
-                      <li key={point}>{point}</li>
-                    ))}
-                  </ul>
                 </div>
-              ))}
+              </div>
             </div>
-          </div>
+          </section>
 
-          {/* Projects */}
+          {analysis ? (
+            <div className="grid gap-6 xl:grid-cols-2">
+              <DetailCard title="Personal Information">
+                <dl className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <dt className="text-xs uppercase tracking-[0.25em] text-gray-500">Name</dt>
+                    <dd className="mt-1 break-words text-sm text-white">
+                      {analysis.personal_info.full_name || "Not available"}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-xs uppercase tracking-[0.25em] text-gray-500">Email</dt>
+                    <dd className="mt-1 break-words text-sm text-white">
+                      {analysis.personal_info.email || "Not available"}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-xs uppercase tracking-[0.25em] text-gray-500">Phone</dt>
+                    <dd className="mt-1 break-words text-sm text-white">
+                      {analysis.personal_info.phone || "Not available"}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-xs uppercase tracking-[0.25em] text-gray-500">Location</dt>
+                    <dd className="mt-1 break-words text-sm text-white">
+                      {analysis.personal_info.location || "Not available"}
+                    </dd>
+                  </div>
+                </dl>
+              </DetailCard>
 
-          <div className="rounded-2xl bg-gray-900 border border-gray-800 p-8">
-            <h3 className="text-2xl font-semibold text-white">
-              Projects
-            </h3>
+              <DetailCard title="Links">
+                <div className="space-y-3 text-sm">
+                  <LinkItem
+                    label="LinkedIn"
+                    value={analysis.personal_info.linkedin}
+                    fallbackLabel="LinkedIn"
+                  />
+                  <LinkItem
+                    label="GitHub"
+                    value={analysis.personal_info.github}
+                    fallbackLabel="GitHub"
+                  />
+                  <LinkItem
+                    label="LeetCode"
+                    value={analysis.personal_info.leetcode}
+                    fallbackLabel="LeetCode"
+                  />
+                  <LinkItem
+                    label="Portfolio"
+                    value={analysis.personal_info.portfolio}
+                    fallbackLabel="Live Demo"
+                  />
+                </div>
+              </DetailCard>
 
-            <div className="mt-6 space-y-5">
-              {resume.analysis.projects.map((project: any) => (
-                <div
-                  key={project.title}
-                  className="rounded-xl bg-gray-800 p-5"
-                >
-                  <h4 className="text-xl font-bold text-white">
-                    {project.title}
-                  </h4>
+              <DetailCard title="Technical Skills">
+                <div className="space-y-4">
+                  <ChipList items={analysis.technical_skills.programming_languages} emptyText="No programming languages detected." />
+                  <ChipList items={analysis.technical_skills.frameworks} emptyText="No frameworks detected." />
+                  <ChipList items={analysis.technical_skills.libraries} emptyText="No libraries detected." />
+                  <ChipList items={analysis.technical_skills.databases} emptyText="No databases detected." />
+                  <ChipList items={analysis.technical_skills.tools} emptyText="No tools detected." />
+                </div>
+              </DetailCard>
 
-                  <p className="mt-2 text-gray-300">
-                    {project.description}
-                  </p>
-
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {project.technologies.map((tech: string) => (
-                      <span
-                        key={tech}
-                        className="rounded-full bg-gray-700 px-3 py-1 text-sm text-white"
+              <DetailCard title="Projects" className="xl:col-span-2">
+                <div className="grid gap-4 lg:grid-cols-2">
+                  {analysis.projects.length > 0 ? (
+                    analysis.projects.map((project: any) => (
+                      <article
+                        key={project.title}
+                        className="rounded-xl border border-gray-800 bg-gray-950/50 p-5"
                       >
-                        {tech}
-                      </span>
-                    ))}
+                        <h4 className="text-lg font-semibold text-white">
+                          {project.title}
+                        </h4>
+                        {project.description ? (
+                          <p className="mt-2 text-sm leading-7 text-gray-300">
+                            {project.description}
+                          </p>
+                        ) : null}
+                        <div className="mt-4">
+                          <ChipList
+                            items={project.technologies || []}
+                            emptyText="No technologies listed."
+                          />
+                        </div>
+                        <div className="mt-4">
+                          <BulletList
+                            items={project.bullet_points || []}
+                            emptyText="No bullet points extracted."
+                          />
+                        </div>
+                      </article>
+                    ))
+                  ) : (
+                    <p className="text-sm text-gray-500">
+                      No projects detected.
+                    </p>
+                  )}
+                </div>
+              </DetailCard>
+
+              <DetailCard title="Education" className="xl:col-span-2">
+                <div className="grid gap-4 md:grid-cols-2">
+                  {analysis.education.length > 0 ? (
+                    analysis.education.map((edu: any) => (
+                      <article
+                        key={`${edu.institution}-${edu.degree}`}
+                        className="rounded-xl border border-gray-800 bg-gray-950/50 p-5"
+                      >
+                        <h4 className="text-lg font-semibold text-white">
+                          {edu.institution || "Institution not available"}
+                        </h4>
+                        <p className="mt-1 text-sm text-blue-400">
+                          {edu.degree || "Degree not available"}
+                        </p>
+                        <dl className="mt-4 grid gap-3 text-sm text-gray-300 sm:grid-cols-2">
+                          <div>
+                            <dt className="text-xs uppercase tracking-[0.2em] text-gray-500">Field</dt>
+                            <dd className="mt-1">{edu.field_of_study || "N/A"}</dd>
+                          </div>
+                          <div>
+                            <dt className="text-xs uppercase tracking-[0.2em] text-gray-500">CGPA</dt>
+                            <dd className="mt-1">{edu.cgpa || "N/A"}</dd>
+                          </div>
+                          <div>
+                            <dt className="text-xs uppercase tracking-[0.2em] text-gray-500">Start</dt>
+                            <dd className="mt-1">{edu.start_date || "N/A"}</dd>
+                          </div>
+                          <div>
+                            <dt className="text-xs uppercase tracking-[0.2em] text-gray-500">End</dt>
+                            <dd className="mt-1">{edu.end_date || "N/A"}</dd>
+                          </div>
+                        </dl>
+                      </article>
+                    ))
+                  ) : (
+                    <p className="text-sm text-gray-500">
+                      No education entries detected.
+                    </p>
+                  )}
+                </div>
+              </DetailCard>
+
+              <DetailCard title="Experience" className="xl:col-span-2">
+                <div className="space-y-4">
+                  {analysis.experience.length > 0 ? (
+                    analysis.experience.map((exp: any) => (
+                      <article
+                        key={`${exp.company}-${exp.title}`}
+                        className="rounded-xl border border-gray-800 bg-gray-950/50 p-5"
+                      >
+                        <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
+                          <div>
+                            <h4 className="text-lg font-semibold text-white">
+                              {exp.title || "Title not available"}
+                            </h4>
+                            <p className="mt-1 text-sm text-blue-400">
+                              {exp.company || "Company not available"}
+                            </p>
+                          </div>
+                          <p className="text-sm text-gray-400">
+                            {(exp.start_date || "N/A")} - {(exp.end_date || "N/A")}
+                          </p>
+                        </div>
+                        <div className="mt-4">
+                          <BulletList
+                            items={exp.description || []}
+                            emptyText="No bullet points extracted."
+                          />
+                        </div>
+                      </article>
+                    ))
+                  ) : (
+                    <p className="text-sm text-gray-500">
+                      No experience entries detected.
+                    </p>
+                  )}
+                </div>
+              </DetailCard>
+
+              <DetailCard title="Additional Information">
+                <div className="space-y-6">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.25em] text-gray-500">
+                      Certifications
+                    </p>
+                    <div className="mt-3">
+                      <ChipList items={analysis.certifications || []} emptyText="No certifications detected." />
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.25em] text-gray-500">
+                      Achievements
+                    </p>
+                    <div className="mt-3">
+                      <BulletList items={analysis.achievements || []} emptyText="No achievements detected." />
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.25em] text-gray-500">
+                      Languages
+                    </p>
+                    <div className="mt-3">
+                      <ChipList items={analysis.languages || []} emptyText="No languages detected." />
+                    </div>
                   </div>
                 </div>
-              ))}
+              </DetailCard>
             </div>
-          </div>
-
+          ) : null}
         </div>
       )}
     </DashboardLayout>

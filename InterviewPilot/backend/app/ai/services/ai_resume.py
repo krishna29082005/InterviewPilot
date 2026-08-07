@@ -1,8 +1,14 @@
-from app.ai.providers.factory import ProviderFactory
+import logging
+
+from app.ai.exceptions import AIError
+from app.ai.parsers.fallback_resume_parser import parse_resume_fallback
 from app.ai.parsers.pdf_parser import extract_text
 from app.ai.parsers.text_cleaner import clean_text
 from app.ai.prompts.resume_parser import get_resume_parser_prompt
+from app.ai.providers.factory import ProviderFactory
 from app.ai.schemas.resume import ResumeSchema
+
+logger = logging.getLogger(__name__)
 
 
 async def process_resume(pdf_path: str):
@@ -11,16 +17,16 @@ async def process_resume(pdf_path: str):
     """
 
     print("=" * 60)
-    print("📄 Starting Resume Processing...")
+    print("ðŸ“„ Starting Resume Processing...")
     print("=" * 60)
 
     # Step 1: Extract text from PDF
-    print(f"📍 Processing file: {pdf_path}")
-    print("📑 Extracting text from PDF...")
+    print(f"ðŸ“ Processing file: {pdf_path}")
+    print("ðŸ“‘ Extracting text from PDF...")
     raw_text = extract_text(pdf_path)
 
     # Step 2: Clean extracted text
-    print("🧹 Cleaning extracted text...")
+    print("ðŸ§¹ Cleaning extracted text...")
     cleaned_text = clean_text(raw_text)
 
     print("\n" + "=" * 80)
@@ -30,22 +36,27 @@ async def process_resume(pdf_path: str):
     print("=" * 80 + "\n")
 
     # Step 3: Build AI Prompt
-    print("📝 Building Resume Parser Prompt...")
+    print("ðŸ“ Building Resume Parser Prompt...")
     prompt = get_resume_parser_prompt(cleaned_text)
 
     # Step 4: Initialize Gemini Provider
-    print("🤖 Initializing Gemini Provider...")
+    print("ðŸ¤– Initializing Gemini Provider...")
     provider = ProviderFactory.get_provider("gemini")
 
     # Step 5: Send Prompt to Gemini
-    print("🚀 Sending resume to Gemini...")
+    print("ðŸš€ Sending resume to Gemini...")
 
-    resume = await provider.generate(
-        prompt=prompt,
-        response_model=ResumeSchema,
-    )
+    try:
+        resume = await provider.generate(
+            prompt=prompt,
+            response_model=ResumeSchema,
+        )
+    except AIError:
+        logger.warning("Gemini parsing failed, using fallback parser.")
+        print("⚠️ Gemini parsing failed, using fallback parser.")
+        resume = parse_resume_fallback(pdf_path)
 
-    print("✅ Resume Parsed Successfully!")
+    print("âœ… Resume Parsed Successfully!")
     print("=" * 60)
     print(resume)
     print("=" * 60)

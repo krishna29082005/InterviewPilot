@@ -5,6 +5,7 @@ import json
 from fastapi import HTTPException, UploadFile
 import json
 from app.ai.services.ai_resume import process_resume
+from app.ai.exceptions import AIError
 
 BACKEND_ROOT = Path(__file__).resolve().parents[2]
 UPLOAD_DIR = BACKEND_ROOT / "uploads" / "resumes"
@@ -62,20 +63,34 @@ async def upload_resume(
     print("File size:", os.path.getsize(saved_path))
     print("=" * 60) 
     # AI Processing
-    analysis = await process_resume(saved_path)
+    analysis_data = None
     analysis_path = UPLOAD_DIR / f"{current_user.id}_analysis.json"
-    with open(analysis_path, "w", encoding="utf-8") as f:
-       json.dump(
-        analysis.model_dump(),
-        f,
-        indent=4,
-        ensure_ascii=False,
-    )
 
-    if hasattr(analysis, "model_dump"):
-        analysis_data = analysis.model_dump()
-    else:
-        analysis_data = analysis
+    try:
+        analysis = await process_resume(saved_path)
+
+        if hasattr(analysis, "model_dump"):
+            analysis_data = analysis.model_dump()
+        else:
+            analysis_data = analysis
+
+        with open(analysis_path, "w", encoding="utf-8") as f:
+            json.dump(
+                analysis_data,
+                f,
+                indent=4,
+                ensure_ascii=False,
+            )
+
+    except Exception as exc:
+        print("⚠️ Resume processing failed, continuing upload:", exc)
+        analysis_data = None
+
+        if analysis_path.exists():
+            try:
+                analysis_path.unlink()
+            except OSError:
+                pass
 
     print("\n========== RESUME ANALYSIS ==========")
     print(analysis_data)
@@ -96,3 +111,15 @@ def get_resume_analysis(user_id: int):
 
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
+
+
+def save_resume_analysis(user_id: int, analysis_data: dict):
+    path = UPLOAD_DIR / f"{user_id}_analysis.json"
+
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(
+            analysis_data,
+            f,
+            indent=4,
+            ensure_ascii=False,
+        )
