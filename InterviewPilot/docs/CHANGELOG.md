@@ -6,6 +6,46 @@ The project follows Semantic Versioning.
 
 ---
 
+# v0.6.0
+
+Release Date: 07 August 2026
+
+## Added
+
+### Resume Intelligence
+
+- Fallback Resume Parser
+- Resume regeneration when analysis JSON is missing
+- PDF hyperlink extraction
+- Better resume parsing prompts for link extraction
+
+### ATS Analysis
+
+- Fallback ATS analysis
+- Gemini-first ATS generation with safe fallback
+
+### Frontend
+
+- Resume dashboard redesign
+- ATS dashboard redesign
+- Cleaner structured resume analysis UI
+- Better link rendering
+
+### Documentation
+
+- Updated project architecture documentation
+- Updated roadmap
+- Updated project context
+
+## Improved
+
+- Gemini failure handling
+- Resume parsing resilience
+- ATS resilience during 429 and 503 responses
+- Local file-based analysis regeneration
+
+---
+
 # v0.3.0
 
 Release Date: 08 July 2026

@@ -2,522 +2,335 @@
 
 ## Overview
 
-InterviewPilot is a production-grade AI-powered interview preparation platform built using a modern full-stack architecture.
+InterviewPilot is a full-stack AI-powered interview preparation platform with a Next.js frontend and a FastAPI backend.
 
-The project follows a modular, layered, and scalable architecture where every component has a single responsibility. This makes the codebase maintainable, testable, and easy to extend as new features such as AI interview generation, resume parsing, analytics, and dashboards are added.
+The codebase is organized around a layered architecture:
 
----
-
-# Current High-Level Architecture
-
-```
-                    Browser
-                       │
-                       ▼
-              Next.js Frontend
-                 (React + TS)
-                       │
-                HTTP / REST API
-                       │
-                       ▼
-              FastAPI Backend
-                       │
-                  APIRouter
-                       │
-                    Schemas
-                  (Pydantic)
-                       │
-                  Service Layer
-               (Business Logic)
-                       │
-                 SQLAlchemy ORM
-                       │
-                       ▼
-                  PostgreSQL
-```
+- Frontend UI and state management
+- REST API communication
+- FastAPI route layer
+- Service layer for business logic
+- AI provider abstraction
+- Pydantic schemas for validation
+- Local file-based storage for resume artifacts
 
 ---
 
-# Current Tech Stack
+## Current High-Level Architecture
 
-## Frontend
+```
+Browser
+   ↓
+Next.js Frontend
+   ↓
+REST API
+   ↓
+FastAPI Routes
+   ↓
+Service Layer
+   ↓
+AI ProviderFactory
+   ↓
+Gemini Provider
+   ↓
+Fallback Parser / Fallback ATS
+   ↓
+Pydantic Schemas
+   ↓
+Local Storage
+```
 
-- Next.js (App Router)
+---
+
+## Tech Stack
+
+### Frontend
+
+- Next.js
 - React
 - TypeScript
-- Tailwind CSS
+- TailwindCSS
 
-### Responsibilities
+### Backend
 
-- User Interface
-- API Calls
-- State Management
-- Dynamic Rendering
-- Authentication UI
-
----
-
-## Backend
-
-- FastAPI
 - Python
-- APIRouter
+- FastAPI
+- Uvicorn
 - Pydantic
+- JWT
+- Passlib
+- PyMuPDF
+- Google Gemini
 
-### Responsibilities
+### Storage
 
-- REST API
-- Request Validation
-- Business Logic
-- Authentication
-- JSON Responses
-- API Documentation (Swagger)
-
----
-
-## Database
-
-- PostgreSQL
-- SQLAlchemy ORM
-
-### Responsibilities
-
-- Persistent Data Storage
-- User Management
-- Authentication Data
-- Future Resume & Interview Data
+- Local filesystem storage for uploaded resumes and parsed analysis JSON
 
 ---
 
-# Current Folder Structure
+## Current Folder Structure
 
 ```
 InterviewPilot/
-
 ├── frontend/
-│   ├── src/
-│   │   └── app/
-│   │       └── page.tsx
-│
+│   └── src/
+│       ├── app/
+│       ├── components/
+│       ├── context/
+│       ├── hooks/
+│       ├── lib/
+│       └── types/
 ├── backend/
-│   ├── app/
-│   │
-│   ├── api/
-│   │   └── routes/
-│   │       ├── health.py
-│   │       └── auth.py
-│   │
-│   ├── schemas/
-│   │   └── auth.py
-│   │
-│   ├── services/
-│   │   └── auth.py
-│   │
-│   ├── models/
-│   │   └── user.py
-│   │
-│   ├── db/
-│   │   ├── database.py
-│   │   └── init_db.py
-│   │
-│   └── main.py
-│
-│   requirements.txt
-│
-├── docs/
-├── docker/
-├── scripts/
-└── .github/
+│   └── app/
+│       ├── api/
+│       │   ├── dependencies/
+│       │   └── routes/
+│       ├── ai/
+│       │   ├── parsers/
+│       │   ├── prompts/
+│       │   ├── providers/
+│       │   ├── schemas/
+│       │   └── services/
+│       ├── core/
+│       ├── db/
+│       ├── models/
+│       ├── schemas/
+│       └── services/
+└── docs/
 ```
 
 ---
 
-# Backend Architecture
+## Backend Architecture
 
 ```
-                 HTTP Request
-                       │
-                       ▼
-                  FastAPI Route
-                       │
-                       ▼
-             Pydantic Schema Validation
-                       │
-                       ▼
-                Service Layer
-             (Business Logic)
-                       │
-                       ▼
-               SQLAlchemy ORM
-                       │
-                       ▼
-                 PostgreSQL
-                       │
-                       ▼
-                JSON Response
+HTTP Request
+   ↓
+FastAPI Route
+   ↓
+Pydantic Validation
+   ↓
+Service Layer
+   ↓
+AI / Business Logic
+   ↓
+Database / File Storage
+   ↓
+JSON Response
 ```
-
----
-
-## Backend Components
 
 ### Route Layer
 
-Responsibilities
+Responsibilities:
 
 - Receives HTTP requests
-- Calls the correct service
-- Returns API responses
-- Injects database session
+- Injects dependencies
+- Calls services
+- Returns responses
 
-Current Routes
+Current routes:
 
-- Health
-- Authentication
-
----
-
-### Schema Layer
-
-Responsibilities
-
-- Validate request data
-- Validate response data
-- Prevent invalid input
-- Type safety
-
-Current Schemas
-
-- User Signup
-
----
+- `GET /health`
+- `POST /auth/signup`
+- `POST /auth/login`
+- `GET /auth/me`
+- `POST /resume/upload`
+- `GET /resume/info`
+- `GET /resume/download`
+- `DELETE /resume/delete`
+- `GET /ats/analysis`
 
 ### Service Layer
 
-Responsibilities
+Responsibilities:
 
-- Business Logic
-- Password Hashing
-- Duplicate User Validation
-- Database Transactions
+- Business logic
+- Resume upload orchestration
+- Resume analysis persistence
+- ATS generation
+- Fallback handling
 
-Current Services
+### AI Layer
 
-- User Signup
+The AI layer is split into:
 
----
+- `ProviderFactory`
+- `GeminiProvider`
+- Gemini prompt files
+- Deterministic fallback parsers
+- AI schemas
 
-### Database Layer
+This keeps the rest of the app independent from the specific LLM provider.
 
-Responsibilities
+### Schemas
 
-- Database Session
-- ORM Models
-- CRUD Operations
-- Transactions
+Pydantic is used because it:
 
-Current Models
+- validates structured AI output
+- keeps response contracts stable
+- prevents malformed data from reaching the frontend
 
-- User
+### Storage
 
----
+Resume PDFs and parsed analysis JSON are stored locally under:
 
-# Authentication Flow
-
-Current Signup Flow
-
-```
-Client
-
-↓
-
-POST /auth/signup
-
-↓
-
-Route
-
-↓
-
-Pydantic Validation
-
-↓
-
-Check Username
-
-↓
-
-Check Email
-
-↓
-
-Hash Password (bcrypt)
-
-↓
-
-SQLAlchemy
-
-↓
-
-PostgreSQL
-
-↓
-
-Success Response
-```
-
----
-
-# Frontend Architecture
-
-```
-Browser
-
-↓
-
-Next.js
-
-↓
-
-React Components
-
-↓
-
-useEffect / useState
-
-↓
-
-Fetch API
-
-↓
-
-FastAPI
-
-↓
-
-JSON Response
-
-↓
-
-React State Update
-
-↓
-
-Updated UI
-```
-
-Current Functionality
-
-- Landing Page
-- Backend Health Check
-- Dynamic Backend Status
-- API Integration
-
----
-
-# Current API Endpoints
-
-| Method | Endpoint | Description |
-|----------|----------|-------------|
-| GET | `/` | Welcome Endpoint |
-| GET | `/health` | Backend Health Status |
-| POST | `/auth/signup` | Register New User |
-
----
-
-# Database Design
-
-Current Tables
-
-```
-users
-
-id
-username
-email
-hashed_password
-```
-
-Current Features
-
-- Unique Username
-- Unique Email
-- Password Hashing
-- Duplicate Validation
-- Transaction Rollback
-
----
-
-# Development Flow
-
-```
-Browser
-
-↓
-
-Next.js
-
-↓
-
-REST API
-
-↓
-
-FastAPI
-
-↓
-
-Route
-
-↓
-
-Schema
-
-↓
-
-Service
-
-↓
-
-SQLAlchemy
-
-↓
-
-PostgreSQL
-
-↓
-
-JSON Response
-
-↓
-
-Frontend Update
-```
-
----
-
-# Architecture Principles
-
-Current architecture follows
-
-- Layered Architecture
-- Separation of Concerns
-- Feature-based Routing
-- Modular Design
-- RESTful APIs
-- ORM Pattern
-- Production-ready Development Practices
-- Scalable Folder Structure
-
----
-
-# Planned Architecture
-
-## Authentication
-
-- Login API
-- JWT Authentication
-- Protected Routes
-- Refresh Tokens
-- Role-based Authorization
-
----
-
-## Database
-
-- Alembic Migrations
-- Database Relationships
-- Index Optimization
-- Soft Deletes
-
----
-
-## Resume Module
-
-- Resume Upload
-- Resume Storage
-- Resume Parsing
-- Skill Extraction
+- `backend/uploads/resumes/`
 
 ---
 
 ## AI Pipeline
 
+### Resume Parsing
+
 ```
-Resume
-
-↓
-
-Resume Parser
-
-↓
-
-Skill Extraction
-
-↓
-
-Question Generator
-
-↓
-
-Interview Session
-
-↓
-
-LLM Evaluation
-
-↓
-
-Feedback
-
-↓
-
-Dashboard
+PDF Upload
+   ↓
+Extract Text
+   ↓
+Clean Text
+   ↓
+Gemini Resume Parser
+   ↓
+ResumeSchema
+   ↓
+Persist Analysis JSON
 ```
 
----
+### ATS Analysis
 
-## Infrastructure
+```
+ResumeSchema
+   ↓
+Gemini ATS Analysis
+   ↓
+ATSAnalysis
+```
 
-- Docker
-- Docker Compose
-- GitHub Actions
-- CI/CD Pipeline
+### Fallback Strategy
 
----
+If Gemini fails because of:
 
-## Deployment
+- missing configuration
+- invalid response
+- 429 quota exhaustion
+- 503 high-demand unavailability
 
-Frontend
+the backend falls back to deterministic local logic.
 
-↓
+The fallback strategy exists for both:
 
-Vercel
+- resume parsing
+- ATS analysis
 
-Backend
-
-↓
-
-Railway / Render
-
-Database
-
-↓
-
-Neon PostgreSQL
+This ensures the app remains usable even when the model is unavailable.
 
 ---
 
-# Future Documentation
+## Frontend Architecture
 
-This document will later include
+```
+Browser
+   ↓
+Next.js Pages / Components
+   ↓
+Fetch API
+   ↓
+FastAPI
+   ↓
+JSON Response
+   ↓
+React State Update
+```
 
-- JWT Authentication Flow
-- Database ER Diagram
-- Sequence Diagrams
-- Deployment Diagram
-- Docker Architecture
-- AI System Design
-- Caching Strategy
-- Background Workers
-- Monitoring & Logging
+Current frontend areas:
+
+- Landing page
+- Authentication pages
+- Dashboard
+- Resume dashboard
+- ATS dashboard
+
+---
+
+## AI Provider Architecture
+
+### ProviderFactory
+
+`ProviderFactory` returns the configured LLM provider.
+
+Current implementation:
+
+- `gemini` → `GeminiProvider`
+
+### GeminiProvider
+
+Responsibilities:
+
+- initialize the Gemini client
+- send prompts to Gemini
+- parse JSON output
+- validate output with Pydantic
+- raise typed AI exceptions on failure
+
+---
+
+## Resume Data Flow
+
+```
+Resume Upload
+   ↓
+Text Extraction
+   ↓
+Gemini Parser
+   ↓
+Fallback Parser if needed
+   ↓
+ResumeSchema
+   ↓
+Saved JSON analysis
+   ↓
+Resume dashboard
+```
+
+### Hyperlink Extraction
+
+The PDF parser also extracts embedded link targets from the PDF annotations, so link labels like `GitHub` or `Live Demo` can still be resolved when the actual URL is stored in the document metadata.
+
+---
+
+## ATS Data Flow
+
+```
+ResumeSchema
+   ↓
+Gemini ATS Prompt
+   ↓
+Fallback ATS analysis if needed
+   ↓
+ATSAnalysis
+   ↓
+ATS dashboard
+```
+
+The ATS response includes:
+
+- score
+- summary
+- strengths
+- weaknesses
+- missing keywords
+- formatting issues
+- recommendations
+
+---
+
+## Planned Areas
+
+The following remain planned and are not yet implemented:
+
+- Job description matching
+- Mock interview engine
+- Interview evaluation
+- Analytics dashboard
+- AI coaching workflow
+

@@ -1,5 +1,3 @@
-# PROJECT_CONTEXT.md
-
 # InterviewPilot
 
 ---
@@ -8,21 +6,19 @@
 
 InterviewPilot is a production-grade AI-powered interview preparation platform.
 
-The objective is to build a startup-quality SaaS application rather than a college project.
+The goal is to build a startup-quality SaaS application that demonstrates strong backend engineering, frontend engineering, AI integration, and practical product thinking.
 
-The project is intended to become the flagship software engineering project for Software Engineering and AI/ML placements.
-
-Every implementation should follow production software engineering practices.
+The repository is intended to be suitable for placement interviews, portfolio demonstrations, and long-term expansion into interview practice and analytics.
 
 ---
 
 # Current Project Version
 
-v0.3.0
+v0.6.0
 
 Date
 
-08-07-2026
+07-08-2026
 
 ---
 
@@ -41,7 +37,7 @@ Completed Features
 - PostgreSQL Integration
 - SQLAlchemy ORM
 - User Model
-- Password Hashing (bcrypt)
+- Password Hashing
 - Password Verification
 - Duplicate Username Validation
 - Duplicate Email Validation
@@ -51,26 +47,93 @@ Completed Features
 - JWT Verification
 - Protected Routes
 - Current User Endpoint (`GET /auth/me`)
-- Swagger OAuth2 Authorization
 - Database Transaction Rollback
 
-Authentication has been completely implemented and tested.
+---
+
+## Resume Module
+
+Status
+
+✅ COMPLETED
+
+Completed Features
+
+- Resume Upload
+- Resume Download
+- Resume Delete
+- Resume Information API
+- Resume Dashboard
+- Local resume storage
+
+---
+
+## Resume Parsing
+
+Status
+
+✅ COMPLETED
+
+Completed Features
+
+- PDF text extraction using PyMuPDF
+- Text cleaning
+- Gemini resume parser
+- Deterministic fallback parser
+- ResumeSchema validation
+- Hyperlink extraction from PDF annotations
+- Resume regeneration when analysis is missing
+
+---
+
+## ATS Analysis
+
+Status
+
+✅ COMPLETED
+
+Completed Features
+
+- Gemini ATS analysis
+- ATS score
+- Summary
+- Strengths
+- Weaknesses
+- Missing keywords
+- Formatting issues
+- Recommendations
+- Fallback ATS analysis
+
+---
+
+## Frontend Dashboard
+
+Status
+
+✅ COMPLETED
+
+Completed Features
+
+- Resume dashboard
+- ATS dashboard
+- Structured resume analysis layout
+- Better link rendering
+- Protected dashboard experience
 
 ---
 
 # Current API Endpoints
 
-GET /
-
-GET /health
-
-POST /auth/signup
-
-POST /auth/login
-
-GET /auth/me
-
-All endpoints are fully functional.
+- `GET /`
+- `GET /health`
+- `POST /auth/signup`
+- `POST /auth/login`
+- `GET /auth/me`
+- `POST /resume/upload`
+- `GET /resume/info`
+- `GET /resume/download`
+- `DELETE /resume/delete`
+- `GET /ats/analysis`
 
 ---
 
@@ -78,42 +141,26 @@ All endpoints are fully functional.
 
 ```
 Browser
-
-↓
-
+   ↓
 Next.js Frontend
-
-↓
-
+   ↓
 REST API
-
-↓
-
+   ↓
 FastAPI
-
-↓
-
+   ↓
 Route Layer
-
-↓
-
-Schema Layer
-
-↓
-
+   ↓
 Service Layer
-
-↓
-
-Security Layer
-
-↓
-
-Database Layer
-
-↓
-
-PostgreSQL
+   ↓
+AI ProviderFactory
+   ↓
+Gemini Provider
+   ↓
+Fallback Parser / Fallback ATS
+   ↓
+Pydantic Schemas
+   ↓
+Local Storage
 ```
 
 ---
@@ -122,56 +169,48 @@ PostgreSQL
 
 ```
 backend/
+└── app/
+    ├── api/
+    │   ├── dependencies/
+    │   └── routes/
+    ├── ai/
+    │   ├── parsers/
+    │   ├── prompts/
+    │   ├── providers/
+    │   ├── schemas/
+    │   └── services/
+    ├── core/
+    ├── db/
+    ├── models/
+    ├── schemas/
+    └── services/
 
-app/
-
-├── api/
-│   ├── routes/
-│   └── dependencies/
-│
-├── core/
-│   └── security.py
-│
-├── db/
-│   ├── database.py
-│   └── init_db.py
-│
-├── models/
-│   └── user.py
-│
-├── schemas/
-│   └── auth.py
-│
-├── services/
-│   └── auth.py
-│
-└── main.py
+frontend/
+└── src/
+    ├── app/
+    ├── components/
+    ├── context/
+    ├── hooks/
+    ├── lib/
+    └── types/
 ```
 
 ---
 
 # Backend Design Rules
 
-Every backend feature must follow this architecture.
+Every backend feature follows this pattern:
 
 ```
 Route
-
 ↓
-
 Schema
-
 ↓
-
 Service
-
 ↓
-
-Security
-
+Provider / Parser
 ↓
-
-Database
+Storage
 ```
 
 Responsibilities
@@ -183,78 +222,28 @@ Responsibilities
 - Call service
 - Return response
 
-No business logic.
-
----
-
 ## Schema
 
-- Validate request
-- Validate response
-
-No business logic.
-
----
+- Validate request data
+- Validate response data
 
 ## Service
 
-Contains all business logic.
+- Resume upload orchestration
+- ATS generation orchestration
+- Gemini-first execution
+- Fallback handling
 
-Examples
+## Provider / Parser
 
-- Signup
-- Login
-- Resume Upload
-- Interview Generation
+- Gemini provider
+- Resume fallback parser
+- ATS fallback logic
 
-No HTTP handling.
+## Storage
 
----
-
-## Security
-
-Contains all authentication related utilities.
-
-Examples
-
-- Password Hashing
-- Password Verification
-- JWT Generation
-- JWT Verification
-
-No business logic.
-
----
-
-## Database
-
-Contains
-
-- SQLAlchemy Models
-- Database Sessions
-
----
-
-# Current Database
-
-Database
-
-```
-interviewpilot
-```
-
-Current Tables
-
-```
-users
-```
-
-Columns
-
-- id
-- username
-- email
-- hashed_password
+- Uploaded resume PDFs
+- Parsed resume analysis JSON
 
 ---
 
@@ -271,256 +260,81 @@ Backend
 
 - FastAPI
 - Python
-
-Database
-
-- PostgreSQL
-- SQLAlchemy ORM
-
-Authentication
-
+- Uvicorn
+- Pydantic
+- JWT
 - Passlib
-- bcrypt
-- python-jose
-- OAuth2PasswordBearer
-- python-multipart
+- PyMuPDF
+- Google Gemini
 
-Documentation
+Storage
 
-- Swagger/OpenAPI
+- Local filesystem
 
 ---
 
-# Development Workflow
+# AI Workflow
 
-Every feature must follow
+## Resume Pipeline
 
 ```
-Understand
-
+Resume Upload
 ↓
-
-Design
-
+Extract Text
 ↓
-
-Implement
-
+Clean Text
 ↓
-
-Test
-
+Gemini Resume Parser
 ↓
-
-Refactor
-
+ResumeSchema
 ↓
-
-Documentation
-
-↓
-
-Git Commit
-
-↓
-
-Git Push
+Save Analysis JSON
 ```
 
-A feature is NOT considered complete until all eight steps are finished.
+## ATS Pipeline
+
+```
+ResumeSchema
+↓
+Gemini ATS Analysis
+↓
+ATSAnalysis
+```
+
+## Fallback Strategy
+
+If Gemini is unavailable, returns invalid JSON, or is rate limited, the app falls back to deterministic local logic instead of crashing.
+
+This keeps the resume and ATS dashboards usable even under load.
 
 ---
 
-# Coding Standards
+# Roadmap Status
 
-Business logic belongs only inside Services.
+## Completed
 
-Routes should remain thin.
-
-Schemas should only validate data.
-
-Security logic belongs inside `core/security.py`.
-
-Models should only represent database tables.
-
-Never duplicate business logic.
-
-Always keep authentication reusable.
-
-Follow production-level coding practices.
-
----
-
-# Current Milestone
-
-Authentication Module
-
-Status
-
-✅ COMPLETED
-
----
-
-# Next Sprint
-
-Sprint 5
-
-Objective
-
-Build the complete Frontend Authentication Module.
-
----
-
-# Next Tasks
-
-## Backend Cleanup
-
-Before starting frontend, complete a short engineering cleanup.
-
-Tasks
-
-- Move password hashing utilities into `core/security.py`
-- Remove unused imports
-- Create response models for authentication
-- Review authentication module for consistency
-- Final cleanup before commit
-
-Estimated Time
-
-15–20 minutes
-
----
-
-## Frontend Authentication
-
-Build
-
-- Signup Page
-- Login Page
-- Professional UI
-- API Integration
-- JWT Storage
-- Logout
-- Protected Routes
-- Auto Login
-- Authentication Context
-- Redirect after Login
-
-The frontend must use the existing authentication backend.
-
-Do NOT rebuild backend authentication.
-
----
-
-# Long-Term Roadmap
-
-Phase 1 ✅
-
-Foundation
-
-Completed
-
----
-
-Phase 2 ✅
-
-Authentication
-
-Completed
-
----
-
-Phase 3
-
-Resume Module
-
+- Authentication
 - Resume Upload
 - Resume Parsing
-- Skill Extraction
+- Fallback Resume Parser
+- ATS Analysis
+- Fallback ATS
+- Resume Dashboard
+- ATS Dashboard
+
+## Planned
+
+- Job Description Matching
+- Mock Interview
+- AI Interview Evaluator
+- Analytics Dashboard
 
 ---
 
-Phase 4
+# Notes for Future Work
 
-AI Interview
-
-- Question Generator
-- Company Specific Interviews
-- Coding Interviews
-
----
-
-Phase 5
-
-AI Evaluation
-
-- LLM Feedback
-- Communication Analysis
-- Technical Analysis
-
----
-
-Phase 6
-
-Dashboard
-
-- Interview History
-- Analytics
-- Progress Tracking
-
----
-
-Phase 7
-
-DevOps
-
-- Docker
-- Docker Compose
-- GitHub Actions
-- CI/CD
-
----
-
-Phase 8
-
-Deployment
-
-- Vercel
-- Railway / Render
-- Neon PostgreSQL
-
----
-
-# AI Instructions
-
-When continuing this project:
-
-- Never rewrite completed modules unless fixing bugs.
-- Build on top of the existing architecture.
-- Follow the Route → Schema → Service → Security → Database architecture.
 - Keep business logic inside services.
-- Keep security logic inside `core/security.py`.
-- Prefer production-grade implementations over tutorial-style code.
-- Explain important architectural decisions before implementing them.
-- Optimize for completing production-ready modules rather than isolated examples.
+- Keep AI provider-specific logic behind the provider layer.
+- Prefer deterministic fallback behavior when Gemini is unavailable.
+- Do not change the frontend contract unless the API changes intentionally.
 
----
-
-# End Goal
-
-InterviewPilot should demonstrate
-
-- Production Backend Engineering
-- Frontend Engineering
-- Authentication
-- Database Design
-- REST APIs
-- AI Integration
-- Docker
-- CI/CD
-- Cloud Deployment
-- Software Architecture
-
-The final product should resemble a real startup SaaS application rather than a college project.
-
-This repository should be suitable for placement interviews and portfolio demonstrations.

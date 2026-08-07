@@ -1,235 +1,146 @@
 # InterviewPilot Roadmap
 
-This roadmap tracks the development progress of InterviewPilot.
+This roadmap tracks the current development status of InterviewPilot.
 
 ---
 
 # Current Version
 
-**v0.5.0**
+**v0.6.0**
 
-**Current Sprint:** Sprint 5 — Resume Intelligence
+**Current Sprint:** Resume Intelligence and Documentation Sync
 
 ---
 
-# Phase 1 — Project Foundation ✅
+# Phase 1 - Project Foundation ✅
 
 **Status:** Completed
 
-## Repository
-
-- [x] GitHub Repository
-- [x] Monorepo Architecture
-- [x] Professional Documentation
-
-## Frontend
-
-- [x] Next.js
-- [x] TypeScript
-- [x] Tailwind CSS
-- [x] Landing Page
-- [x] Backend Status Component
-
-## Backend
-
-- [x] FastAPI
-- [x] APIRouter
-- [x] Swagger Documentation
-- [x] Health Endpoint
-- [x] CORS Configuration
-
-## Integration
-
-- [x] Frontend ↔ Backend Communication
+- [x] Repository setup
+- [x] Monorepo architecture
+- [x] Professional documentation
+- [x] Frontend and backend bootstrap
 
 ---
 
-# Phase 2 — Authentication ✅
+# Phase 2 - Authentication ✅
 
 **Status:** Completed
 
-## Database
-
-- [x] PostgreSQL
-- [x] SQLAlchemy ORM
-- [x] User Model
-- [x] Database Sessions
-
-## Signup
-
-- [x] User Registration API
-- [x] Password Hashing
-- [x] Duplicate Username Validation
-- [x] Duplicate Email Validation
-- [x] Transaction Rollback
-
-## Login
-
-- [x] User Login API
-- [x] Password Verification
-- [x] JWT Authentication
-- [x] Access Token
-- [x] Protected Routes
-- [x] Current User Endpoint
-
-## Frontend
-
-- [x] Signup Page
-- [x] Login Page
-- [x] Authentication Forms
-- [x] Auth Context
-- [x] Persistent Login
-- [x] Route Protection
-- [x] Dashboard Redirect
-- [x] Logout
+- [x] Signup
+- [x] Login
+- [x] JWT authentication
+- [x] Protected routes
+- [x] Current user endpoint
+- [x] Auth context and route guarding
 
 ---
 
-# Phase 3 — Resume Management ✅
+# Phase 3 - Resume Management ✅
 
 **Status:** Completed
 
-- [x] Resume Upload
-- [x] Resume Storage
-- [x] Resume Replace
-- [x] Resume Download
-- [x] Resume Delete
-- [x] Resume Information API
-- [x] Dashboard Integration
-- [x] Resume Persistence
+- [x] Resume upload
+- [x] Resume download
+- [x] Resume delete
+- [x] Resume information endpoint
+- [x] Resume dashboard
+- [x] Local storage for uploaded resumes
 
 ---
 
-# Phase 4 — AI Resume Parsing ✅
+# Phase 4 - Resume Parsing ✅
 
 **Status:** Completed
 
-## AI Architecture
-
-- [x] Modular AI Layer
-- [x] Provider Abstraction
-- [x] Gemini Provider
-- [x] Prompt Management
-- [x] Resume Schema
-- [x] Pydantic Validation
-
-## Resume Parsing
-
-- [x] PDF Text Extraction
-- [x] Text Cleaning
-- [x] Prompt Generation
-- [x] Gemini Resume Parsing
-- [x] Structured JSON Output
-- [x] Resume Analysis Storage
-
-### Notes
-
-- Verified complete AI pipeline.
-- Identified PDF extraction artifacts caused by some LaTeX-generated resumes.
+- [x] PDF text extraction
+- [x] Text cleaning
+- [x] Gemini resume parser
+- [x] ResumeSchema validation
+- [x] Fallback resume parser
+- [x] Deterministic parsing
+- [x] Hyperlink extraction from PDFs
+- [x] Resume regeneration when analysis is missing
 
 ---
 
-# Phase 5 — Resume Intelligence 🚧
+# Phase 5 - ATS Analysis ✅
 
-**Status:** In Progress
+**Status:** Completed
 
-- [ ] ATS Resume Score
-- [ ] Resume Strength Analysis
-- [ ] Skill Gap Detection
-- [ ] Missing Keywords
-- [ ] Resume Improvement Suggestions
-- [ ] Company-specific Resume Feedback
-- [ ] AI Resume Chat
+- [x] Gemini ATS analysis
+- [x] ATS score
+- [x] Summary
+- [x] Strengths
+- [x] Weaknesses
+- [x] Missing keywords
+- [x] Formatting issues
+- [x] Recommendations
+- [x] Fallback ATS analysis
 
 ---
 
-# Phase 6 — AI Interview Engine
+# Phase 6 - UI Refinement ✅
+
+**Status:** Completed
+
+- [x] Resume dashboard redesign
+- [x] ATS dashboard integration
+- [x] Structured resume analysis layout
+- [x] Better link rendering
+- [x] Cleaner card-based sections
+
+---
+
+# Phase 7 - AI Interview Engine
 
 **Status:** Planned
 
-- [ ] Resume-based Questions
-- [ ] Technical Interview Generator
-- [ ] HR Interview Generator
-- [ ] Company-specific Interviews
-- [ ] Coding Interview
-- [ ] Adaptive Difficulty
-- [ ] AI Follow-up Questions
+- [ ] Resume-based questions
+- [ ] Technical interview generator
+- [ ] HR interview generator
+- [ ] Company-specific interviews
 
 ---
 
-# Phase 7 — AI Evaluation
+# Phase 8 - AI Evaluation
 
 **Status:** Planned
 
-- [ ] Technical Score
-- [ ] Communication Score
-- [ ] Behavioral Score
-- [ ] Confidence Score
-- [ ] AI Feedback
-- [ ] Personalized Improvement Plan
+- [ ] Interview scoring
+- [ ] Communication analysis
+- [ ] Technical feedback
+- [ ] Personalized improvement plan
 
 ---
 
-# Phase 8 — Analytics
+# Phase 9 - Analytics
 
 **Status:** Planned
 
-- [ ] AI Dashboard
-- [ ] Interview History
-- [ ] Resume History
-- [ ] Progress Tracking
-- [ ] Weak Topic Detection
-- [ ] Company Readiness Score
+- [ ] Progress tracking
+- [ ] Weak topic detection
+- [ ] Interview history
+- [ ] Resume history
 
 ---
 
-# Phase 9 — Advanced AI
-
-**Status:** Planned
-
-- [ ] Voice Interviews
-- [ ] Speech-to-Text
-- [ ] Text-to-Speech
-- [ ] AI Interview Coach
-- [ ] Real-time AI Feedback
-- [ ] Multi-Agent Evaluation
-
----
-
-# Phase 10 — DevOps
+# Phase 10 - DevOps
 
 **Status:** Planned
 
 - [ ] Docker
 - [ ] Docker Compose
-- [ ] Alembic
-- [ ] GitHub Actions
-- [ ] Automated Testing
-- [ ] CI/CD Pipeline
+- [ ] CI/CD pipeline
+- [ ] Automated testing
 
 ---
 
-# Phase 11 — Deployment
+# Phase 11 - Deployment
 
 **Status:** Planned
 
-- [ ] Vercel
-- [ ] Railway / Render
-- [ ] Neon PostgreSQL
-- [ ] Production Monitoring
-- [ ] Logging
+- [ ] Vercel frontend deployment
+- [ ] Backend hosting
+- [ ] Production monitoring
 
----
-
-# Version Timeline
-
-- v0.1.0 — Project Foundation
-- v0.2.0 — Backend Integration
-- v0.3.0 — Authentication
-- v0.4.0 — Resume Management
-- **v0.5.0 — AI Resume Parsing ✅ (Current)**
-- v0.6.0 — Resume Intelligence
-- v0.7.0 — AI Interview Engine
-- v0.8.0 — AI Evaluation
-- v0.9.0 — Analytics & DevOps
-- v1.0.0 — Production AI Interview Platform

@@ -605,3 +605,60 @@ Current Status
 Known Issue:
 - Some LaTeX-generated resumes produce PDF extraction artifacts (e.g., isolated characters like "R").
 - This originates from the PDF text layer rather than Gemini.
+
+---
+
+# Recent Development
+
+## Resume Intelligence Update
+
+### Completed
+
+- Added Gemini-first resume parsing with deterministic fallback parsing
+- Added Gemini-first ATS analysis with deterministic fallback analysis
+- Added PDF hyperlink extraction from embedded annotations
+- Added resume regeneration when the stored analysis JSON is missing
+- Improved link parsing for LinkedIn, GitHub, LeetCode, and portfolio fields
+- Redesigned the resume dashboard into a structured report layout
+- Redesigned the ATS dashboard for cleaner score and insight display
+
+### Notes
+
+- Gemini is still attempted first for both resume parsing and ATS analysis.
+- If Gemini is rate-limited or unavailable, the fallback path keeps the app usable.
+- The backend now logs when Gemini falls back so the active path is visible during development.
+
+## Current Resume Pipeline
+
+```
+Resume Upload
+      ↓
+Extract Text
+      ↓
+Clean Text
+      ↓
+Gemini Resume Parser
+      ↓
+ResumeSchema
+      ↓
+Persist JSON Analysis
+      ↓
+ATS Analysis
+      ↓
+Gemini ATS Analysis
+      ↓
+ATSAnalysis
+```
+
+## Fallback Strategy
+
+- Resume parsing falls back to a deterministic local parser when Gemini raises an AI error.
+- ATS analysis falls back to a local ATS scorer when Gemini raises an AI error.
+- PDF hyperlinks are extracted directly from PDF annotations so visible labels like `GitHub` and `Live Demo` can be resolved when possible.
+
+## Current Focus
+
+- Documentation sync
+- Resume parser accuracy
+- Better link extraction
+- Stable Gemini-first behavior with safe fallbacks
