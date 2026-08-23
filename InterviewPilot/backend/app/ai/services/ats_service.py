@@ -88,7 +88,7 @@ Resume:
             "Add job-specific keywords from the target role description.",
         ],
         formatting_issues=[],
-        recommendations=[
+        improvement_suggestions=[
             "Tailor the summary to the role you are applying for.",
             "Add measurable outcomes to projects and experience bullets.",
             "Mirror key terms from the target job description.",

@@ -11,7 +11,8 @@ from app.ai.schemas.resume import ResumeSchema
 logger = logging.getLogger(__name__)
 
 
-async def process_resume(pdf_path: str):
+async def process_resume(pdf_path: str):#this function dosent perform anything it just calls the other functions to perform the task of 
+    #parsing the resume and returning the parsed ResumeSchema. it is basically a wrapper function that orchestrates the different steps involved in processing a resume PDF.
     """
     Process a resume PDF and return the parsed ResumeSchema.
     """

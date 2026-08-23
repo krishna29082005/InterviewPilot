@@ -10,7 +10,7 @@ from app.ai.exceptions import AIError
 BACKEND_ROOT = Path(__file__).resolve().parents[2]
 UPLOAD_DIR = BACKEND_ROOT / "uploads" / "resumes"
 
-UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+UPLOAD_DIR.mkdir(parents=True, exist_ok=True)# if the file exist then fine if not then it will create it.
 
 
 def get_resume_filename(user_id: int) -> str:
