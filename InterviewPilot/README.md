@@ -41,6 +41,28 @@ AI-powered interview preparation platform.
 - Formatting issues
 - Recommendations
 
+### Recommended Roles / Career Fit
+
+- ATS-driven role recommendations
+- Gemini role recommendation extraction
+- Deterministic fallback role detection
+- Career Fit / Recommended Roles UI
+
+### Job Description Matching
+
+- Job description input and analysis
+- Gemini requirement extraction
+- Deterministic resume/job matching
+- Matching skills and missing skills
+- Matching keywords and missing keywords
+- Strengths, gaps, and recommendations
+
+### Job Match Frontend
+
+- Authenticated Job Match page
+- Analyze and clear actions
+- Sidebar navigation entry
+
 ### AI Architecture
 
 - Provider abstraction
@@ -49,6 +71,7 @@ AI-powered interview preparation platform.
 - Pydantic validation
 - Gemini-first execution
 - Safe fallback strategy
+- Deterministic fallbacks for ATS and job matching
 
 ## Tech Stack
 
@@ -98,6 +121,37 @@ ResumeSchema
 Gemini
       ↓
 ATSAnalysis
+```
+
+### Recommended Roles / Career Fit
+
+```
+ResumeSchema
+      ↓
+ATS Service
+      ↓
+Gemini role recommendation
+  or fallback role detection
+      ↓
+RecommendedRole[]
+      ↓
+Career Fit UI
+```
+
+### Job Description Matching
+
+```
+Job Description
+      ↓
+Gemini requirement extraction
+      ↓
+JobRequirements
+      ↓
+Deterministic matching
+      ↓
+JobMatchAnalysis
+      ↓
+Frontend
 ```
 
 ### Fallback Strategy
@@ -212,6 +266,12 @@ Deletes the stored resume and analysis.
 
 Returns ATS analysis for the uploaded resume.
 
+### Job Match
+
+#### `POST /job-match/analyze`
+
+Analyzes a job description against the authenticated user's resume analysis.
+
 ## Project Status
 
 ### Completed
@@ -222,6 +282,9 @@ Returns ATS analysis for the uploaded resume.
 - Fallback Resume Parser
 - ATS Analysis
 - Fallback ATS Analysis
+- Recommended Roles / Career Fit
+- Job Description Matching
+- Job Match Frontend
 - Resume Dashboard
 - ATS Dashboard
 - Hyperlink extraction
@@ -229,7 +292,6 @@ Returns ATS analysis for the uploaded resume.
 
 ### Upcoming
 
-- Job Description Matching
 - Mock Interview
 - AI Interview Evaluator
 - Analytics Dashboard
@@ -242,4 +304,3 @@ Add screenshots here when available.
 - ATS dashboard
 - Login page
 - Signup page
-

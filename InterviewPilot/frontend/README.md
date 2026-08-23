@@ -18,6 +18,7 @@ This is the Next.js frontend for InterviewPilot.
 - Protected dashboard
 - Resume dashboard
 - ATS dashboard
+- Job Match page
 - Resume analysis cards
 - ATS analysis cards
 - Auth context for JWT persistence
@@ -29,6 +30,7 @@ This is the Next.js frontend for InterviewPilot.
 - `/login`
 - `/dashboard`
 - `/resume`
+- `/job-match`
 
 ## Components
 
@@ -37,6 +39,7 @@ This is the Next.js frontend for InterviewPilot.
 - Resume upload card
 - Resume info card
 - ATS analysis card
+- Job Match page
 
 ## Environment
 
@@ -69,6 +72,7 @@ npm run build
 ## Notes
 
 - The frontend uses the backend resume and ATS APIs directly.
+- The frontend also uses the Job Match API directly.
 - Resume and ATS sections are rendered from structured API responses.
 - The UI now includes a cleaner report-style resume analysis layout and better link rendering.
 
@@ -82,4 +86,3 @@ Add screenshots here when available.
 - Dashboard
 - Resume dashboard
 - ATS dashboard
-

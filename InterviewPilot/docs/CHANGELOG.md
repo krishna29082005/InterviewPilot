@@ -6,6 +6,48 @@ The project follows Semantic Versioning.
 
 ---
 
+# v0.7.0
+
+Release Date: 23 August 2026
+
+## Added
+
+### Job Match
+
+- Job Description Matching API
+- Job Match frontend page
+- Sidebar navigation entry for Job Match
+- Deterministic job requirement matching
+- Fallback job requirement parsing
+
+### Career Fit
+
+- ATS-driven role recommendations
+- Gemini role recommendation extraction
+- Deterministic fallback role detection
+- Career Fit / Recommended Roles UI
+
+### Documentation
+
+- Updated architecture documentation
+- Updated project context
+- Updated roadmap
+- Updated development log
+- Updated frontend README
+
+## Changed
+
+- Expanded fallback strategy documentation to include job matching
+- Clarified implemented versus planned features across docs
+- Aligned project status with the current codebase
+
+## Fixed
+
+- Documentation drift between roadmap, changelog, project context, and architecture notes
+- Incomplete feature status descriptions for ATS and job matching related work
+
+---
+
 # v0.6.0
 
 Release Date: 07 August 2026

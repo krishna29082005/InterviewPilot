@@ -33,7 +33,7 @@ AI ProviderFactory
    ↓
 Gemini Provider
    ↓
-Fallback Parser / Fallback ATS
+Fallback Parser / Fallback ATS / Fallback Job Match
    ↓
 Pydantic Schemas
    ↓
@@ -139,6 +139,7 @@ Current routes:
 - `GET /resume/download`
 - `DELETE /resume/delete`
 - `GET /ats/analysis`
+- `POST /job-match/analyze`
 
 ### Service Layer
 
@@ -148,6 +149,7 @@ Responsibilities:
 - Resume upload orchestration
 - Resume analysis persistence
 - ATS generation
+- Job description matching
 - Fallback handling
 
 ### AI Layer
@@ -221,6 +223,7 @@ The fallback strategy exists for both:
 
 - resume parsing
 - ATS analysis
+- job description matching
 
 This ensures the app remains usable even when the model is unavailable.
 
@@ -249,6 +252,7 @@ Current frontend areas:
 - Dashboard
 - Resume dashboard
 - ATS dashboard
+- Job Match page
 
 ---
 
@@ -261,6 +265,12 @@ Current frontend areas:
 Current implementation:
 
 - `gemini` → `GeminiProvider`
+
+### AI Design Notes
+
+- The application does not use LangChain.
+- Services call the configured provider directly through `ProviderFactory`.
+- Structured outputs are validated with Pydantic models before reaching the API layer.
 
 ### GeminiProvider
 
@@ -324,13 +334,72 @@ The ATS response includes:
 
 ---
 
+## Recommended Roles Flow
+
+```
+ResumeSchema
+   ↓
+ATS Service
+   ↓
+Gemini role recommendation
+   or fallback role detection
+   ↓
+RecommendedRole[]
+   ↓
+Career Fit UI
+```
+
+The role recommendation layer currently highlights evidence for:
+
+- AI/ML Engineer
+- Backend Engineer
+- Frontend Engineer
+- Data Scientist
+- DevOps / Cloud Engineer
+- Software Engineer fallback
+
+---
+
+## Job Match Data Flow
+
+```
+Job Description
+   ↓
+Job Match Router
+   ↓
+Job Match AI Service
+   ↓
+Gemini requirement extraction
+   ↓
+Fallback parser if needed
+   ↓
+JobRequirements
+   ↓
+Deterministic matching service
+   ↓
+JobMatchAnalysis
+   ↓
+Frontend
+```
+
+The job match response includes:
+
+- match score
+- matching skills
+- missing skills
+- matching keywords
+- missing keywords
+- strengths
+- gaps
+- recommendations
+
+---
+
 ## Planned Areas
 
 The following remain planned and are not yet implemented:
 
-- Job description matching
 - Mock interview engine
 - Interview evaluation
 - Analytics dashboard
 - AI coaching workflow
-
