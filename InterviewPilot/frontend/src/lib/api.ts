@@ -203,9 +203,38 @@ export async function downloadResume(
   window.URL.revokeObjectURL(url);
 }
 
+export async function analyzeJobMatch(
+  jobDescription: string,
+  token: string
+): Promise<JobMatchAnalysis> {
+  const response = await fetch(`${BASE_URL}/job-match/analyze`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      job_description: jobDescription,
+    }),
+  });
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.detail || "Failed to analyze job match.");
+  }
+
+  return result;
+}
+
 /* ===========================
    ATS Analysis
 =========================== */
+export interface RecommendedRole {
+  role: string;
+  match_level: "High" | "Medium" | "Low" | string;
+  reasons: string[];
+}
 
 export interface ATSAnalysis {
   ats_score: number;
@@ -214,8 +243,9 @@ export interface ATSAnalysis {
   weaknesses: string[];
   missing_keywords: string[];
   formatting_issues: string[];
-  recommendations: string[];
+  recommendations?: string[];
   improvement_suggestions?: string[];
+  recommended_roles: RecommendedRole[];
 }
 
 export async function getATSAnalysis(
@@ -239,4 +269,17 @@ export async function getATSAnalysis(
   }
 
   return result;
+}
+
+
+export interface JobMatchAnalysis {
+  match_score: number;
+  summary: string;
+  matching_skills: string[];
+  missing_skills: string[];
+  matching_keywords: string[];
+  missing_keywords: string[];
+  strengths: string[];
+  gaps: string[];
+  recommendations: string[];
 }

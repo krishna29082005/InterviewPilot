@@ -8,11 +8,22 @@ from app.ai.schemas.resume import ResumeSchema
 def _normalize(value: str) -> str:
     """
     Normalize text so comparisons are case-insensitive
-    and punctuation differences don't matter.
+    and punctuation differences do not matter.
     """
+
     value = value.lower().strip()
-    value = re.sub(r"[^a-z0-9+#./-]+", " ", value)
-    value = re.sub(r"\s+", " ", value)
+
+    value = re.sub(
+        r"[^a-z0-9+#./-]+",
+        " ",
+        value,
+    )
+
+    value = re.sub(
+        r"\s+",
+        " ",
+        value,
+    )
 
     return value
 
@@ -21,29 +32,59 @@ def _collect_resume_skills(
     resume: ResumeSchema,
 ) -> list[str]:
     """
-    Collect technical skills from the structured resume.
+    Collect all explicitly declared technical skills
+    from the structured resume.
 
-    We also include technologies explicitly mentioned
-    inside projects.
+    Project technologies are also included because they
+    are evidence of skills demonstrated by the candidate.
     """
 
     skills: list[str] = []
 
     technical_skills = resume.technical_skills
 
-    skills.extend(technical_skills.programming_languages)
-    skills.extend(technical_skills.frameworks)
-    skills.extend(technical_skills.libraries)
-    skills.extend(technical_skills.databases)
-    skills.extend(technical_skills.cloud)
-    skills.extend(technical_skills.tools)
-    skills.extend(technical_skills.technologies)
-    skills.extend(technical_skills.ai_ml)
-    skills.extend(technical_skills.gen_ai)
+    skills.extend(
+        technical_skills.programming_languages
+    )
 
-    # Project technologies are also evidence of skills.
+    skills.extend(
+        technical_skills.frameworks
+    )
+
+    skills.extend(
+        technical_skills.libraries
+    )
+
+    skills.extend(
+        technical_skills.databases
+    )
+
+    skills.extend(
+        technical_skills.cloud
+    )
+
+    skills.extend(
+        technical_skills.tools
+    )
+
+    skills.extend(
+        technical_skills.technologies
+    )
+
+    skills.extend(
+        technical_skills.ai_ml
+    )
+
+    skills.extend(
+        technical_skills.gen_ai
+    )
+
+    # Also include technologies explicitly mentioned
+    # inside projects.
     for project in resume.projects:
-        skills.extend(project.technologies)
+        skills.extend(
+            project.technologies
+        )
 
     # Remove duplicates while preserving order.
     result: list[str] = []
@@ -69,23 +110,33 @@ def _skill_matches(
     required_skill: str,
 ) -> bool:
     """
-    Check whether a resume skill matches a job requirement.
+    Determine whether a resume skill satisfies
+    a job requirement.
 
-    Version 1 uses normalized matching and simple
+    Uses normalized exact matching plus simple
     naming variations.
     """
 
-    resume_normalized = _normalize(resume_skill)
-    required_normalized = _normalize(required_skill)
+    resume_normalized = _normalize(
+        resume_skill
+    )
+
+    required_normalized = _normalize(
+        required_skill
+    )
 
     if not resume_normalized or not required_normalized:
         return False
 
-    # Exact match
+    # Exact match.
     if resume_normalized == required_normalized:
         return True
 
-    # Handle simple singular/plural differences.
+    # Handle simple plural differences.
+    #
+    # REST API
+    # REST APIs
+    #
     if (
         resume_normalized.rstrip("s")
         == required_normalized.rstrip("s")
@@ -121,9 +172,13 @@ def _match_skills(
         )
 
         if found:
-            matching.append(required_skill)
+            matching.append(
+                required_skill
+            )
         else:
-            missing.append(required_skill)
+            missing.append(
+                required_skill
+            )
 
     return matching, missing
 
@@ -133,37 +188,139 @@ def _match_keywords(
     keywords: list[str],
 ) -> tuple[list[str], list[str]]:
     """
-    Search important job-description keywords across
-    the structured resume.
+    Search important JD keywords across the complete
+    structured resume.
+
+    Technical skills are intentionally included here.
+
+    This prevents inconsistencies such as:
+
+        Docker -> matching skill
+
+    while simultaneously having:
+
+        Docker -> missing keyword
+
+    when Docker is present in ResumeSchema.technical_skills.
     """
 
     resume_parts: list[str] = []
 
-    # Resume summary
+    # ======================================================
+    # Summary
+    # ======================================================
+
     if resume.summary:
-        resume_parts.append(resume.summary)
+        resume_parts.append(
+            resume.summary
+        )
 
+    # ======================================================
+    # Technical Skills
+    # ======================================================
+
+    technical_skills = resume.technical_skills
+
+    resume_parts.extend(
+        technical_skills.programming_languages
+    )
+
+    resume_parts.extend(
+        technical_skills.frameworks
+    )
+
+    resume_parts.extend(
+        technical_skills.libraries
+    )
+
+    resume_parts.extend(
+        technical_skills.databases
+    )
+
+    resume_parts.extend(
+        technical_skills.cloud
+    )
+
+    resume_parts.extend(
+        technical_skills.tools
+    )
+
+    resume_parts.extend(
+        technical_skills.technologies
+    )
+
+    resume_parts.extend(
+        technical_skills.ai_ml
+    )
+
+    resume_parts.extend(
+        technical_skills.gen_ai
+    )
+
+    # ======================================================
     # Experience
-    for experience in resume.experience:
-        resume_parts.append(experience.company)
-        resume_parts.append(experience.title)
-        resume_parts.extend(experience.description)
+    # ======================================================
 
+    for experience in resume.experience:
+
+        resume_parts.append(
+            experience.company
+        )
+
+        resume_parts.append(
+            experience.title
+        )
+
+        resume_parts.extend(
+            experience.description
+        )
+
+    # ======================================================
     # Projects
+    # ======================================================
+
     for project in resume.projects:
-        resume_parts.append(project.title)
+
+        resume_parts.append(
+            project.title
+        )
 
         if project.description:
-            resume_parts.append(project.description)
+            resume_parts.append(
+                project.description
+            )
 
-        resume_parts.extend(project.technologies)
-        resume_parts.extend(project.bullet_points)
+        resume_parts.extend(
+            project.technologies
+        )
 
-    # Other resume information
-    resume_parts.extend(resume.soft_skills)
-    resume_parts.extend(resume.certifications)
-    resume_parts.extend(resume.achievements)
-    resume_parts.extend(resume.languages)
+        resume_parts.extend(
+            project.bullet_points
+        )
+
+    # ======================================================
+    # Additional Resume Information
+    # ======================================================
+
+    resume_parts.extend(
+        resume.soft_skills
+    )
+
+    resume_parts.extend(
+        resume.certifications
+    )
+
+    resume_parts.extend(
+        resume.achievements
+    )
+
+    resume_parts.extend(
+        resume.languages
+    )
+
+    # ======================================================
+    # Normalize complete resume text
+    # ======================================================
 
     resume_text = _normalize(
         " ".join(resume_parts)
@@ -172,16 +329,27 @@ def _match_keywords(
     matching: list[str] = []
     missing: list[str] = []
 
+    # ======================================================
+    # Compare JD keywords
+    # ======================================================
+
     for keyword in keywords:
-        normalized_keyword = _normalize(keyword)
+
+        normalized_keyword = _normalize(
+            keyword
+        )
 
         if not normalized_keyword:
             continue
 
         if normalized_keyword in resume_text:
-            matching.append(keyword)
+            matching.append(
+                keyword
+            )
         else:
-            missing.append(keyword)
+            missing.append(
+                keyword
+            )
 
     return matching, missing
 
@@ -193,29 +361,59 @@ def _calculate_match_score(
     keywords: list[str],
 ) -> int:
     """
-    Calculate the deterministic baseline match score.
+    Calculate a deterministic baseline match score.
 
     Required skills contribute 70%.
-    General keywords contribute 30%.
+    General job-description keywords contribute 30%.
     """
 
+    # ======================================================
+    # Required skill score
+    # ======================================================
+
     if required_skills:
+
         skill_score = (
             len(matching_skills)
             / len(required_skills)
         ) * 70
+
     else:
+
+        # If the JD contains no required skills,
+        # give the full skill portion.
         skill_score = 70
 
+    # ======================================================
+    # Keyword score
+    # ======================================================
+
     if keywords:
+
         keyword_score = (
             len(matching_keywords)
             / len(keywords)
         ) * 30
+
     else:
+
+        # If there are no keywords,
+        # give the full keyword portion.
         keyword_score = 30
 
-    return round(skill_score + keyword_score)
+    # ======================================================
+    # Final score
+    # ======================================================
+
+    score = round(
+        skill_score + keyword_score
+    )
+
+    # Safety clamp.
+    return max(
+        0,
+        min(score, 100),
+    )
 
 
 def match_resume_to_job(
@@ -226,37 +424,41 @@ def match_resume_to_job(
     Compare a structured resume against extracted
     job requirements.
 
-    This is the deterministic baseline matcher and
-    does not depend on Gemini.
+    This is the deterministic baseline matcher.
+
+    It does NOT depend on Gemini and therefore continues
+    working even when the Gemini API is unavailable.
     """
 
-    # ------------------------------------------------------
+    # ======================================================
     # 1. Collect resume skills
-    # ------------------------------------------------------
+    # ======================================================
 
-    resume_skills = _collect_resume_skills(resume)
+    resume_skills = _collect_resume_skills(
+        resume
+    )
 
-    # ------------------------------------------------------
+    # ======================================================
     # 2. Match required skills
-    # ------------------------------------------------------
+    # ======================================================
 
     matching_skills, missing_skills = _match_skills(
         resume_skills,
         requirements.required_skills,
     )
 
-    # ------------------------------------------------------
-    # 3. Match important JD keywords
-    # ------------------------------------------------------
+    # ======================================================
+    # 3. Match JD keywords
+    # ======================================================
 
     matching_keywords, missing_keywords = _match_keywords(
         resume,
         requirements.keywords,
     )
 
-    # ------------------------------------------------------
-    # 4. Calculate baseline score
-    # ------------------------------------------------------
+    # ======================================================
+    # 4. Calculate match score
+    # ======================================================
 
     match_score = _calculate_match_score(
         matching_skills,
@@ -265,9 +467,9 @@ def match_resume_to_job(
         requirements.keywords,
     )
 
-    # ------------------------------------------------------
+    # ======================================================
     # 5. Check preferred skills
-    # ------------------------------------------------------
+    # ======================================================
 
     missing_preferred_skills = [
         skill
@@ -281,9 +483,9 @@ def match_resume_to_job(
         )
     ]
 
-    # ------------------------------------------------------
+    # ======================================================
     # 6. Generate strengths
-    # ------------------------------------------------------
+    # ======================================================
 
     strengths: list[str] = []
 
@@ -299,7 +501,7 @@ def match_resume_to_job(
 
     if resume.projects:
         strengths.append(
-            "The candidate has project experience that supports the application."
+            "The candidate has project experience that can support the application."
         )
 
     if resume.experience:
@@ -312,9 +514,9 @@ def match_resume_to_job(
             "The resume was successfully analyzed against the job description."
         )
 
-    # ------------------------------------------------------
+    # ======================================================
     # 7. Generate gaps
-    # ------------------------------------------------------
+    # ======================================================
 
     gaps: list[str] = []
 
@@ -338,9 +540,9 @@ def match_resume_to_job(
             "No major skill or keyword gaps were detected by the baseline matcher."
         )
 
-    # ------------------------------------------------------
+    # ======================================================
     # 8. Generate recommendations
-    # ------------------------------------------------------
+    # ======================================================
 
     recommendations: list[str] = []
 
@@ -364,9 +566,9 @@ def match_resume_to_job(
             "Maintain strong alignment between the resume and the target job description."
         )
 
-    # ------------------------------------------------------
+    # ======================================================
     # 9. Generate summary
-    # ------------------------------------------------------
+    # ======================================================
 
     summary = (
         f"The resume has a baseline match score of "
@@ -374,9 +576,9 @@ def match_resume_to_job(
         f"and job-specific keywords."
     )
 
-    # ------------------------------------------------------
-    # 10. Return validated Pydantic response
-    # ------------------------------------------------------
+    # ======================================================
+    # 10. Return validated result
+    # ======================================================
 
     return JobMatchAnalysis(
         match_score=match_score,

@@ -1,161 +1,64 @@
 {
     "personal_info": {
-        "full_name": "Krishna Mehra",
+        "full_name": null,
         "email": "krishnab2908@gmail.com",
         "phone": "+91 6354604426",
-        "location": "Sardar Vallabhbhai National Institute of Technology, Surat",
+        "location": "Trained Empathetic Agents Reinforcement Learning, LLM",
         "linkedin": "https://www.linkedin.com/in/krishna-mehra-a25827407/",
         "github": "https://github.com/krishna29082005",
         "leetcode": "https://leetcode.com/u/krishna29082005/",
-        "portfolio": null
+        "portfolio": "https://gmail.com"
     },
-    "summary": null,
-    "education": [
-        {
-            "institution": "NIT Surat",
-            "degree": "B.Tech - Artificial Intelligence",
-            "field_of_study": null,
-            "start_date": null,
-            "end_date": null,
-            "cgpa": "CGPA: 7.4"
-        },
-        {
-            "institution": "SGVP, Rajkot",
-            "degree": "12th (CBSE)",
-            "field_of_study": null,
-            "start_date": null,
-            "end_date": null,
-            "cgpa": "87.1%"
-        },
-        {
-            "institution": "Kendriya Vidyalaya, Rajkot",
-            "degree": "10th (CBSE)",
-            "field_of_study": null,
-            "start_date": null,
-            "end_date": null,
-            "cgpa": "91.2%"
-        }
-    ],
-    "experience": [
-        {
-            "company": "MINDBEND (Annual Technical Festival)",
-            "title": "Manager",
-            "start_date": "Jan 2026",
-            "end_date": "Apr 2026",
-            "location": null,
-            "description": []
-        },
-        {
-            "company": "MINDBEND (Annual Technical Festival)",
-            "title": "Co-Head",
-            "start_date": "Jan 2025",
-            "end_date": "Apr 2025",
-            "location": null,
-            "description": []
-        },
-        {
-            "company": "MINDBEND (Annual Technical Festival)",
-            "title": "Executive",
-            "start_date": "Jan 2024",
-            "end_date": "Apr 2024",
-            "location": null,
-            "description": []
-        }
-    ],
-    "projects": [
-        {
-            "title": "Can You Break RLVER? Probing Adversarial Robustness of RL-Trained Empathetic Agents",
-            "technologies": [
-                "Reinforcement Learning",
-                "LLM Evaluation",
-                "Empathy Modeling"
-            ],
-            "description": "Manuscript under review at NeurIPS 2026 investigating robustness in empathetic dialogue systems.",
-            "bullet_points": [
-                "Designed adversarial personas and dialogue trajectories for the Adversarial Empathy Benchmark (AEB).",
-                "Conducted controlled evaluations across 480 adversarial dialogues comparing RL-trained and baseline LLMs."
-            ]
-        },
-        {
-            "title": "VidSynth AI – YouTube Chat Assistant",
-            "technologies": [
-                "Streamlit",
-                "Gemini 2.5 Flash Lite",
-                "ChromaDB",
-                "LangChain",
-                "Sentence Transformers"
-            ],
-            "description": "Context-aware YouTube video question answering and summarization web application.",
-            "bullet_points": [
-                "Independently developed the complete VidSynth AI system, including transcript processing and RAG pipeline integration.",
-                "Developed a Streamlit-based RAG application using Gemini 2.5 Flash Lite and ChromaDB deployed on Hugging Face."
-            ]
-        },
-        {
-            "title": "Rare Gen Master - Synthetic Data Generation for Rare Cancer Diseases Using GANs",
-            "technologies": [
-                "Deep Learning",
-                "PyTorch",
-                "GANs",
-                "VAEs"
-            ],
-            "description": "Research paper accepted at IEEE AICAS 2026 on GAN-VAE based synthetic rare cancer imaging data generation.",
-            "bullet_points": [
-                "Implemented a GAN-VAE framework on the Brain Glioma dataset to synthesize rare cancer imaging data.",
-                "Validated generated samples using FID/IS metrics and evaluated downstream classification performance improvements."
-            ]
-        }
-    ],
+    "summary": "Resume parsed successfully. Detected 0 projects. Detected programming languages: Python, C. Detected 0 education entries.",
+    "education": [],
+    "experience": [],
+    "projects": [],
     "technical_skills": {
         "programming_languages": [
-            "C",
-            "C++",
-            "Python"
+            "Python",
+            "C"
         ],
         "frameworks": [
-            "Streamlit"
+            "FastAPI"
         ],
         "libraries": [
-            "PyTorch",
-            "Scikit-learn",
-            "TensorFlow",
-            "Hugging Face Transformers",
-            "LangChain",
-            "ChromaDB",
-            "Pandas",
             "NumPy",
+            "Pandas",
             "Matplotlib",
-            "Seaborn"
+            "Seaborn",
+            "scikit[- ]learn",
+            "PyTorch",
+            "TensorFlow"
         ],
         "databases": [
-            "MongoDB",
-            "MySQL"
+            "MySQL",
+            "PostgreSQL",
+            "MongoDB"
         ],
         "cloud": [],
         "tools": [
             "Git",
-            "Colab",
-            "Kaggle",
             "GitHub",
-            "Jupyter Notebook",
+            "VS Code",
+            "Jupyter",
             "Anaconda",
-            "VS Code"
+            "Colab",
+            "Kaggle"
         ],
         "technologies": [
-            "HTML"
+            "REST"
         ],
         "ai_ml": [
             "Machine Learning",
             "Deep Learning",
-            "Reinforcement Learning",
             "NLP",
-            "GANs",
-            "VAEs"
+            "LLM",
+            "Reinforcement Learning"
         ],
         "gen_ai": [
-            "RAG Systems",
-            "LLM Evaluation",
-            "Empathy Modeling"
+            "Gemini",
+            "LangChain",
+            "RAG"
         ]
     },
     "soft_skills": [],

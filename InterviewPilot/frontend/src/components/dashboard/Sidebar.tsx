@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   FileText,
   BrainCircuit,
+  BriefcaseBusiness,
   BarChart3,
   Settings,
   LogOut,
@@ -35,6 +36,11 @@ export default function Sidebar() {
       href: "/resume",
       label: "Resume",
       icon: FileText,
+    },
+    {
+      href: "/job-match",
+      label: "Job Match",
+      icon: BriefcaseBusiness,
     },
     {
       href: "/interviews",
