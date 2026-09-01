@@ -35,7 +35,8 @@ Completed Features
 - User Registration
 - User Login
 - PostgreSQL Integration
-- SQLAlchemy ORM
+- SQLAlchemy ORMgit status
+
 - User Model
 - Password Hashing
 - Password Verification
