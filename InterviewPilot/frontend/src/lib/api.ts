@@ -271,6 +271,107 @@ export async function getATSAnalysis(
   return result;
 }
 
+/* ===========================
+   Mock Interview
+=========================== */
+
+export interface MockInterviewStartRequest {
+  role: string;
+  difficulty: "easy" | "medium" | "hard";
+  question_count: number;
+}
+
+export interface MockInterviewResponse {
+  session_id: string;
+  role: string;
+  difficulty: string;
+  question_number: number;
+  total_questions: number;
+  question: string | null;
+  category: string | null;
+  status: "active" | "completed" | string;
+}
+
+export async function startMockInterview(
+  data: MockInterviewStartRequest,
+  token: string
+): Promise<MockInterviewResponse> {
+  const response = await fetch(
+    `${BASE_URL}/mock-interview/start`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    }
+  );
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      result.detail || "Failed to start mock interview."
+    );
+  }
+
+  return result;
+}
+
+export async function submitMockInterviewAnswer(
+  sessionId: string,
+  answer: string,
+  token: string
+): Promise<MockInterviewResponse> {
+  const response = await fetch(
+    `${BASE_URL}/mock-interview/${sessionId}/answer`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        answer,
+      }),
+    }
+  );
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      result.detail || "Failed to submit interview answer."
+    );
+  }
+
+  return result;
+}
+
+export async function getMockInterviewSession(
+  sessionId: string,
+  token: string
+): Promise<MockInterviewResponse> {
+  const response = await fetch(
+    `${BASE_URL}/mock-interview/${sessionId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      result.detail || "Failed to fetch interview session."
+    );
+  }
+
+  return result;
+}
 
 export interface JobMatchAnalysis {
   match_score: number;

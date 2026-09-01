@@ -3,7 +3,6 @@ import shutil
 from pathlib import Path
 import json
 from fastapi import HTTPException, UploadFile
-import json
 from app.ai.services.ai_resume import process_resume
 from app.ai.exceptions import AIError
 
@@ -49,7 +48,13 @@ async def upload_resume(
     filename = get_resume_filename(current_user.id)
     
     filepath = UPLOAD_DIR / filename
+    ats_analysis_path = UPLOAD_DIR / f"{current_user.id}_ats_analysis.json"
 
+    if ats_analysis_path.exists():
+        try:
+            ats_analysis_path.unlink()
+        except OSError:
+            pass
     # Save (overwrite if already exists)
     with filepath.open("wb") as buffer:
         shutil.copyfileobj(
@@ -123,3 +128,35 @@ def save_resume_analysis(user_id: int, analysis_data: dict):
             indent=4,
             ensure_ascii=False,
         )
+
+
+def get_ats_analysis(user_id: int):
+    path = UPLOAD_DIR / f"{user_id}_ats_analysis.json"
+
+    if not path.exists():
+        return None
+
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def save_ats_analysis(user_id: int, ats_data: dict):
+    path = UPLOAD_DIR / f"{user_id}_ats_analysis.json"
+
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(
+            ats_data,
+            f,
+            indent=4,
+            ensure_ascii=False,
+        )
+
+
+def delete_ats_analysis(user_id: int):
+    path = UPLOAD_DIR / f"{user_id}_ats_analysis.json"
+
+    if path.exists():
+        try:
+            path.unlink()
+        except OSError:
+            pass

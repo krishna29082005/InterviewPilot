@@ -1,0 +1,50 @@
+{
+    "ats_score": 55,
+    "summary": "Fallback ATS analysis generated because Gemini was unavailable.",
+    "strengths": [
+        "Resume includes structured sections that are easy to parse.",
+        "Relevant technical skills are present."
+    ],
+    "weaknesses": [
+        "Some sections may benefit from stronger keyword targeting.",
+        "Quantified impact could be more visible in experience bullets."
+    ],
+    "missing_keywords": [],
+    "formatting_issues": [],
+    "improvement_suggestions": [
+        "Tailor the summary to the role you are applying for.",
+        "Add measurable outcomes to projects and experience bullets.",
+        "Mirror key terms from the target job description."
+    ],
+    "recommended_roles": [
+        {
+            "role": "AI/ML Engineer",
+            "match_level": "High",
+            "reasons": [
+                "Resume demonstrates tensorflow.",
+                "Resume demonstrates deep learning.",
+                "Resume demonstrates nlp."
+            ]
+        },
+        {
+            "role": "Backend Engineer",
+            "match_level": "High",
+            "reasons": [
+                "Resume demonstrates rest.",
+                "Resume demonstrates python.",
+                "Resume demonstrates mysql.",
+                "Resume demonstrates postgresql."
+            ]
+        },
+        {
+            "role": "Data Scientist",
+            "match_level": "High",
+            "reasons": [
+                "Resume demonstrates python.",
+                "Resume demonstrates matplotlib.",
+                "Resume demonstrates seaborn.",
+                "Resume demonstrates machine learning."
+            ]
+        }
+    ]
+}
