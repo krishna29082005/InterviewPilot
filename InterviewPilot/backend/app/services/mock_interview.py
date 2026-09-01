@@ -32,6 +32,7 @@ class InterviewSession:
         self.answers: list[str] = []
 
         self.status = "active"
+        self.evaluation = None
 
     @property
     def total_questions(self) -> int:

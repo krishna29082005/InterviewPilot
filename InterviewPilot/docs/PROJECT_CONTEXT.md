@@ -8,18 +8,18 @@ InterviewPilot is a production-grade AI-powered interview preparation platform.
 
 The goal is to build a startup-quality SaaS application that demonstrates strong backend engineering, frontend engineering, AI integration, and practical product thinking.
 
-The repository is intended to be suitable for placement interviews, portfolio demonstrations, and long-term expansion into interview practice and analytics.
+The repository is intended to be suitable for placement interviews, portfolio demonstrations, and long-term expansion into interview practice, personalized career guidance, and analytics.
 
 ---
 
 # Current Project Version
 
-v0.7.0
+v0.8.0
 
 Date
 
-23-08-2026
-`
+01-09-2026
+
 ---
 
 # Current Status
@@ -28,7 +28,7 @@ Date
 
 Status
 
-âœ… COMPLETED
+✅ COMPLETED
 
 Completed Features
 
@@ -55,7 +55,7 @@ Completed Features
 
 Status
 
-âœ… COMPLETED
+✅ COMPLETED
 
 Completed Features
 
@@ -65,6 +65,8 @@ Completed Features
 - Resume Information API
 - Resume Dashboard
 - Local resume storage
+- One-resume-per-user handling
+- Resume overwrite handling
 
 ---
 
@@ -72,17 +74,18 @@ Completed Features
 
 Status
 
-âœ… COMPLETED
+✅ COMPLETED
 
 Completed Features
 
 - PDF text extraction using PyMuPDF
 - Text cleaning
 - Gemini resume parser
-- Deterministic fallback parser
 - ResumeSchema validation
+- Deterministic fallback parser
 - Hyperlink extraction from PDF annotations
 - Resume regeneration when analysis is missing
+- Resume analysis persistence
 
 ---
 
@@ -90,7 +93,7 @@ Completed Features
 
 Status
 
-âœ… COMPLETED
+✅ COMPLETED
 
 Completed Features
 
@@ -103,6 +106,8 @@ Completed Features
 - Formatting issues
 - Recommendations
 - Fallback ATS analysis
+- ATS analysis persistence
+- Cached ATS analysis retrieval
 
 ---
 
@@ -110,7 +115,7 @@ Completed Features
 
 Status
 
-âœ… COMPLETED
+✅ COMPLETED
 
 Completed Features
 
@@ -125,7 +130,7 @@ Completed Features
 
 Status
 
-âœ… COMPLETED
+✅ COMPLETED
 
 Completed Features
 
@@ -134,6 +139,8 @@ Completed Features
 - Fallback job requirement parsing
 - Deterministic resume/job matching
 - JobMatchAnalysis output
+- Latest Job Match result persistence
+- Job description persistence with Job Match result
 
 ---
 
@@ -141,7 +148,7 @@ Completed Features
 
 Status
 
-âœ… COMPLETED
+✅ COMPLETED
 
 Completed Features
 
@@ -156,273 +163,171 @@ Completed Features
 
 ---
 
-## Frontend Dashboard
+## Mock Interview
 
 Status
 
-âœ… COMPLETED
+✅ COMPLETED
 
 Completed Features
 
-- Resume dashboard
-- ATS dashboard
-- Job Match page
-- Structured resume analysis layout
-- Better link rendering
-- Protected dashboard experience
+- Mock Interview setup
+- Role selection
+- Difficulty selection
+- Configurable question count
+- Resume-aware interview flow
+- Technical interview question generation
+- Deterministic fallback question generation
+- Interview session management
+- One-question-at-a-time interview flow
+- Answer submission
+- Interview completion handling
+- Existing session detection
+- Continue existing interview
+- Start new interview
+- Interview results flow
+- Sidebar navigation entry
+
+---
+
+## AI Interview Evaluation
+
+Status
+
+✅ COMPLETED
+
+Completed Features
+
+- Interview evaluation schema
+- Overall interview score
+- Technical score
+- Relevance score
+- Communication score
+- Problem-solving score
+- Strengths
+- Weaknesses
+- Improvement suggestions
+- Question-by-question feedback
+- Gemini evaluation path
+- Deterministic fallback evaluation
+- Evaluation caching within the active interview session
+- Interview Results frontend
+
+---
+
+## AI Assistant / Chatbot
+
+Status
+
+✅ COMPLETED
+
+Completed Features
+
+- AI Assistant page
+- Free-form chat input
+- Suggested prompts
+- Chat message API
+- Authenticated chatbot access
+- Resume context
+- ATS context
+- Job Match context
+- Interview context
+- Hybrid context routing
+- High-confidence deterministic context detection
+- Secondary deterministic context scoring
+- Gemini context routing for ambiguous questions
+- Structured context selection using Pydantic
+- Context-aware final answer generation
+- Gemini routing fallback
+- Data-driven Resume fallback
+- Data-driven ATS fallback
+- Data-driven Job Match fallback
+- Data-driven Interview fallback
+- Multi-context fallback synthesis
+- User-specific chat history persistence
+- Chat history restoration after refresh
+- Clear Chat functionality
+- AI Assistant sidebar navigation entry
 
 ---
 
 # Current API Endpoints
 
+## General
+
 - `GET /`
 - `GET /health`
+
+## Authentication
+
 - `POST /auth/signup`
 - `POST /auth/login`
 - `GET /auth/me`
+
+## Resume
+
 - `POST /resume/upload`
 - `GET /resume/info`
 - `GET /resume/download`
 - `DELETE /resume/delete`
+
+## ATS
+
 - `GET /ats/analysis`
+
+## Job Match
+
 - `POST /job-match/analyze`
+
+## Mock Interview
+
+- `POST /mock-interview/start`
+- `POST /mock-interview/{session_id}/answer`
+- `POST /mock-interview/{session_id}/evaluate`
+
+## AI Assistant
+
+- `POST /chat/message`
 
 ---
 
 # Current Backend Architecture
 
-```
+```text
 Browser
-   â†“
+   ↓
 Next.js Frontend
-   â†“
+   ↓
 REST API
-   â†“
+   ↓
 FastAPI
-   â†“
+   ↓
 Route Layer
-   â†“
+   ↓
+Schema Layer
+   ↓
 Service Layer
-   â†“
+   ↓
 AI ProviderFactory
-   â†“
+   ↓
 Gemini Provider
-   â†“
-Fallback Parser / Fallback ATS / Fallback Job Match
-   â†“
+   ↓
+Feature-specific AI Services
+   ├── Resume Parser
+   ├── ATS Analysis
+   ├── Job Requirement Extraction
+   ├── Mock Interview Generation
+   ├── Interview Evaluation
+   └── AI Assistant
+   ↓
+Fallback / Deterministic Logic
+   ├── Resume Parser Fallback
+   ├── ATS Fallback
+   ├── Job Match Fallback
+   ├── Interview Question Fallback
+   ├── Interview Evaluation Fallback
+   └── Chatbot Data-driven Fallback
+   ↓
 Pydantic Schemas
-   â†“
-Local Storage
-```
-
----
-
-# Current Folder Structure
-
-```
-backend/
-â””â”€â”€ app/
-    â”œâ”€â”€ api/
-    â”‚   â”œâ”€â”€ dependencies/
-    â”‚   â””â”€â”€ routes/
-    â”œâ”€â”€ ai/
-    â”‚   â”œâ”€â”€ parsers/
-    â”‚   â”œâ”€â”€ prompts/
-    â”‚   â”œâ”€â”€ providers/
-    â”‚   â”œâ”€â”€ schemas/
-    â”‚   â””â”€â”€ services/
-    â”œâ”€â”€ core/
-    â”œâ”€â”€ db/
-    â”œâ”€â”€ models/
-    â”œâ”€â”€ schemas/
-    â””â”€â”€ services/
-
-frontend/
-â””â”€â”€ src/
-    â”œâ”€â”€ app/
-    â”œâ”€â”€ components/
-    â”œâ”€â”€ context/
-    â”œâ”€â”€ hooks/
-    â”œâ”€â”€ lib/
-    â””â”€â”€ types/
-```
-
----
-
-# Backend Design Rules
-
-Every backend feature follows this pattern:
-
-```
-Route
-â†“
-Schema
-â†“
-Service
-â†“
-Provider / Parser
-â†“
+   ↓
 Storage
-```
-
-Responsibilities
-
-## Route
-
-- Receive HTTP request
-- Validate dependencies
-- Call service
-- Return response
-
-## Schema
-
-- Validate request data
-- Validate response data
-
-## Service
-
-- Resume upload orchestration
-- ATS generation orchestration
-- Gemini-first execution
-- Fallback handling
-- Job description matching orchestration
-
-## Provider / Parser
-
-- Gemini provider
-- Resume fallback parser
-- ATS fallback logic
-- Job match fallback parser
-
-## Storage
-
-- Uploaded resume PDFs
-- Parsed resume analysis JSON
-
----
-
-# Current Tech Stack
-
-Frontend
-
-- Next.js
-- React
-- TypeScript
-- Tailwind CSS
-
-Backend
-
-- FastAPI
-- Python
-- Uvicorn
-- Pydantic
-- JWT
-- Passlib
-- PyMuPDF
-- Google Gemini
-
-Storage
-
-- Local filesystem
-
----
-
-# AI Workflow
-
-## Resume Pipeline
-
-```
-Resume Upload
-â†“
-Extract Text
-â†“
-Clean Text
-â†“
-Gemini Resume Parser
-â†“
-ResumeSchema
-â†“
-Save Analysis JSON
-```
-
-## ATS Pipeline
-
-```
-ResumeSchema
-â†“
-Gemini ATS Analysis
-â†“
-ATSAnalysis
-```
-
-## Recommended Roles / Career Fit Pipeline
-
-```
-ResumeSchema
-â†“
-ATS Service
-â†“
-Gemini role recommendation
-OR
-Fallback role detection
-â†“
-RecommendedRole[]
-â†“
-Career Fit UI
-```
-
-## Job Match Pipeline
-
-```
-Job Description
-â†“
-Gemini requirement extraction
-â†“
-JobRequirements
-â†“
-Deterministic matching
-â†“
-JobMatchAnalysis
-â†“
-Frontend
-```
-
-## Fallback Strategy
-
-If Gemini is unavailable, returns invalid JSON, or is rate limited, the app falls back to deterministic local logic instead of crashing.
-
-This keeps the resume, ATS, role recommendation, and job matching flows usable even under load.
-
----
-
-# Roadmap Status
-
-## Completed
-
-- Authentication
-- Resume Upload
-- Resume Parsing
-- Fallback Resume Parser
-- ATS Analysis
-- Fallback ATS
-- Recommended Roles / Career Fit
-- Job Description Matching
-- Job Match Frontend
-- Resume Dashboard
-- ATS Dashboard
-
-## Planned
-
-- Mock Interview
-- AI Interview Evaluator
-- Analytics Dashboard
-
----
-
-# Notes for Future Work
-
-- Keep business logic inside services.
-- Keep AI provider-specific logic behind the provider layer.
-- Prefer deterministic fallback behavior when Gemini is unavailable.
-- Do not change the frontend contract unless the API changes intentionally.
-- Mock Interview is the next major feature.

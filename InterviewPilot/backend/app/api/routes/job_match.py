@@ -7,10 +7,15 @@ from app.ai.schemas.job_match_request import JobMatchRequest
 from app.ai.schemas.resume import ResumeSchema
 from app.ai.services.job_match import extract_job_requirements
 from app.api.dependencies.auth import get_current_user
-from app.services.job_match import match_resume_to_job
+from app.services.job_match import (
+    match_resume_to_job,
+    save_job_match_result,
+)
 from app.services.resume import get_resume_analysis
 
+
 logger = logging.getLogger(__name__)
+
 
 router = APIRouter(
     prefix="/job-match",
@@ -35,7 +40,9 @@ async def analyze_job_match(
     # 1. Load the user's existing resume analysis
     # ------------------------------------------------------
 
-    analysis = get_resume_analysis(current_user.id)
+    analysis = get_resume_analysis(
+        current_user.id
+    )
 
     if analysis is None:
         raise HTTPException(
@@ -51,7 +58,9 @@ async def analyze_job_match(
         # 2. Convert stored JSON into ResumeSchema
         # --------------------------------------------------
 
-        resume = ResumeSchema.model_validate(analysis)
+        resume = ResumeSchema.model_validate(
+            analysis
+        )
 
         # --------------------------------------------------
         # 3. Extract requirements from the JD
@@ -71,10 +80,23 @@ async def analyze_job_match(
         )
 
         # --------------------------------------------------
-        # 5. Return JobMatchAnalysis
+        # 5. Save latest job-match result
+        # --------------------------------------------------
+
+        save_job_match_result(
+            user_id=current_user.id,
+            job_description=request.job_description,
+            result=result,
+        )
+
+        # --------------------------------------------------
+        # 6. Return JobMatchAnalysis
         # --------------------------------------------------
 
         return result
+
+    except HTTPException:
+        raise
 
     except Exception as exc:
         logger.exception(

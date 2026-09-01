@@ -4,538 +4,158 @@ This document records the development progress of InterviewPilot throughout the 
 
 ---
 
-# Session 5
+# Session 6
 
 **Date**
 
-2026-08-23
+2026-09-01
 
 ---
 
 ## Objective
 
-Synchronize documentation with the current InterviewPilot implementation.
+Complete the remaining core InterviewPilot features:
+
+- Mock Interview
+- AI Interview Evaluation
+- AI Assistant / Chatbot
+
+Integrate the new features with the existing application and verify fallback behavior when Gemini is unavailable.
 
 ---
 
 ## Completed
 
-### Documentation
+### Mock Interview
 
-- Updated project context to reflect the current implemented feature set
-- Updated architecture documentation to include job match and recommended roles flows
-- Updated roadmap to mark resume parsing, ATS analysis, recommended roles, job matching, and the Job Match frontend as completed
-- Updated changelog with the current release entry
-- Updated frontend README to include the Job Match page
+- Implemented Mock Interview API
+- Implemented interview session management
+- Added role selection
+- Added difficulty selection
+- Added configurable question count
+- Added resume-aware interview flow
+- Added technical interview question generation
+- Added deterministic fallback question generation
+- Added one-question-at-a-time interview flow
+- Added answer submission
+- Added interview completion handling
+- Added existing interview session detection
+- Added continue or start-new-interview flow
+- Integrated Mock Interview into the frontend
+- Added Mock Interview to sidebar navigation
 
-### Product
+### AI Interview Evaluation
 
-- Documented completed Job Description Matching flow
-- Documented ATS-driven Recommended Roles / Career Fit behavior
-- Documented fallback handling for Gemini 429 and 503 responses
-- Kept Mock Interview and AI Interview Evaluation explicitly planned
+- Created structured interview evaluation schema
+- Implemented interview evaluation service
+- Added overall performance score
+- Added technical score
+- Added relevance score
+- Added communication score
+- Added problem-solving score
+- Added strengths
+- Added weaknesses
+- Added improvement suggestions
+- Added question-by-question feedback
+- Added Gemini-first evaluation flow
+- Added deterministic fallback evaluation
+- Added interview evaluation endpoint
+- Added evaluation caching within the interview session
+- Added Interview Results frontend UI
 
----
+### AI Assistant / Chatbot
 
-## Notes
+- Created chatbot request and response schemas
+- Created chatbot prompt architecture
+- Implemented AI Assistant service
+- Added free-form chatbot messaging
+- Added suggested prompts
+- Added AI Assistant frontend page
+- Added AI Assistant to sidebar navigation
+- Added `/chat/message` endpoint
 
-- No application source code was modified for this session.
-- Documentation now distinguishes implemented features from planned features more clearly.
-- Gemini availability remains a non-blocking dependency because fallback logic is documented as part of the supported architecture.
+### Chatbot Contexts
 
----
+Implemented four InterviewPilot context sources:
 
-## Next Session
+- Resume
+- ATS Analysis
+- Job Match
+- Interview
 
-- Mock Interview design and implementation
-- AI Interview Evaluation planning
-- Optional documentation polish after the next feature lands
+The chatbot can now use existing InterviewPilot data to answer personalized questions.
 
----
+### Hybrid Context Routing
 
-# Session 1
+Implemented hybrid context routing consisting of:
 
-**Date**
+1. High-confidence deterministic intent detection
+2. Secondary deterministic context scoring
+3. Gemini-based routing for ambiguous questions
+4. Available-context fallback when Gemini routing is unavailable
 
-2026-07-05
+Explicit questions are routed directly when confidence is high, while ambiguous questions can be classified by Gemini.
 
----
+### Chatbot Fallback Architecture
 
-## Objective
+Implemented fallback behavior for Gemini failures.
 
-Initialize the project repository and frontend.
+Added:
 
----
+- Resume fallback responses
+- ATS fallback responses
+- Job Match fallback responses
+- Interview fallback responses
+- Multi-context fallback responses
+- Data-driven fallback using stored InterviewPilot results
 
-## Completed
+The fallback system continues to provide useful responses without depending entirely on Gemini.
 
-### Repository
+### Data Persistence
 
-- Created GitHub repository
-- Created monorepo structure
+- Added ATS analysis persistence
+- Added cached ATS analysis retrieval
+- Added latest Job Match result persistence
+- Added job description persistence with Job Match results
+- Added user-specific chatbot history using localStorage
+- Added chatbot history restoration after page refresh
+- Added Clear Chat functionality
 
-### Frontend
+### Frontend Integration
 
-- Initialized Next.js
-- Configured TypeScript
-- Configured Tailwind CSS
-- Configured ESLint
-- Created landing page
-- Started development server
-
-### Git
-
-- Created first Git commit
-
----
-
-## Decisions
-
-- Next.js instead of Vite
-- FastAPI instead of Flask
-- Monorepo architecture
-- Tailwind CSS
-- App Router
+- Integrated Mock Interview with the authenticated dashboard layout
+- Integrated AI Interview Evaluation with the interview completion flow
+- Added Interview Results presentation
+- Added AI Assistant to the main application navigation
+- Added persistent chat conversation behavior
+- Added context labels to chatbot responses
 
 ---
 
 ## Problems Faced
 
-- Node PATH issue
-- Nested repository issue
-- README directory issue
+### Gemini Availability
 
----
+Gemini repeatedly returned HTTP 503 `UNAVAILABLE` responses during development.
 
-## Learnings
-
-- Git workflow
-- Professional repository setup
-- Next.js initialization
-
----
-
-## Next Session
-
-- Initialize FastAPI backend
-- Create first API
-- Connect frontend and backend
-
----
-
-# Session 2
-
-**Date**
-
-2026-07-06
-
----
-
-## Objective
-
-Initialize the FastAPI backend and establish frontend-backend communication.
-
----
-
-## Completed
-
-### Backend
-
-- Created Python virtual environment
-- Installed FastAPI
-- Installed Uvicorn
-- Generated `requirements.txt`
-- Created backend folder structure
-- Created FastAPI application
-- Added Root endpoint (`/`)
-- Added Health endpoint (`/health`)
-- Configured APIRouter
-- Configured Swagger/OpenAPI
-- Configured CORS middleware
-
-### Frontend
-
-- Converted landing page into a Client Component
-- Learned React `useState`
-- Learned React `useEffect`
-- Connected frontend to FastAPI backend
-- Displayed backend health status
-
-### Git
-
-- Updated `.gitignore`
-- Removed virtual environment from Git tracking
-- Created cleanup commit
-- Pushed changes to GitHub
-
----
-
-## Decisions
-
-- Modular routing using APIRouter
-- Keep `main.py` minimal
-- Feature-based routing
-- Configure CORS during development
-- Never commit virtual environments
-
----
-
-## Problems Faced
-
-### Virtual Environment tracked by Git
+The error indicated provider-side model availability/high-demand conditions.
 
 **Solution**
 
-- Updated `.gitignore`
-
-```bash
-git rm -r --cached backend/.venv
-```
-
----
-
-### Frontend could not reach backend
-
-**Cause**
-
-Same-Origin Policy
-
-**Solution**
-
-Configured `CORSMiddleware`
+- Preserved Gemini as the primary AI provider.
+- Added deterministic fallback question generation.
+- Added deterministic fallback ATS analysis.
+- Added deterministic fallback interview evaluation.
+- Added data-driven chatbot fallback responses.
+- Ensured the application continues operating when Gemini is unavailable.
 
 ---
 
-### Git commit confusion
+### Chatbot Context Routing
 
-**Solution**
+Initially, some ATS questions were incorrectly routed to Job Match.
 
-Verified commit history using
+For example:
 
-```bash
-git log --oneline
-```
-
----
-
-## Learnings
-
-### FastAPI
-
-- APIRouter
-- OpenAPI
-- Swagger
-
-### React
-
-- Client Components
-- useState
-- useEffect
-- Fetch API
-
-### Backend
-
-- REST APIs
-- JSON Responses
-- CORS
-
-### Git
-
-- `.gitignore`
-- `git rm --cached`
-
----
-
-## Architecture Achieved
-
-```
-Browser
-
-↓
-
-Next.js
-
-↓
-
-Fetch API
-
-↓
-
-FastAPI
-
-↓
-
-JSON Response
-
-↓
-
-React UI
-```
-
----
-
-## Next Session
-
-- Authentication Module
-- PostgreSQL
-- SQLAlchemy
-
----
-
-# Session 3
-
-**Date**
-
-2026-07-07
-
----
-
-## Objective
-
-Build a production-style authentication system backed by PostgreSQL.
-
----
-
-## Completed
-
-### Database
-
-- Installed PostgreSQL
-- Created `interviewpilot` database
-- Connected SQLAlchemy
-- Configured database sessions
-- Created database initialization script
-- Generated first database table (`users`)
-
-### Models
-
-- Created User model
-- Designed user table schema
-
-### Authentication
-
-- Created Authentication Router
-- Created Signup API
-- Added Pydantic request validation
-- Implemented Service Layer
-- Connected service with PostgreSQL
-- Stored first user in database
-
-### Security
-
-- Implemented bcrypt password hashing
-- Prevented duplicate usernames
-- Prevented duplicate emails
-- Added HTTP 409 Conflict responses
-- Added database transaction rollback
-
-### Testing
-
-- Verified API using Swagger UI
-- Verified database records using PostgreSQL
-- Successfully stored first real user
-
----
-
-## Decisions
-
-- Layered Backend Architecture
-- Route → Schema → Service → Database
-- SQLAlchemy ORM
-- PostgreSQL
-- bcrypt password hashing
-- Database sessions using dependency injection
-
----
-
-## Problems Faced
-
-### PostgreSQL PATH issue
-
-**Solution**
-
-Added PostgreSQL `bin` directory to Windows PATH.
-
----
-
-### Missing `email-validator`
-
-**Solution**
-
-Installed:
-
-```bash
-pip install email-validator
-```
-
----
-
-### bcrypt compatibility warning
-
-**Solution**
-
-Verified hashing worked correctly.
-
----
-
-### Duplicate username crash
-
-**Solution**
-
-Added application-level validation before database insertion.
-
----
-
-## Learnings
-
-### Authentication
-
-- Password hashing
-- HTTP status codes
-- Duplicate validation
-
-### SQLAlchemy
-
-- Models
-- Sessions
-- Transactions
-- ORM workflow
-
-### PostgreSQL
-
-- Database creation
-- Table creation
-- SQL verification
-
-### Backend Engineering
-
-- Layered Architecture
-- Separation of Concerns
-- Dependency Injection
-
----
-
-## Architecture Achieved
-
-```
-Client
-
-↓
-
-FastAPI Route
-
-↓
-
-Pydantic Schema
-
-↓
-
-Service Layer
-
-↓
-
-SQLAlchemy ORM
-
-↓
-
-PostgreSQL
-
-↓
-
-JSON Response
-```
-
----
-
-## Next Session
-
-- Login API
-- JWT Authentication
-- Protected Routes
-- Current User Endpoint
-
----
-
-# Session 4
-
-**Date**
-
-2026-07-08
-
----
-
-## Objective
-
-Complete the Authentication Module.
-
----
-
-## Completed
-
-### Authentication
-
-- Implemented Login API
-- Implemented OAuth2 Password Flow
-- Implemented JWT Token Generation
-- Implemented JWT Verification
-- Created Protected Endpoints
-- Implemented Current User Dependency
-- Implemented `/auth/me`
-- Added response models
-- Centralized security utilities into `core/security.py`
-- Moved `SECRET_KEY` to environment variables
-- Added function return type hints
-- Cleaned imports and project structure
-
-### Security
-
-- Password Hashing
-- Password Verification
-- JWT Access Tokens
-- Protected Routes
-- OAuth2 Integration
-
-### Testing
-
-Completed full regression testing.
-
-Passed all 8 tests:
-
-- ✅ Signup
-- ✅ Duplicate Email
-- ✅ Duplicate Username
-- ✅ Login
-- ✅ JWT Generation
-- ✅ Protected Route (`/auth/me`)
-- ✅ Invalid Password
-- ✅ Unauthorized Access
-
----
-
-## Decisions
-
-- Adopt FastAPI OAuth2 Password Flow
-- Store email inside JWT subject (`sub`)
-- Centralize all security logic inside `core/security.py`
-- Every endpoint should have request and response models
-- Freeze completed modules after testing
-
----
-
-## Learnings
-
-- OAuth2 Password Flow
-- JWT Authentication
-- Dependency Injection
-- Response Models
-- Security Layer Design
-- Production Refactoring
-- Regression Testing
-
----
-
-## Current Status
-
-✅ Authentication Module Completed
-
----
+```text
+Why could my ATS score be improved?

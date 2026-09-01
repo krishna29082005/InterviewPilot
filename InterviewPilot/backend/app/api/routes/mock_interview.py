@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-
+from app.ai.services.interview_evaluation import evaluate_interview
 from app.ai.schemas.mock_interview import (
     MockInterviewAnswerRequest,
     MockInterviewResponse,
@@ -204,3 +204,66 @@ async def get_mock_interview_session(
         category=current_question.category,
         status=session.status,
     )
+
+# ==========================================================
+# Evaluate Completed Interview
+# ==========================================================
+
+@router.post("/{session_id}/evaluate")
+async def evaluate_mock_interview(
+    session_id: str,
+    current_user=Depends(get_current_user),
+):
+    """
+    Evaluate a completed mock interview.
+
+    If the interview has already been evaluated, return the
+    stored evaluation instead of generating it again.
+    """
+
+    # ------------------------------------------------------
+    # Get session
+    # ------------------------------------------------------
+
+    session = get_interview_session(
+        session_id=session_id,
+        user_id=current_user.id,
+    )
+
+    # ------------------------------------------------------
+    # Interview must be completed
+    # ------------------------------------------------------
+
+    if session.status != "completed":
+        raise HTTPException(
+            status_code=400,
+            detail=(
+                "Interview must be completed "
+                "before evaluation."
+            ),
+        )
+
+    # ------------------------------------------------------
+    # Return cached evaluation if available
+    # ------------------------------------------------------
+
+    if session.evaluation is not None:
+        return session.evaluation
+
+    # ------------------------------------------------------
+    # Generate evaluation
+    # ------------------------------------------------------
+
+    evaluation = await evaluate_interview(
+        role=session.role,
+        questions=session.questions,
+        answers=session.answers,
+    )
+
+    # ------------------------------------------------------
+    # Cache evaluation in session
+    # ------------------------------------------------------
+
+    session.evaluation = evaluation
+
+    return evaluation

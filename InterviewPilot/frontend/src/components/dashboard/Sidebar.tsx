@@ -8,6 +8,7 @@ import {
   FileText,
   BrainCircuit,
   BriefcaseBusiness,
+  Bot,
   BarChart3,
   Settings,
   LogOut,
@@ -35,6 +36,11 @@ const NAVIGATION_LINKS = [
     href: "/interview",
     label: "Interviews",
     icon: BrainCircuit,
+  },
+  {
+    href: "/chat",
+    label: "AI Assistant",
+    icon: Bot,
   },
   {
     href: "/analytics",
@@ -86,6 +92,7 @@ export default function Sidebar() {
         >
           {NAVIGATION_LINKS.map((link) => {
             const Icon = link.icon;
+
             const active =
               pathname === link.href;
 

@@ -6,6 +6,112 @@ The project follows Semantic Versioning.
 
 ---
 
+# v0.8.0
+
+Release Date: 01 September 2026
+
+## Added
+
+### Mock Interview
+
+- Mock Interview API
+- Interview session management
+- Role-specific interview question generation
+- Difficulty selection
+- Configurable interview question count
+- One-question-at-a-time interview flow
+- Interview answer submission
+- Interview completion handling
+
+### AI Interview Evaluation
+
+- Interview evaluation API
+- Overall interview score
+- Technical performance score
+- Relevance score
+- Communication score
+- Problem-solving score
+- Interview strengths
+- Interview weaknesses
+- Improvement suggestions
+- Question-by-question feedback
+- Deterministic fallback interview evaluation
+
+### AI Assistant / Chatbot
+
+- AI Assistant chatbot
+- Free-form conversational interface
+- Suggested prompts for Resume, ATS, Job Match, and Interview topics
+- User-specific chat history persistence
+- Clear Chat functionality
+- AI Assistant frontend page
+- AI Assistant sidebar navigation entry
+
+### Context-Aware Chatbot
+
+- Resume context
+- ATS analysis context
+- Job Match context
+- Interview context
+- Hybrid context routing
+- Deterministic high-confidence intent detection
+- Secondary deterministic context scoring
+- Gemini-based context routing for ambiguous queries
+- Structured context selection using Pydantic validation
+- Context-aware final response generation
+
+### Chatbot Fallbacks
+
+- Gemini context-routing fallback
+- Data-driven Resume fallback
+- Data-driven ATS fallback
+- Data-driven Job Match fallback
+- Data-driven Interview fallback
+- Multi-context fallback synthesis
+- Graceful chatbot behavior during Gemini 503 responses
+
+### Data Persistence
+
+- Latest ATS analysis persistence
+- Latest Job Match result persistence
+- Job description persistence with Job Match analysis
+- User-specific chatbot history persistence using localStorage
+
+## Changed
+
+- Expanded the AI architecture to support Mock Interview and AI Assistant workflows
+- Expanded fallback architecture beyond Resume and ATS processing
+- Added context-aware data selection before chatbot response generation
+- Improved chatbot routing for overlapping natural-language queries
+- Improved handling of ambiguous chatbot questions
+- Integrated AI Assistant into the main authenticated application shell
+- Integrated Mock Interview into the main application navigation
+- Updated frontend API layer for chatbot and interview evaluation functionality
+- Added cached ATS analysis retrieval to avoid repeated generation
+- Added cached Job Match result retrieval for chatbot context
+
+## Fixed
+
+- Fixed incorrect chatbot routing of ATS questions to Job Match context
+- Fixed incorrect chatbot routing of Resume questions to Job Match context
+- Fixed deterministic routing threshold issue for explicit ATS queries
+- Fixed multi-context fallback responses being returned as unrelated concatenated answers
+- Fixed chatbot refresh behavior where previous conversation messages disappeared
+- Fixed missing ATS context in the chatbot route
+- Fixed Job Match result availability for chatbot context
+- Fixed interview completion flow
+- Fixed interview evaluation fallback behavior when Gemini is unavailable
+- Fixed navigation integration for Mock Interview and AI Assistant
+
+## Notes
+
+- Gemini may temporarily return 503 responses because of provider-side availability or demand.
+- InterviewPilot continues to operate through deterministic and data-driven fallback mechanisms when Gemini is unavailable.
+- The chatbot uses deterministic routing for high-confidence queries and Gemini routing for ambiguous queries when the provider is available.
+- Chat history currently persists locally per authenticated user through browser localStorage.
+
+---
+
 # v0.7.0
 
 Release Date: 23 August 2026
@@ -88,6 +194,68 @@ Release Date: 07 August 2026
 
 ---
 
+# v0.4.0
+
+## Added
+
+### Resume Module
+
+- Authentication persistence
+- Protected dashboard
+- Professional dashboard UI
+- Sidebar navigation
+- Resume upload page
+- PDF upload support
+- Resume storage backend
+- Resume upload notifications
+- Resume management card
+
+### Resume AI Architecture
+
+- Modular AI architecture
+- Gemini provider abstraction
+- Resume parser pipeline
+- Prompt management
+- Pydantic response validation
+- Resume analysis persistence
+- Resume information API
+- Resume download API
+- Resume deletion API
+- Dashboard integration
+
+## Improved
+
+- Login flow
+- Signup flow
+- Dashboard UX
+- Error handling
+- Authentication state restoration
+- Resume upload flow
+- AI processing pipeline
+- Provider initialization
+- Resume overwrite handling
+- Overall project structure
+
+## Fixed
+
+- Login routing
+- Dashboard rendering
+- JWT authentication
+- Resume upload integration
+- Provider initialization bug
+- Resume overwrite issues
+- Dashboard synchronization
+- Resume deletion cleanup
+- AI parsing pipeline verification
+
+## Notes
+
+- Investigated incorrect parsing of "Krishna Mehra R".
+- Root cause traced to LaTeX-generated PDF text layer artifacts during PDF extraction.
+- Confirmed Gemini correctly parsed the extracted text and was not the source of the issue.
+
+---
+
 # v0.3.0
 
 Release Date: 08 July 2026
@@ -122,33 +290,6 @@ Release Date: 08 July 2026
 - Signup Endpoint (`POST /auth/signup`)
 - Login Endpoint (`POST /auth/login`)
 - Current User Endpoint (`GET /auth/me`)
-
-## Added
-
-### Authentication
-
-- User Registration API
-- Layered Authentication Architecture
-- Pydantic Request Validation
-- Service Layer
-- User Database Model
-- Password Hashing using bcrypt
-- Duplicate Username Validation
-- Duplicate Email Validation
-- Database Transaction Rollback
-- Database Session Management
-
-### Database
-
-- PostgreSQL Integration
-- SQLAlchemy ORM
-- User Table
-- Database Initialization Script
-
-### API
-
-- Authentication Router
-- Signup Endpoint (`POST /auth/signup`)
 
 ---
 
@@ -212,73 +353,3 @@ Release Date: July 2026
 - DEVLOG.md
 - CHANGELOG.md
 - ROADMAP.md
-
----
-
-# Changelog
-
-## v0.4.0 - Resume Module
-
-### Added
-
-- Authentication persistence
-- Protected dashboard
-- Professional dashboard UI
-- Sidebar navigation
-- Resume upload page
-- PDF upload support
-- Resume storage backend
-- Resume upload notifications
-- Resume management card
-
-### Improved
-
-- Login flow
-- Signup flow
-- Dashboard UX
-- Error handling
-- Authentication state restoration
-
-### Fixed
-
-- Login routing
-- Dashboard rendering
-- JWT authentication
-- Resume upload integration
-
-## July 19, 2026
-
-### Added
-
-- Modular AI architecture
-- Gemini provider abstraction
-- Resume parser pipeline
-- Prompt management
-- Pydantic response validation
-- Resume analysis persistence
-- Resume information API
-- Resume download API
-- Resume deletion API
-- Dashboard integration
-
-### Improved
-
-- Resume upload flow
-- AI processing pipeline
-- Provider initialization
-- Resume overwrite handling
-- Overall project structure
-
-### Fixed
-
-- Provider initialization bug
-- Resume overwrite issues
-- Dashboard synchronization
-- Resume deletion cleanup
-- AI parsing pipeline verification
-
-### Notes
-
-- Investigated incorrect parsing of "Krishna Mehra R".
-- Root cause traced to LaTeX-generated PDF text layer artifacts during PDF extraction.
-- Confirmed Gemini correctly parsed the extracted text and was not the source of the issue.

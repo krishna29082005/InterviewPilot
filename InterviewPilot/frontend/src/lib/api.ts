@@ -384,3 +384,92 @@ export interface JobMatchAnalysis {
   gaps: string[];
   recommendations: string[];
 }
+
+/* ===========================
+   Interview Evaluation
+=========================== */
+
+export interface InterviewEvaluation {
+  overall_score: number;
+  technical_score: number;
+  relevance_score: number;
+  communication_score: number;
+  problem_solving_score: number;
+  strengths: string[];
+  weaknesses: string[];
+  improvement_suggestions: string[];
+  summary: string;
+  question_feedback: string[];
+}
+
+export async function evaluateMockInterview(
+  sessionId: string,
+  token: string
+): Promise<InterviewEvaluation> {
+  const response = await fetch(
+    `${BASE_URL}/mock-interview/${sessionId}/evaluate`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      result.detail ||
+        "Failed to evaluate mock interview."
+    );
+  }
+
+  return result;
+}
+
+
+/* ===========================
+   AI Chatbot
+=========================== */
+
+export type ChatContext =
+  | "resume"
+  | "ats_analysis"
+  | "job_match"
+  | "interview";
+
+export interface ChatMessageResponse {
+  reply: string;
+  context_used: ChatContext[];
+}
+
+export async function sendChatMessage(
+  message: string,
+  token: string
+): Promise<ChatMessageResponse> {
+  const response = await fetch(
+    `${BASE_URL}/chat/message`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        message,
+      }),
+    }
+  );
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      result.detail ||
+        "Failed to send chat message."
+    );
+  }
+
+  return result;
+}

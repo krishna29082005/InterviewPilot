@@ -1,5 +1,5 @@
 import re
-
+import json
 from app.ai.schemas.job_match import JobMatchAnalysis
 from app.ai.schemas.job_requirements import JobRequirements
 from app.ai.schemas.resume import ResumeSchema
@@ -591,3 +591,76 @@ def match_resume_to_job(
         gaps=gaps,
         recommendations=recommendations,
     )
+from pathlib import Path
+
+from app.ai.schemas.job_match import JobMatchAnalysis
+
+
+JOB_MATCH_DIR = (
+    Path(__file__).resolve().parents[2]
+    / "uploads"
+    / "resumes"
+)
+
+
+def get_job_match_result(
+    user_id: int,
+) -> dict | None:
+    """
+    Return the most recently saved job-match result
+    for the user.
+    """
+
+    path = (
+        JOB_MATCH_DIR
+        / f"{user_id}_job_match.json"
+    )
+
+    if not path.exists():
+        return None
+
+    try:
+        with path.open(
+            "r",
+            encoding="utf-8",
+        ) as file:
+            return json.load(file)
+
+    except (OSError, json.JSONDecodeError):
+        return None
+
+
+def save_job_match_result(
+    user_id: int,
+    job_description: str,
+    result: JobMatchAnalysis,
+) -> None:
+    """
+    Save the latest job description and its matching result.
+    """
+
+    JOB_MATCH_DIR.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    path = (
+        JOB_MATCH_DIR
+        / f"{user_id}_job_match.json"
+    )
+
+    data = {
+        "job_description": job_description,
+        "analysis": result.model_dump(),
+    }
+
+    with path.open(
+        "w",
+        encoding="utf-8",
+    ) as file:
+        json.dump(
+            data,
+            file,
+            indent=4,
+            ensure_ascii=False,
+        )

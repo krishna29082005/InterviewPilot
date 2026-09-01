@@ -1,11 +1,15 @@
-from fastapi import APIRouter, Depends, HTTPException
 import logging
+
+from fastapi import APIRouter, Depends, HTTPException
 
 from app.api.dependencies.auth import get_current_user
 
 from app.services.resume import (
     get_resume_analysis,
     get_resume_filepath,
+)
+
+from app.services.ats import (
     get_ats_analysis,
     save_ats_analysis,
 )
@@ -19,7 +23,9 @@ from app.ai.schemas.resume import (
     TechnicalSkills,
 )
 
+
 logger = logging.getLogger(__name__)
+
 
 router = APIRouter(
     prefix="/ats",
@@ -35,7 +41,9 @@ async def get_ats_analysis_route(
     # 1. Check whether ATS analysis already exists
     # ==========================================================
 
-    cached_ats = get_ats_analysis(current_user.id)
+    cached_ats = get_ats_analysis(
+        current_user.id
+    )
 
     if cached_ats is not None:
         logger.info(
@@ -49,11 +57,16 @@ async def get_ats_analysis_route(
     # 2. Get parsed resume
     # ==========================================================
 
-    analysis = get_resume_analysis(current_user.id)
+    analysis = get_resume_analysis(
+        current_user.id
+    )
+
     resume = None
 
     if analysis is None:
-        file_path = get_resume_filepath(current_user.id)
+        file_path = get_resume_filepath(
+            current_user.id
+        )
 
         if not file_path:
             raise HTTPException(
@@ -62,12 +75,16 @@ async def get_ats_analysis_route(
             )
 
         try:
-            parsed_resume = await process_resume(file_path)
+            parsed_resume = await process_resume(
+                file_path
+            )
+
             analysis = parsed_resume.model_dump()
 
         except Exception as exc:
             logger.warning(
-                "ATS resume parsing failed, using fallback resume schema: %s",
+                "ATS resume parsing failed, using fallback "
+                "resume schema: %s",
                 exc,
             )
 
@@ -81,23 +98,25 @@ async def get_ats_analysis_route(
     # ==========================================================
 
     if resume is None:
-        resume = ResumeSchema.model_validate(analysis)
+        resume = ResumeSchema.model_validate(
+            analysis
+        )
 
     # ==========================================================
     # 4. Generate ATS analysis
     # ==========================================================
 
-    ats = await generate_ats_analysis(resume)
+    ats = await generate_ats_analysis(
+        resume
+    )
 
     # ==========================================================
     # 5. Save ATS analysis
     # ==========================================================
 
-    ats_data = ats.model_dump()
-
     save_ats_analysis(
         current_user.id,
-        ats_data,
+        ats,
     )
 
     logger.info(
@@ -105,4 +124,8 @@ async def get_ats_analysis_route(
         current_user.id,
     )
 
-    return ats_data
+    # ==========================================================
+    # 6. Return ATS analysis
+    # ==========================================================
+
+    return ats.model_dump()
