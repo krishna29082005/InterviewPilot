@@ -1,4 +1,3 @@
-import asyncio
 import logging
 import os
 from datetime import datetime
@@ -32,7 +31,7 @@ async def upload_resume_route(
     return await upload_resume(file, current_user)
 
 @router.get("/info")
-def get_resume_info(
+async def get_resume_info(
     current_user=Depends(get_current_user),
 ):
     file_path = get_resume_filepath(current_user.id)
@@ -51,7 +50,7 @@ def get_resume_info(
 
     if analysis is None and file_path:
         try:
-            parsed_resume = asyncio.run(process_resume(file_path))
+            parsed_resume = await process_resume(file_path)
             analysis = parsed_resume.model_dump()
             save_resume_analysis(current_user.id, analysis)
         except (AIError, OSError, ValidationError) as exc:
