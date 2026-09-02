@@ -14,8 +14,8 @@ from app.services.resume import (
     get_resume_filepath,
     save_resume_analysis,
     upload_resume,
+    delete_ats_analysis,
 )
-from app.services.ats import delete_ats_analysis
 from app.services.job_match import delete_job_match_result
 
 logger = logging.getLogger(__name__)

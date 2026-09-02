@@ -35,7 +35,7 @@ Completed Features
 - User Registration
 - User Login
 - PostgreSQL Integration
-- SQLAlchemy ORMgit status
+- SQLAlchemy ORM
 
 - User Model
 - Password Hashing
@@ -283,6 +283,7 @@ Completed Features
 ## Mock Interview
 
 - `POST /mock-interview/start`
+- `GET /mock-interview/{session_id}`
 - `POST /mock-interview/{session_id}/answer`
 - `POST /mock-interview/{session_id}/evaluate`
 
@@ -332,3 +333,38 @@ Fallback / Deterministic Logic
 Pydantic Schemas
    ↓
 Storage
+
+## AI Request Flow
+
+```text
+Route
+  -> Service
+  -> ProviderFactory
+  -> GeminiProvider
+  -> Pydantic schema
+  -> AIError handling / deterministic fallback
+```
+
+Gemini SDK usage is isolated in `backend/app/ai/providers/gemini.py`. Feature services do not construct the Gemini client directly. Deterministic or data-driven fallbacks are currently implemented for resume parsing, ATS analysis, job-requirement extraction and matching, Mock Interview questions, interview evaluation, and AI Assistant responses.
+
+## Current Persistence Model
+
+- Resume PDF: `backend/uploads/resumes/{user_id}_resume.pdf`
+- Resume analysis: `backend/uploads/resumes/{user_id}_analysis.json`
+- ATS analysis: `backend/uploads/resumes/{user_id}_ats_analysis.json`
+- Job Match result and job description: `backend/uploads/resumes/{user_id}_job_match.json`
+- Mock Interview session: in-memory `_sessions` store
+- Interview evaluation: stored on the in-memory interview session
+- Chat history: browser `localStorage` key `interviewpilot_chat_{user_id}`
+
+Resume, ATS, and Job Match files survive backend restart. Mock Interview sessions and evaluations do not. Chat history survives browser refresh and is user-scoped in the browser.
+
+## Known Limitations
+
+- Interview history is not yet persistent.
+- Analytics is not implemented.
+- Mock Interview and evaluation state are lost when the backend restarts.
+- pytest and real browser automation were unavailable during Phase 5 validation.
+- Direct Gemini execution was blocked by restricted network access during testing; fallbacks remain available.
+- Existing ESLint issues remain.
+- Passlib/bcrypt emits a compatibility warning while password verification succeeds.

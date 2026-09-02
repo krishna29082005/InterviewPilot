@@ -140,6 +140,11 @@ Current routes:
 - `DELETE /resume/delete`
 - `GET /ats/analysis`
 - `POST /job-match/analyze`
+- `POST /mock-interview/start`
+- `GET /mock-interview/{session_id}`
+- `POST /mock-interview/{session_id}/answer`
+- `POST /mock-interview/{session_id}/evaluate`
+- `POST /chat/message`
 
 ### Service Layer
 
@@ -150,6 +155,9 @@ Responsibilities:
 - Resume analysis persistence
 - ATS generation
 - Job description matching
+- Mock Interview question generation and session state
+- Interview evaluation
+- AI Assistant context routing and response generation
 - Fallback handling
 
 ### AI Layer
@@ -224,6 +232,9 @@ The fallback strategy exists for both:
 - resume parsing
 - ATS analysis
 - job description matching
+- Mock Interview question generation
+- interview evaluation
+- AI Assistant responses
 
 This ensures the app remains usable even when the model is unavailable.
 
@@ -253,6 +264,8 @@ Current frontend areas:
 - Resume dashboard
 - ATS dashboard
 - Job Match page
+- Mock Interview page
+- AI Assistant page
 
 ---
 
@@ -395,11 +408,22 @@ The job match response includes:
 
 ---
 
+## Current Persistence Notes
+
+- Resume PDF: `backend/uploads/resumes/{user_id}_resume.pdf`
+- Resume analysis: `{user_id}_analysis.json`
+- ATS analysis: `{user_id}_ats_analysis.json`
+- Job Match result: `{user_id}_job_match.json`
+- Mock Interview sessions and evaluations: in-memory only
+- Chat history: user-scoped browser localStorage
+
+Resume, ATS, and Job Match files survive backend restart. Mock Interview sessions and evaluations do not. Chat history survives browser refresh.
+
 ## Planned Areas
 
 The following remain planned and are not yet implemented:
 
-- Mock interview engine
-- Interview evaluation
 - Analytics dashboard
-- AI coaching workflow
+- Persistent interview history
+- Production hardening
+- DevOps and deployment

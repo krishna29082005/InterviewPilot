@@ -12,6 +12,22 @@ This roadmap tracks the current development status of InterviewPilot.
 
 ---
 
+# Current Stabilization Roadmap
+
+| Phase | Status |
+|---|---|
+| Phase 1 - Backend Cleanup | Completed |
+| Phase 2 - AI Architecture Review | Completed |
+| Phase 3 - Persistence / State Review | Completed |
+| Phase 4 - Frontend Polish | Completed |
+| Phase 5 - E2E Regression Testing | Completed |
+| Phase 6 - Documentation Sync | Current |
+| Phase 7 - Final Build & Freeze | Next |
+
+Phase 6 synchronizes project documentation with the verified v0.8.0 codebase. Phase 7 is the next release-readiness step.
+
+---
+
 # Phase 1 - Project Foundation ✅
 
 **Status:** Completed

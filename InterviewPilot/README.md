@@ -63,6 +63,30 @@ AI-powered interview preparation platform.
 - Analyze and clear actions
 - Sidebar navigation entry
 
+### Mock Interview
+
+- Resume-aware interview setup
+- Role and difficulty selection
+- Configurable question count
+- Deterministic fallback questions
+- One-question-at-a-time interview flow
+- Answer submission and completion handling
+
+### AI Interview Evaluation
+
+- Overall, technical, relevance, communication, and problem-solving scores
+- Strengths, weaknesses, improvement suggestions, and question feedback
+- Gemini evaluation path with deterministic fallback
+- Evaluation cached within the active in-memory interview session
+
+### AI Assistant / Chatbot
+
+- Free-form chat with suggested prompts
+- Resume, ATS, Job Match, and Interview context
+- Hybrid deterministic and Gemini context routing
+- Data-driven fallback responses when Gemini is unavailable
+- User-specific browser history using `interviewpilot_chat_{user_id}`
+
 ### AI Architecture
 
 - Provider abstraction
@@ -211,7 +235,7 @@ Response:
 
 ```json
 {
-  "message": "User created successfully."
+  "message": "User registered successfully."
 }
 ```
 
@@ -272,6 +296,17 @@ Returns ATS analysis for the uploaded resume.
 
 Analyzes a job description against the authenticated user's resume analysis.
 
+### Mock Interview
+
+- `POST /mock-interview/start`
+- `GET /mock-interview/{session_id}`
+- `POST /mock-interview/{session_id}/answer`
+- `POST /mock-interview/{session_id}/evaluate`
+
+### AI Assistant
+
+- `POST /chat/message`
+
 ## Project Status
 
 ### Completed
@@ -289,12 +324,24 @@ Analyzes a job description against the authenticated user's resume analysis.
 - ATS Dashboard
 - Hyperlink extraction
 - Resume regeneration
+- Mock Interview
+- AI Interview Evaluation
+- AI Assistant / Chatbot
+- Hybrid context routing and deterministic fallback architecture
 
 ### Upcoming
 
-- Mock Interview
-- AI Interview Evaluator
+- Persistent interview history
 - Analytics Dashboard
+- Production hardening
+- Docker / CI/CD
+- Deployment
+
+## Current Persistence Notes
+
+- Resume, resume analysis, ATS analysis, and Job Match data are stored in user-ID-prefixed files under `backend/uploads/resumes/`.
+- Mock Interview sessions and evaluations are intentionally in memory and do not survive backend restart.
+- Chat history is stored in user-specific browser localStorage and survives browser refresh.
 
 ## Screenshots
 

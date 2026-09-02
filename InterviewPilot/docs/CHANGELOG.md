@@ -10,6 +10,36 @@ The project follows Semantic Versioning.
 
 Release Date: 01 September 2026
 
+## Stabilization / Polish
+
+The following verified stabilization work was completed within v0.8.0 after the core feature work. These are maintenance and reliability changes, not new product features.
+
+### Backend
+
+- Removed debug output and standardized application logging.
+- Improved exception handling around AI providers and persistence boundaries.
+- Isolated Gemini SDK usage in the provider layer.
+- Fixed async resume processing in the resume information route.
+- Invalidated stale ATS and Job Match caches when a resume is replaced or deleted.
+- Made malformed resume, ATS, and Job Match cache data fail safely.
+- Verified authenticated user isolation across file-backed state and interview sessions.
+- Fixed a startup import regression discovered during end-to-end testing.
+
+### Frontend
+
+- Added resume upload loading and duplicate-submit protection.
+- Improved ATS error-state presentation.
+- Added localStorage safety for user switching and malformed chat history.
+- Added accessible labels to password visibility controls.
+- Removed temporary debug logging and dead navigation targets.
+
+### Verification
+
+- Completed live regression checks for authentication, resume upload, ATS, Job Match, Mock Interview, evaluation, and chat.
+- Verified cache invalidation, backend restart behavior, and cross-user isolation.
+- Backend compile and frontend production build passed.
+- pytest was unavailable in the test environment, browser automation was unavailable, and direct Gemini execution was blocked by restricted network access during testing.
+
 ## Added
 
 ### Mock Interview
