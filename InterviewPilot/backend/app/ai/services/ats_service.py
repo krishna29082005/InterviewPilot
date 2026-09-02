@@ -782,11 +782,6 @@ Resume:
             exc,
         )
 
-        print(
-            "⚠️ Gemini ATS generation failed, "
-            "using fallback ATS analysis."
-        )
-
         return _build_fallback_analysis(
             resume
         )

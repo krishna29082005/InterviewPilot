@@ -1,6 +1,7 @@
 import logging
 
 from fastapi import APIRouter, Depends, HTTPException
+from pydantic import ValidationError
 
 from app.ai.schemas.chat import (
     ChatMessageRequest,
@@ -88,7 +89,7 @@ async def send_chat_message(
                 resume_analysis
             )
 
-        except Exception as exc:
+        except ValidationError as exc:
             logger.warning(
                 "Stored resume analysis is invalid for chatbot: %s",
                 exc,
@@ -160,8 +161,9 @@ async def send_chat_message(
     if interview is not None:
         available_contexts.append("interview")
 
-    logger.info(
-        "CHAT ROUTE AVAILABLE CONTEXTS: %s",
+    logger.debug(
+        "Chat contexts available for user %s: %s",
+        current_user.id,
         available_contexts,
     )
 

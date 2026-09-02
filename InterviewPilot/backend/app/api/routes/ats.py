@@ -2,6 +2,7 @@ import logging
 
 from fastapi import APIRouter, Depends, HTTPException
 
+from app.ai.exceptions import AIError
 from app.api.dependencies.auth import get_current_user
 
 from app.services.resume import (
@@ -81,7 +82,7 @@ async def get_ats_analysis_route(
 
             analysis = parsed_resume.model_dump()
 
-        except Exception as exc:
+        except AIError as exc:
             logger.warning(
                 "ATS resume parsing failed, using fallback "
                 "resume schema: %s",

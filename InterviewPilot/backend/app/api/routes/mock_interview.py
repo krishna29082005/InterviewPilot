@@ -1,4 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
+from pydantic import ValidationError
+
 from app.ai.services.interview_evaluation import evaluate_interview
 from app.ai.schemas.mock_interview import (
     MockInterviewAnswerRequest,
@@ -54,7 +56,7 @@ async def start_mock_interview(
             resume_analysis
         )
 
-    except Exception as exc:
+    except ValidationError as exc:
         raise HTTPException(
             status_code=500,
             detail="Stored resume analysis is invalid.",

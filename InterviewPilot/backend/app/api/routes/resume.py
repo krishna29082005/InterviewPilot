@@ -5,7 +5,9 @@ from datetime import datetime
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from fastapi.responses import FileResponse
+from pydantic import ValidationError
 
+from app.ai.exceptions import AIError
 from app.api.dependencies.auth import get_current_user
 from app.ai.services.ai_resume import process_resume
 from app.services.resume import (
@@ -52,7 +54,7 @@ def get_resume_info(
             parsed_resume = asyncio.run(process_resume(file_path))
             analysis = parsed_resume.model_dump()
             save_resume_analysis(current_user.id, analysis)
-        except Exception as exc:
+        except (AIError, OSError, ValidationError) as exc:
             logger.warning(
                 "Resume analysis could not be regenerated: %s",
                 exc,

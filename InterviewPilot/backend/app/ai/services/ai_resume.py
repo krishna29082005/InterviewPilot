@@ -11,55 +11,39 @@ from app.ai.schemas.resume import ResumeSchema
 logger = logging.getLogger(__name__)
 
 
-async def process_resume(pdf_path: str):#this function dosent perform anything it just calls the other functions to perform the task of 
-    #parsing the resume and returning the parsed ResumeSchema. it is basically a wrapper function that orchestrates the different steps involved in processing a resume PDF.
+async def process_resume(pdf_path: str) -> ResumeSchema:
     """
     Process a resume PDF and return the parsed ResumeSchema.
     """
 
-    print("=" * 60)
-    print("ðŸ“„ Starting Resume Processing...")
-    print("=" * 60)
+    logger.info("Starting resume processing: %s", pdf_path)
 
     # Step 1: Extract text from PDF
-    print(f"ðŸ“ Processing file: {pdf_path}")
-    print("ðŸ“‘ Extracting text from PDF...")
     raw_text = extract_text(pdf_path)
+    logger.debug("Resume text extracted successfully.")
 
     # Step 2: Clean extracted text
-    print("ðŸ§¹ Cleaning extracted text...")
     cleaned_text = clean_text(raw_text)
+    logger.debug("Resume text cleaned successfully.")
 
-    print("\n" + "=" * 80)
-    print("EXTRACTED TEXT SENT TO GEMINI")
-    print("=" * 80)
-    print(cleaned_text[:3000])
-    print("=" * 80 + "\n")
-
-    # Step 3: Build AI Prompt
-    print("ðŸ“ Building Resume Parser Prompt...")
+    # Step 3: Build AI prompt
     prompt = get_resume_parser_prompt(cleaned_text)
 
-    # Step 4: Initialize Gemini Provider
-    print("ðŸ¤– Initializing Gemini Provider...")
+    # Step 4: Initialize AI provider
     provider = ProviderFactory.get_provider("gemini")
 
-    # Step 5: Send Prompt to Gemini
-    print("ðŸš€ Sending resume to Gemini...")
-
+    # Step 5: Send prompt to Gemini
     try:
         resume = await provider.generate(
             prompt=prompt,
             response_model=ResumeSchema,
         )
     except AIError:
-        logger.warning("Gemini parsing failed, using fallback parser.")
-        print("⚠️ Gemini parsing failed, using fallback parser.")
+        logger.warning(
+            "Gemini resume parsing failed; using fallback parser."
+        )
         resume = parse_resume_fallback(pdf_path)
 
-    print("âœ… Resume Parsed Successfully!")
-    print("=" * 60)
-    print(resume)
-    print("=" * 60)
+    logger.info("Resume processing completed successfully.")
 
     return resume

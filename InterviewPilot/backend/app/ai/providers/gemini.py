@@ -1,4 +1,5 @@
 import json
+import logging
 from typing import Type
 
 from google import genai
@@ -10,6 +11,8 @@ from app.ai.exceptions import (
 )
 from app.ai.providers.base import LLMProvider
 from app.core.config import settings
+
+logger = logging.getLogger(__name__)
 
 
 class GeminiProvider(LLMProvider):
@@ -45,8 +48,7 @@ class GeminiProvider(LLMProvider):
                 "GEMINI_API_KEY is not configured."
             )
 
-        try:# this is the first step where error can occur request issue or quota issue or any other issue with the request to Gemini API. this it the AIprovidererror 
-            #if any error occurs it will be caught in the except block and raised as AIProviderError with the message "Gemini request failed: {e}" where e is the original exception message.
+        try:
             if response_model is not None:
                 response = self.client.models.generate_content(
                     model=settings.GEMINI_MODEL,
@@ -62,74 +64,52 @@ class GeminiProvider(LLMProvider):
                     contents=prompt,
                 )
 
-        except Exception as e:
+        except Exception as exc:
+            logger.exception("Gemini request failed")
             raise AIProviderError(
-                f"Gemini request failed: {e}"
-            ) from e
+                f"Gemini request failed: {exc}"
+            ) from exc
 
         response_text = response.text or ""
         response_text = self._clean_json_response(response_text)
 
-        if response_model is None:# if we wont hava a schema specified then we will just return the raw response text from Gemini API. this is the case when we are not expecting a 
-            #structured response and just want to get the raw output from the model.
+        if response_model is None:
             return response_text
 
         try:
-            data = json.loads(response_text)#this is the second step where error can occur if the response from Gemini API is not a valid JSON. 
-            #this will raise a json.JSONDecodeError which will be caught in the except block and raised as AIProviderError with the message "Gemini returned invalid JSON.".
-            # this is also an AIprovidererror since the response from the provider is not valid JSON and cannot be processed further.
-        except json.JSONDecodeError as e:
+            data = json.loads(response_text)
 
-            print("\n" + "=" * 100)
-            print("❌ INVALID JSON RETURNED BY GEMINI")
-            print("=" * 100)
-
-            print(f"\nError: {e}")
-            print(f"Line: {e.lineno}")
-            print(f"Column: {e.colno}")
-            print(f"Character: {e.pos}")
-
-            start = max(0, e.pos - 150)
-            end = min(len(response_text), e.pos + 150)
-
-            print("\n---------------- CONTEXT ----------------\n")
-            print(response_text[start:end])
-            print("\n-----------------------------------------")
-
-            print("\n================ FULL RESPONSE =================\n")
-            print(response_text)
-            print("\n================================================\n")
+        except json.JSONDecodeError as exc:
+            logger.error(
+                "Gemini returned invalid JSON at position %s.",
+                exc.pos,
+            )
 
             raise AIProviderError(
                 "Gemini returned invalid JSON."
-            ) from e
+            ) from exc
 
-        print("\n" + "=" * 100)
-        print("✅ RAW GEMINI JSON")
-        print("=" * 100)
-        print(json.dumps(data, indent=4, ensure_ascii=False))
-        print("=" * 100 + "\n")
+        logger.debug(
+            "Gemini returned structured JSON for %s",
+            response_model.__name__,
+        )
 
-        try: # now lets say we have the correct JSON response from Gemini API and we have a response_model specified. we will now validate the JSON data against the Pydantic model. 
-            #if the validation fails, it will raise a ValidationError which will be caught in the except block and raised as AIValidationError with the message 
-            # "AI response failed schema validation.". this is not the provider error this is more of a validation error since the response from the provider is valid 
-            # #JSON but does not conform to the expected schema defined by the Pydantic model.
+        try:
             parsed = response_model.model_validate(data)
 
-            print("\n" + "=" * 100)
-            print("✅ PYDANTIC VALIDATION SUCCESSFUL")
-            print("=" * 100 + "\n")
+            logger.debug(
+                "Gemini response validated successfully against %s",
+                response_model.__name__,
+            )
 
             return parsed
 
-        except ValidationError as e:
-
-            print("\n" + "=" * 100)
-            print("❌ PYDANTIC VALIDATION ERROR")
-            print("=" * 100)
-            print(e)
-            print("=" * 100 + "\n")
+        except ValidationError as exc:
+            logger.error(
+                "Gemini response failed validation against %s.",
+                response_model.__name__,
+            )
 
             raise AIValidationError(
                 "AI response failed schema validation."
-            ) from e
+            ) from exc

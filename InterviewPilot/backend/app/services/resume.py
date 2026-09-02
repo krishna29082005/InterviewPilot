@@ -1,15 +1,19 @@
-import os
+import json
+import logging
 import shutil
 from pathlib import Path
-import json
+
 from fastapi import HTTPException, UploadFile
-from app.ai.services.ai_resume import process_resume
+
 from app.ai.exceptions import AIError
+from app.ai.services.ai_resume import process_resume
+
+logger = logging.getLogger(__name__)
 
 BACKEND_ROOT = Path(__file__).resolve().parents[2]
 UPLOAD_DIR = BACKEND_ROOT / "uploads" / "resumes"
 
-UPLOAD_DIR.mkdir(parents=True, exist_ok=True)# if the file exist then fine if not then it will create it.
+UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def get_resume_filename(user_id: int) -> str:
@@ -37,16 +41,14 @@ async def upload_resume(
     file: UploadFile,
     current_user,
 ):
-    # Validate file type
     if file.content_type != "application/pdf":
         raise HTTPException(
             status_code=400,
             detail="Only PDF files are allowed.",
         )
 
-    # One resume per user
     filename = get_resume_filename(current_user.id)
-    
+
     filepath = UPLOAD_DIR / filename
     ats_analysis_path = UPLOAD_DIR / f"{current_user.id}_ats_analysis.json"
 
@@ -54,8 +56,11 @@ async def upload_resume(
         try:
             ats_analysis_path.unlink()
         except OSError:
-            pass
-    # Save (overwrite if already exists)
+            logger.warning(
+                "Unable to remove previous ATS analysis for user %s.",
+                current_user.id,
+            )
+
     with filepath.open("wb") as buffer:
         shutil.copyfileobj(
             file.file,
@@ -63,11 +68,12 @@ async def upload_resume(
         )
 
     saved_path = str(filepath.resolve())
-    print("=" * 60)
-    print("Saved path:", saved_path)
-    print("File size:", os.path.getsize(saved_path))
-    print("=" * 60) 
-    # AI Processing
+
+    logger.info(
+        "Resume uploaded successfully for user %s.",
+        current_user.id,
+    )
+
     analysis_data = None
     analysis_path = UPLOAD_DIR / f"{current_user.id}_analysis.json"
 
@@ -79,34 +85,41 @@ async def upload_resume(
         else:
             analysis_data = analysis
 
-        with open(analysis_path, "w", encoding="utf-8") as f:
+        with analysis_path.open("w", encoding="utf-8") as file_handle:
             json.dump(
                 analysis_data,
-                f,
+                file_handle,
                 indent=4,
                 ensure_ascii=False,
             )
 
-    except Exception as exc:
-        print("⚠️ Resume processing failed, continuing upload:", exc)
+        logger.info(
+            "Resume analysis completed for user %s.",
+            current_user.id,
+        )
+
+    except AIError:
+        logger.warning(
+            "AI resume processing failed for user %s; continuing upload.",
+            current_user.id,
+        )
         analysis_data = None
 
         if analysis_path.exists():
             try:
                 analysis_path.unlink()
             except OSError:
-                pass
-
-    print("\n========== RESUME ANALYSIS ==========")
-    print(analysis_data)
-    print("======================================\n")
+                logger.warning(
+                    "Unable to remove incomplete resume analysis for user %s.",
+                    current_user.id,
+                )
 
     return {
         "message": "Resume uploaded successfully.",
         "filename": filename,
         "analysis": analysis_data,
     }
-import json
+
 
 def get_resume_analysis(user_id: int):
     path = UPLOAD_DIR / f"{user_id}_analysis.json"
@@ -114,17 +127,17 @@ def get_resume_analysis(user_id: int):
     if not path.exists():
         return None
 
-    with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
+    with path.open("r", encoding="utf-8") as file:
+        return json.load(file)
 
 
 def save_resume_analysis(user_id: int, analysis_data: dict):
     path = UPLOAD_DIR / f"{user_id}_analysis.json"
 
-    with open(path, "w", encoding="utf-8") as f:
+    with path.open("w", encoding="utf-8") as file:
         json.dump(
             analysis_data,
-            f,
+            file,
             indent=4,
             ensure_ascii=False,
         )
@@ -136,17 +149,17 @@ def get_ats_analysis(user_id: int):
     if not path.exists():
         return None
 
-    with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
+    with path.open("r", encoding="utf-8") as file:
+        return json.load(file)
 
 
 def save_ats_analysis(user_id: int, ats_data: dict):
     path = UPLOAD_DIR / f"{user_id}_ats_analysis.json"
 
-    with open(path, "w", encoding="utf-8") as f:
+    with path.open("w", encoding="utf-8") as file:
         json.dump(
             ats_data,
-            f,
+            file,
             indent=4,
             ensure_ascii=False,
         )
@@ -159,4 +172,7 @@ def delete_ats_analysis(user_id: int):
         try:
             path.unlink()
         except OSError:
-            pass
+            logger.warning(
+                "Unable to delete ATS analysis for user %s.",
+                user_id,
+            )
