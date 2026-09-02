@@ -3,7 +3,6 @@
 import {
   FileText,
   Download,
-  RefreshCw,
   Trash2,
 } from "lucide-react";
 
@@ -14,7 +13,6 @@ interface ResumeCardProps {
   size: number;
   uploadedAt: string;
   onDownload: () => void;
-  onReplace: () => void;
   onDelete: () => void;
 }
 
@@ -23,7 +21,6 @@ export default function ResumeCard({
   size,
   uploadedAt,
   onDownload,
-  onReplace,
   onDelete,
 }: ResumeCardProps) {
   return (
@@ -62,13 +59,6 @@ export default function ResumeCard({
           text="Download Resume"
           icon={<Download size={18} />}
           onClick={onDownload}
-        />
-
-        <Button
-          text="Replace Resume"
-          icon={<RefreshCw size={18} />}
-          onClick={onReplace}
-          disabled
         />
 
         <Button

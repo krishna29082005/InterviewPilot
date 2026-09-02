@@ -9,8 +9,6 @@ import {
   BrainCircuit,
   BriefcaseBusiness,
   Bot,
-  BarChart3,
-  Settings,
   LogOut,
 } from "lucide-react";
 
@@ -41,16 +39,6 @@ const NAVIGATION_LINKS = [
     href: "/chat",
     label: "AI Assistant",
     icon: Bot,
-  },
-  {
-    href: "/analytics",
-    label: "Analytics",
-    icon: BarChart3,
-  },
-  {
-    href: "/settings",
-    label: "Settings",
-    icon: Settings,
   },
 ];
 

@@ -7,6 +7,7 @@ from fastapi import HTTPException, UploadFile
 
 from app.ai.exceptions import AIError
 from app.ai.services.ai_resume import process_resume
+from app.services.job_match import delete_job_match_result
 
 logger = logging.getLogger(__name__)
 
@@ -60,6 +61,8 @@ async def upload_resume(
                 "Unable to remove previous ATS analysis for user %s.",
                 current_user.id,
             )
+
+    delete_job_match_result(current_user.id)
 
     with filepath.open("wb") as buffer:
         shutil.copyfileobj(
@@ -127,8 +130,11 @@ def get_resume_analysis(user_id: int):
     if not path.exists():
         return None
 
-    with path.open("r", encoding="utf-8") as file:
-        return json.load(file)
+    try:
+        with path.open("r", encoding="utf-8") as file:
+            return json.load(file)
+    except (OSError, json.JSONDecodeError):
+        return None
 
 
 def save_resume_analysis(user_id: int, analysis_data: dict):
@@ -149,8 +155,11 @@ def get_ats_analysis(user_id: int):
     if not path.exists():
         return None
 
-    with path.open("r", encoding="utf-8") as file:
-        return json.load(file)
+    try:
+        with path.open("r", encoding="utf-8") as file:
+            return json.load(file)
+    except (OSError, json.JSONDecodeError):
+        return None
 
 
 def save_ats_analysis(user_id: int, ats_data: dict):

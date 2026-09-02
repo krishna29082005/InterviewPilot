@@ -10,7 +10,7 @@ export default function LoginPage() {
       subtitle="Sign in to continue your interview preparation."
       footer={
         <>
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <Link
             href="/signup"
             className="font-medium text-blue-500 hover:text-blue-400"

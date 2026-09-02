@@ -9,7 +9,6 @@ import { useAuth } from "@/context/AuthContext";
 import {
   FileText,
   BrainCircuit,
-  BarChart3,
   Rocket,
 } from "lucide-react";
 
@@ -71,13 +70,6 @@ export default function DashboardPage() {
     title="Interviews"
     value="0"
     description="Mock interviews completed."
-  />
-
-  <DashboardCard
-    icon={<BarChart3 size={28} />}
-    title="Analytics"
-    value="--"
-    description="Performance insights."
   />
 
   <DashboardCard

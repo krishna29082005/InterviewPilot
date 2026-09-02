@@ -15,6 +15,8 @@ from app.services.resume import (
     save_resume_analysis,
     upload_resume,
 )
+from app.services.ats import delete_ats_analysis
+from app.services.job_match import delete_job_match_result
 
 logger = logging.getLogger(__name__)
 router = APIRouter(
@@ -106,6 +108,9 @@ def delete_resume(
 
     if os.path.exists(analysis_path):
         os.remove(analysis_path)
+
+    delete_ats_analysis(current_user.id)
+    delete_job_match_result(current_user.id)
 
     return {
         "message": "Resume deleted successfully."

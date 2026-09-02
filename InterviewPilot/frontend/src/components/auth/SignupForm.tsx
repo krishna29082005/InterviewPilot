@@ -135,6 +135,11 @@ export default function SignupForm() {
             onClick={() =>
               setShowPassword((prev) => !prev)
             }
+            aria-label={
+              showPassword
+                ? "Hide password"
+                : "Show password"
+            }
             className="cursor-pointer text-gray-400 transition hover:text-white"
           >
             {showPassword ? (

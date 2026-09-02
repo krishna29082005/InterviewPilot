@@ -1,6 +1,8 @@
 import json
 from pathlib import Path
 
+from pydantic import ValidationError
+
 from app.ai.schemas.ats_schema import ATSAnalysis
 
 
@@ -31,9 +33,10 @@ def get_ats_analysis(
             "r",
             encoding="utf-8",
         ) as file:
-            return json.load(file)
+            data = json.load(file)
+            return ATSAnalysis.model_validate(data).model_dump()
 
-    except (OSError, json.JSONDecodeError):
+    except (OSError, json.JSONDecodeError, ValidationError):
         return None
 
 

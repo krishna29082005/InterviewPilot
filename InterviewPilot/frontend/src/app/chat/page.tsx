@@ -4,6 +4,7 @@ import {
   useEffect,
   useRef,
   useState,
+  startTransition,
   type FormEvent,
 } from "react";
 
@@ -98,6 +99,8 @@ export default function ChatPage() {
 
   const messagesEndRef =
     useRef<HTMLDivElement | null>(null);
+  const loadedUserIdRef =
+    useRef<number | null>(null);
 
 
   /*
@@ -116,6 +119,11 @@ export default function ChatPage() {
    */
 
   useEffect(() => {
+    loadedUserIdRef.current = null;
+    startTransition(() => {
+      setMessages([]);
+    });
+
     if (!user) {
       return;
     }
@@ -126,15 +134,18 @@ export default function ChatPage() {
     const savedMessages =
       localStorage.getItem(storageKey);
 
-    if (!savedMessages) {
-      return;
-    }
+      if (!savedMessages) {
+        loadedUserIdRef.current = user.id;
+        return;
+      }
 
     try {
       const parsed =
         JSON.parse(savedMessages);
 
       if (!Array.isArray(parsed)) {
+        localStorage.removeItem(storageKey);
+        loadedUserIdRef.current = user.id;
         return;
       }
 
@@ -161,6 +172,7 @@ export default function ChatPage() {
         );
 
       setMessages(validMessages);
+      loadedUserIdRef.current = user.id;
     } catch (err) {
       console.error(
         "Failed to restore chat history:",
@@ -170,6 +182,7 @@ export default function ChatPage() {
       localStorage.removeItem(
         storageKey
       );
+      loadedUserIdRef.current = user.id;
     }
   }, [user]);
 
@@ -179,7 +192,11 @@ export default function ChatPage() {
    */
 
   useEffect(() => {
-    if (!user || messages.length === 0) {
+    if (
+      !user ||
+      loadedUserIdRef.current !== user.id ||
+      messages.length === 0
+    ) {
       return;
     }
 
@@ -280,7 +297,7 @@ export default function ChatPage() {
   }
 
 
-  function useSuggestedPrompt(
+  function setSuggestedPrompt(
     message: string
   ) {
     setInput(message);
@@ -427,7 +444,7 @@ export default function ChatPage() {
                   </h2>
 
                   <p className="mt-2 max-w-lg text-sm leading-6 text-slate-500">
-                    Ask naturally. You don't need to choose
+                    Ask naturally. You don&apos;t need to choose
                     whether your question is about your resume,
                     ATS, job match, or interview.
                   </p>
@@ -444,7 +461,7 @@ export default function ChatPage() {
                             key={prompt.label}
                             type="button"
                             onClick={() =>
-                              useSuggestedPrompt(
+                              setSuggestedPrompt(
                                 prompt.message
                               )
                             }
@@ -607,7 +624,7 @@ export default function ChatPage() {
                     <button
                       type="button"
                       onClick={() =>
-                        useSuggestedPrompt(
+                        setSuggestedPrompt(
                           "What should I improve next?"
                         )
                       }
@@ -619,7 +636,7 @@ export default function ChatPage() {
                     <button
                       type="button"
                       onClick={() =>
-                        useSuggestedPrompt(
+                        setSuggestedPrompt(
                           "What are my biggest career gaps?"
                         )
                       }
@@ -631,7 +648,7 @@ export default function ChatPage() {
                     <button
                       type="button"
                       onClick={() =>
-                        useSuggestedPrompt(
+                        setSuggestedPrompt(
                           "How can I prepare better for backend interviews?"
                         )
                       }

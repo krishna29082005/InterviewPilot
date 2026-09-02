@@ -145,44 +145,38 @@ export default function ResumePage() {
   const [loading, setLoading] = useState(true);
 
   async function fetchResume() {
-  console.log("🔥 fetchResume called");
-  console.log("Token:", token);
-
   if (!token) {
-    console.log("❌ No token");
     return;
   }
 
   try {
     const data = await getResumeInfo(token);
 
-    console.log("✅ Resume Data:", data);
-
     setResume(data);
-  } catch (err) {
-    console.error("❌ Error:", err);
+  } catch {
     setResume(null);
   } finally {
     setLoading(false);
   }
 }
 
-async function fetchATS() {
+  async function fetchATS() {
     if (!token) return;
 
     try {
         setATSLoading(true);
+        setATSError(null);
 
         const data = await getATSAnalysis(token);
 
-        console.log("========== ATS RESPONSE ==========");
-        console.log(data);
-        console.log(JSON.stringify(data, null, 2));
-
         setATS(data);
     } catch (err) {
-        console.error("ATS ERROR:", err);
         setATS(null);
+        setATSError(
+          err instanceof Error
+            ? err.message
+            : "Unable to load ATS analysis. Please try again."
+        );
     } finally {
         setATSLoading(false);
     }
@@ -283,7 +277,6 @@ async function fetchATS() {
             size={resume.size}
             uploadedAt={resume.uploaded_at}
             onDownload={handleDownload}
-            onReplace={() => {}}
             onDelete={handleDelete}
           />
         ) : (

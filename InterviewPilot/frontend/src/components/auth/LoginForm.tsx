@@ -97,9 +97,13 @@ export default function LoginForm() {
             type="button"
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => {
-              console.log("clicked", showPassword);
               setShowPassword((prev) => !prev);
             }}
+            aria-label={
+              showPassword
+                ? "Hide password"
+                : "Show password"
+            }
             className="cursor-pointer select-none text-gray-400 transition hover:text-white"
           >
             {showPassword ? (

@@ -1,8 +1,16 @@
 import re
 import json
+import logging
+from pathlib import Path
+
+from pydantic import ValidationError
+
 from app.ai.schemas.job_match import JobMatchAnalysis
 from app.ai.schemas.job_requirements import JobRequirements
 from app.ai.schemas.resume import ResumeSchema
+
+
+logger = logging.getLogger(__name__)
 
 
 def _normalize(value: str) -> str:
@@ -591,11 +599,6 @@ def match_resume_to_job(
         gaps=gaps,
         recommendations=recommendations,
     )
-from pathlib import Path
-
-from app.ai.schemas.job_match import JobMatchAnalysis
-
-
 JOB_MATCH_DIR = (
     Path(__file__).resolve().parents[2]
     / "uploads"
@@ -624,9 +627,24 @@ def get_job_match_result(
             "r",
             encoding="utf-8",
         ) as file:
-            return json.load(file)
+            data = json.load(file)
 
-    except (OSError, json.JSONDecodeError):
+            if not isinstance(data, dict):
+                return None
+
+            analysis = JobMatchAnalysis.model_validate(
+                data.get("analysis")
+            )
+
+            if not isinstance(data.get("job_description"), str):
+                return None
+
+            return {
+                "job_description": data["job_description"],
+                "analysis": analysis.model_dump(),
+            }
+
+    except (OSError, json.JSONDecodeError, ValidationError):
         return None
 
 
@@ -664,3 +682,18 @@ def save_job_match_result(
             indent=4,
             ensure_ascii=False,
         )
+
+
+def delete_job_match_result(user_id: int) -> None:
+    """Remove the cached job-match result for the user, if present."""
+
+    path = JOB_MATCH_DIR / f"{user_id}_job_match.json"
+
+    if path.exists():
+        try:
+            path.unlink()
+        except OSError:
+            logger.warning(
+                "Unable to delete job-match result for user %s.",
+                user_id,
+            )

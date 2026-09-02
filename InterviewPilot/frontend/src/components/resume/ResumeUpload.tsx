@@ -18,6 +18,7 @@ export default function ResumeUpload({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const { token } = useAuth();
 
@@ -48,6 +49,8 @@ export default function ResumeUpload({
   }
 
   async function handleUpload() {
+    if (loading) return;
+
     setError("");
     setSuccess("");
 
@@ -70,6 +73,8 @@ export default function ResumeUpload({
 
       return;
     }
+
+    setLoading(true);
 
     try {
       const result = await uploadResume(
@@ -104,6 +109,8 @@ export default function ResumeUpload({
       setTimeout(() => {
         setError("");
       }, 3000);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -171,6 +178,7 @@ export default function ResumeUpload({
           }
           type="button"
           onClick={handleChooseFile}
+          disabled={loading}
         />
 
         {selectedFile && (
@@ -198,6 +206,12 @@ export default function ResumeUpload({
                 }
                 type="button"
                 onClick={handleUpload}
+                loading={loading}
+                loadingText={
+                  hasResume
+                    ? "Replacing Resume..."
+                    : "Uploading Resume..."
+                }
               />
             </div>
           </>
